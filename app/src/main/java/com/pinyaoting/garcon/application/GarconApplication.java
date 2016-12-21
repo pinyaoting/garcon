@@ -65,11 +65,11 @@ public class GarconApplication extends MultiDexApplication {
 
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
 
-        Batch.Push.setGCMSenderId("763265727503");
+        Batch.Push.setGCMSenderId("797609406506");
 
         // TODO : switch to live Batch Api Key before shipping
-        Batch.setConfig(new Config("DEV583F06A4741A0A64636FC04CE70")); // devloppement
-        // Batch.setConfig(new Config("583F06A473F272E3A4CA29DDE170D5")); // live
+        Batch.setConfig(new Config("DEV585AF9F92C546FDFC55E6CEA121")); // devloppement
+        // Batch.setConfig(new Config("585AF9F92C1EB0B95B2171A0990A3F")); // live
         Batch.Push.setNotificationsColor(ContextCompat.getColor(this, R.color.colorPrimary));
         //Batch.Push.setSmallIconResourceId(R.drawable.ic_notification);
     }
