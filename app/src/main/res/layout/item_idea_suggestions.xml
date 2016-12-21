@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="com.doublesp.garcon.viewmodels.Idea"/>
+            type="com.pinyaoting.garcon.viewmodels.Idea"/>
     </data>
 
     <FrameLayout

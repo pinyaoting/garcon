@@ -6,7 +6,7 @@
         android:icon="@android:drawable/ic_menu_search"
         android:orderInCategory="5"
         android:title="Search"
-        app:actionViewClass="com.doublesp.garcon.view.AutoCompleteSearchView"
+        app:actionViewClass="com.pinyaoting.garcon.view.AutoCompleteSearchView"
         app:showAsAction="ifRoom|collapseActionView"/>
     <item
         android:id="@+id/sign_out_menu"

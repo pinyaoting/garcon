@@ -5,7 +5,7 @@
 
         <variable
             name="handler"
-            type="com.doublesp.garcon.interfaces.presentation.ListCompositionHandlerInterface"/>
+            type="com.pinyaoting.garcon.interfaces.presentation.ListCompositionHandlerInterface"/>
     </data>
 
     <android.support.v4.widget.SwipeRefreshLayout
@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/colorBackground"
-            tools:context="com.doublesp.garcon.fragments.GoalSearchFragment">
+            tools:context="com.pinyaoting.garcon.fragments.GoalSearchFragment">
 
             <android.support.percent.PercentFrameLayout
                 android:id="@+id/flGoalSearchBackground"

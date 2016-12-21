@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.doublesp.garcon">
+          package="com.pinyaoting.garcon">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
@@ -18,7 +18,7 @@
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
 
     <application
-        android:name="com.doublesp.garcon.application.GarconApplication"
+        android:name="com.pinyaoting.garcon.application.GarconApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -32,7 +32,7 @@
             android:value="@string/google_maps_api_key"/>
 
         <activity
-            android:name="com.doublesp.garcon.activities.MainActivity"
+            android:name="com.pinyaoting.garcon.activities.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter android:label="@string/app_name">
                 <action android:name="android.intent.action.MAIN"/>
@@ -52,10 +52,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.doublesp.garcon.activities.ShareActivity"
+            android:name="com.pinyaoting.garcon.activities.ShareActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.doublesp.garcon.activities.AddFriendActivity"
+            android:name="com.pinyaoting.garcon.activities.AddFriendActivity"
             android:screenOrientation="portrait"/>
 
         <service android:name="com.batch.android.BatchPushService"/>
@@ -78,7 +78,7 @@
             </intent-filter>
         </service>
         <service
-            android:name="com.doublesp.garcon.service.NotificationService"
+            android:name="com.pinyaoting.garcon.service.NotificationService"
             android:enabled="true"
             android:exported="true"/>
     </application>

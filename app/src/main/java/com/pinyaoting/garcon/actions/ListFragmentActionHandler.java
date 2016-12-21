@@ -1,0 +1,92 @@
+package com.pinyaoting.garcon.actions;
+
+import android.content.Context;
+import android.content.Intent;
+
+import com.pinyaoting.garcon.R;
+import com.pinyaoting.garcon.activities.MainActivity;
+import com.pinyaoting.garcon.activities.ShareActivity;
+import com.pinyaoting.garcon.fragments.MapFragment;
+import com.pinyaoting.garcon.interfaces.domain.IdeaInteractorInterface;
+import com.pinyaoting.garcon.interfaces.presentation.ListFragmentActionHandlerInterface;
+import com.pinyaoting.garcon.utils.ConstantsAndUtils;
+import com.pinyaoting.garcon.viewmodels.Plan;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+public class ListFragmentActionHandler implements ListFragmentActionHandlerInterface {
+
+    Context mContext;
+    IdeaShareHandlerInterface mShareHandler;
+    IdeaInteractorInterface mIdeaInteractor;
+
+    private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference mListDatabaseReference;
+    private DatabaseReference mShoppingListDatabaseReference;
+
+    public ListFragmentActionHandler(Context context, IdeaInteractorInterface ideaInteractor) {
+        mContext = context;
+        if (context instanceof IdeaShareHandlerInterface) {
+            mShareHandler = (IdeaShareHandlerInterface) context;
+        }
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mListDatabaseReference = mFirebaseDatabase.getReference().child(
+                ConstantsAndUtils.USER_LISTS)
+                .child(ConstantsAndUtils.getOwner(context));
+        mShoppingListDatabaseReference = mFirebaseDatabase.getReference().child(
+                ConstantsAndUtils.SHOPPING_LISTS);
+        mIdeaInteractor = ideaInteractor;
+    }
+
+    @Override
+    public void onShareButtonClick() {
+        /*
+        TODO: Sharing with sms, needs to be moved to another part or need to
+        figure out how to do this.
+        DatabaseReference keyReference = mListDatabaseReference.push();
+        Plan plan = mIdeaInteractor.createPlan(keyReference.getKey());
+
+        HashMap<String, Object> timestampCreated = new HashMap<>();
+        timestampCreated.put(ConstantsAndUtils.TIMESTAMP, ServerValue.TIMESTAMP);
+        UserList userList = new UserList(plan.getTitle(), plan.getOwner(), timestampCreated);
+        keyReference.setValue(userList);
+
+        mShoppingListDatabaseReference.child(keyReference.getKey()).setValue(plan);
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        StringBuilder sharableContentBuilder = new StringBuilder();
+        sharableContentBuilder
+                .append("http://pinyaoting.com/shared/")
+                .append(keyReference.getKey());
+
+        // with app link
+        shareIntent.putExtra(Intent.EXTRA_TEXT, sharableContentBuilder.toString());
+        mShareHandler.share(shareIntent);
+        */
+
+        Intent shareIntent = new Intent(mContext, ShareActivity.class);
+        shareIntent.putExtra(ConstantsAndUtils.LIST_ID, mIdeaInteractor.getPlan().getId());
+        mContext.startActivity(shareIntent);
+    }
+
+    @Override
+    public void onSearchButtonClick() {
+        Plan plan = mIdeaInteractor.getPlan();
+        mShareHandler.search(plan);
+    }
+
+    @Override
+    public void onNearbyStoreButtonClick() {
+        ((MainActivity) mContext).getSupportFragmentManager().beginTransaction()
+                .replace(R.id.activity_home, MapFragment.newInstance(), "MapFragment")
+                .addToBackStack(null)
+                .commit();
+    }
+
+    public interface IdeaShareHandlerInterface {
+        void share(Intent intent);
+
+        void search(Plan plan);
+    }
+}

@@ -5,7 +5,7 @@
 
         <variable
             name="handler"
-            type="com.doublesp.garcon.interfaces.presentation.GoalDetailActionHandlerInterface"/>
+            type="com.pinyaoting.garcon.interfaces.presentation.GoalDetailActionHandlerInterface"/>
 
         <variable
             name="pos"
@@ -13,14 +13,14 @@
 
         <variable
             name="viewModel"
-            type="com.doublesp.garcon.viewmodels.Goal"/>
+            type="com.pinyaoting.garcon.viewmodels.Goal"/>
     </data>
 
     <FrameLayout xmlns:app="http://schemas.android.com/apk/res-auto"
                  android:layout_width="match_parent"
                  android:layout_height="match_parent"
                  android:background="@color/colorBackground"
-                 tools:context="com.doublesp.garcon.fragments.GoalPreviewFragment">
+                 tools:context="com.pinyaoting.garcon.fragments.GoalPreviewFragment">
 
         <ScrollView
             android:layout_width="match_parent"

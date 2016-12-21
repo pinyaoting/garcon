@@ -6,7 +6,7 @@
         android:id="@+id/activity_add_friend"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.doublesp.garcon.activities.AddFriendActivity">
+        tools:context="com.pinyaoting.garcon.activities.AddFriendActivity">
 
         <ImageView
             android:id="@+id/share_background"

@@ -5,18 +5,18 @@
     <data>
         <variable
             name="viewHolder"
-            type="com.doublesp.garcon.viewholders.GoalViewHolder"/>
+            type="com.pinyaoting.garcon.viewholders.GoalViewHolder"/>
         <variable
             name="pos"
             type="int"/>
 
         <variable
             name="handler"
-            type="com.doublesp.garcon.interfaces.presentation.GoalActionHandlerInterface"/>
+            type="com.pinyaoting.garcon.interfaces.presentation.GoalActionHandlerInterface"/>
 
         <variable
             name="viewModel"
-            type="com.doublesp.garcon.viewmodels.Goal"/>
+            type="com.pinyaoting.garcon.viewmodels.Goal"/>
     </data>
 
 
