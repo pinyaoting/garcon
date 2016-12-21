@@ -17,6 +17,12 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.pinyaoting.garcon.R;
 import com.pinyaoting.garcon.databinding.FragmentSavedIdeasBinding;
 import com.pinyaoting.garcon.databinding.SinglePlanBinding;
@@ -28,25 +34,20 @@ import com.pinyaoting.garcon.utils.ImageUtils;
 import com.pinyaoting.garcon.viewmodels.Idea;
 import com.pinyaoting.garcon.viewmodels.Plan;
 import com.pinyaoting.garcon.viewmodels.UserList;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.inject.Inject;
 
 import jp.wasabeef.blurry.Blurry;
 
+/**
+ * TODO: [Tech Debt] Refactor this fragment.
+ * Move anything related to Firebase to FirebaseRepository.
+ */
 public class SavedIdeasFragment extends Fragment {
 
-    static final int SAVED_IDEAS_IMAGE_ROTATION_INTERVAL = 3000;
     public static SavedIdeasActionHandlerInterface mActionHandlerRef;
     public static Set<Handler> mHandlers;
     private static FirebaseRecyclerAdapter<UserList, ItemViewHolder> mFirebaseRecyclerAdapter;
@@ -220,33 +221,6 @@ public class SavedIdeasFragment extends Fragment {
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
-    }
-
-    private void asyncRotateImage(final Handler handler, final ImageView imageView, String listId) {
-        handler.removeCallbacksAndMessages(null);
-        DatabaseReference listsDatabaseReference = mFirebaseDatabase.getReference().child(
-                ConstantsAndUtils.SHOPPING_LISTS).child(listId);
-        listsDatabaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Plan plan = dataSnapshot.getValue(Plan.class);
-                List<String> imageUrls = new ArrayList<>();
-                for (Idea idea : plan.getIdeas()) {
-                    if (idea == null || idea.getMeta() == null) continue;
-                    imageUrls.add(idea.getMeta().getImageUrl());
-                }
-
-                if (!imageUrls.isEmpty()) {
-                    ImageUtils.rotateImage(
-                            handler, imageView, imageUrls, 0, SAVED_IDEAS_IMAGE_ROTATION_INTERVAL);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                handler.removeCallbacksAndMessages(null);
             }
         });
     }

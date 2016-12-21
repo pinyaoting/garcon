@@ -26,7 +26,7 @@ public class ListFragmentActionHandler implements ListFragmentActionHandlerInter
         mIdeaInteractor = ideaInteractor;
     }
 
-    // TODO: hook external share button
+    @Override
     public void onExternalShareButtonClick() {
         Plan plan = mIdeaInteractor.getPlan();
         Intent shareIntent = new Intent();

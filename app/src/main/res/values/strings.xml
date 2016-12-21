@@ -28,6 +28,7 @@
     <string name="add_friends">Add New Friend</string>
     <string name="add_friend">Add Friend</string>
     <string name="share_list">Share List</string>
+    <string name="external_share">Share Externally</string>
     <string name="save_recipe">Save Recipe</string>
     <string name="remove_recipe">Remove Recipe</string>
     <string name="create_list">Create Grocery List</string>
