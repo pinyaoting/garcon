@@ -5,18 +5,18 @@
     <data>
         <variable
             name="viewHolder"
-            type="com.doublesp.coherence.viewholders.GoalViewHolder"/>
+            type="com.doublesp.garcon.viewholders.GoalViewHolder"/>
         <variable
             name="pos"
             type="int"/>
 
         <variable
             name="handler"
-            type="com.doublesp.coherence.interfaces.presentation.GoalActionHandlerInterface"/>
+            type="com.doublesp.garcon.interfaces.presentation.GoalActionHandlerInterface"/>
 
         <variable
             name="viewModel"
-            type="com.doublesp.coherence.viewmodels.Goal"/>
+            type="com.doublesp.garcon.viewmodels.Goal"/>
     </data>
 
 

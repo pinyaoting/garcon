@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Coherence.iml" filepath="$PROJECT_DIR$/Coherence.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/garcon.iml" filepath="$PROJECT_DIR$/garcon.iml" />
     </modules>
   </component>
 </project>

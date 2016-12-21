@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.doublesp.coherence">
+          package="com.doublesp.garcon">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
@@ -18,7 +18,7 @@
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
 
     <application
-        android:name=".application.CoherenceApplication"
+        android:name="com.doublesp.garcon.application.GarconApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -26,13 +26,13 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="58083912c035206135aea30a9df62233cd1f2cf5"/>
+            android:value="644988249f2c971638ca9c4dc70b4717bd02410c" />
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="@string/google_maps_api_key"/>
 
         <activity
-            android:name=".activities.MainActivity"
+            android:name="com.doublesp.garcon.activities.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter android:label="@string/app_name">
                 <action android:name="android.intent.action.MAIN"/>
@@ -52,10 +52,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.ShareActivity"
+            android:name="com.doublesp.garcon.activities.ShareActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".activities.AddFriendActivity"
+            android:name="com.doublesp.garcon.activities.AddFriendActivity"
             android:screenOrientation="portrait"/>
 
         <service android:name="com.batch.android.BatchPushService"/>
@@ -78,7 +78,7 @@
             </intent-filter>
         </service>
         <service
-            android:name=".service.NotificationService"
+            android:name="com.doublesp.garcon.service.NotificationService"
             android:enabled="true"
             android:exported="true"/>
     </application>
