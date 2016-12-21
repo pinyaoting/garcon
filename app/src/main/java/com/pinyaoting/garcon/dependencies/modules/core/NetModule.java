@@ -67,22 +67,6 @@ public class NetModule {
     @Provides
     @Singleton
     @IntoMap
-    @IntKey(R.id.idea_category_recipe)
-    Retrofit provideEdamamRetrofit(Gson gson, OkHttpClient okHttpClient, Application application) {
-        String endpoint = application.getString(R.string.api_endpoint_recipe);
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(endpoint)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .addCallAdapterFactory(
-                        RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io()))
-                .client(okHttpClient)
-                .build();
-        return retrofit;
-    }
-
-    @Provides
-    @Singleton
-    @IntoMap
     @IntKey(R.id.idea_category_recipe_v2)
     Retrofit provideSpoonacularRetrofit(Gson gson, OkHttpClient okHttpClient,
                                         Application application) {

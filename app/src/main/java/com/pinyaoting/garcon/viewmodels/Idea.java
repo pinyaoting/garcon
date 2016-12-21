@@ -2,8 +2,6 @@ package com.pinyaoting.garcon.viewmodels;
 
 import com.google.firebase.database.Exclude;
 
-import com.pinyaoting.garcon.R;
-
 import org.parceler.Parcel;
 
 import java.util.HashMap;
@@ -30,12 +28,6 @@ public class Idea {
         this.crossedOut = crossedOut;
         this.type = type;
         this.meta = meta;
-    }
-
-    public static Idea newInstanceOfBlankIdea() {
-        Idea blankIdea = new Idea();
-        blankIdea.type = R.id.idea_type_blank;
-        return blankIdea;
     }
 
     public String getId() {

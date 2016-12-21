@@ -19,9 +19,8 @@
     <string name="idea_hint_search">search for a recipe</string>
     <string name="sign_out">Sign out</string>
     <string name="welcome">Welcome, %1s</string>
-    <string name="facebook_application_id" translatable="false">1822316278006079</string>
-    <!-- Facebook Application ID, prefixed by 'fb'.  Enables Chrome Custom tabs. -->
-    <string name="facebook_login_protocol_scheme" translatable="false">fb1822316278006079</string>
+    <string name="facebook_application_id" translatable="false">392989124371977</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fb392989124371977</string>
     <string name="custom_list">Custom list</string>
     <string name="saved_goals">Saved Recipes</string>
     <string name="explore_goals">Explore</string>

@@ -81,9 +81,6 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
         ListCompositionHandlerInterface {
 
     public static final int RC_SIGN_IN = 1;
-    static final String IDEA_PREVIEW_FRAGMENT = "IDEA_PREVIEW_FRAGMENT";
-    static final String LIST_COMPOSITION_FRAGMENT = "LIST_COMPOSITION_FRAGMENT";
-    static final String IDEA_SEARCH_RESULT_FRAGMENT = "IDEA_SEARCH_RESULT_FRAGMENT";
     ActivityMainBinding binding;
     MainActivitySubComponent mActivityComponent;
     @Inject
@@ -157,8 +154,6 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
                                     .setIsSmartLockEnabled(false)
                                     .setProviders(Arrays.asList(
                                             new AuthUI.IdpConfig.Builder(
-                                                    AuthUI.EMAIL_PROVIDER).build(),
-                                            new AuthUI.IdpConfig.Builder(
                                                     AuthUI.GOOGLE_PROVIDER).build(),
                                             new AuthUI.IdpConfig.Builder(
                                                     AuthUI.FACEBOOK_PROVIDER).build()))
@@ -183,10 +178,6 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
                     ((GarconApplication) getApplication()).getPresentationLayerComponent()
                             .newListCompositionActivitySubComponent(
                                     new MainActivityModule(this, R.id.idea_category_recipe_v2));
-//                                    new MainActivityModule(this, R.id.idea_category_recipe));
-// NOTE: recipe v2 provides more information
-//                                    new MainActivityModule(this, R.id.idea_category_debug));
-// NOTE: use idea_category_debug for mock data
         }
         return mActivityComponent;
     }

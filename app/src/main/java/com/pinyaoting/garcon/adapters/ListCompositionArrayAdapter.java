@@ -1,5 +1,8 @@
 package com.pinyaoting.garcon.adapters;
 
+import static com.pinyaoting.garcon.fragments.ListCompositionFragment.binding;
+import static com.raizlabs.android.dbflow.config.FlowManager.getContext;
+
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,39 +13,20 @@ import com.pinyaoting.garcon.R;
 import com.pinyaoting.garcon.interfaces.domain.IdeaInteractorInterface;
 import com.pinyaoting.garcon.interfaces.presentation.ListFragmentActionHandlerInterface;
 import com.pinyaoting.garcon.interfaces.presentation.ViewState;
-import com.pinyaoting.garcon.utils.ConstantsAndUtils;
 import com.pinyaoting.garcon.viewholders.IdeaViewHolder;
 import com.pinyaoting.garcon.viewmodels.Idea;
-import com.pinyaoting.garcon.viewmodels.Plan;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.List;
 
 import rx.Observer;
-
-import static com.pinyaoting.garcon.fragments.ListCompositionFragment.binding;
-import static com.raizlabs.android.dbflow.config.FlowManager.getContext;
 
 public class ListCompositionArrayAdapter extends RecyclerView.Adapter {
 
     IdeaInteractorInterface mIdeaInteractor;
     ListFragmentActionHandlerInterface mIdeaActionHandler;
 
-    private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference mListDatabaseReference;
-    private DatabaseReference mShoppingListDatabaseReference;
-
     public ListCompositionArrayAdapter(IdeaInteractorInterface ideaInteractor,
                                        ListFragmentActionHandlerInterface ideaActionHandler) {
         mIdeaInteractor = ideaInteractor;
         mIdeaActionHandler = ideaActionHandler;
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mListDatabaseReference = mFirebaseDatabase.getReference().child(
-                ConstantsAndUtils.USER_LISTS)
-                .child(ConstantsAndUtils.getOwner(getContext()));
-        mShoppingListDatabaseReference = mFirebaseDatabase.getReference().child(
-                ConstantsAndUtils.SHOPPING_LISTS);
 
         mIdeaInteractor.subscribeIdeaStateChange(new Observer<ViewState>() {
             @Override
@@ -55,9 +39,6 @@ public class ListCompositionArrayAdapter extends RecyclerView.Adapter {
 
             @Override
             public void onNext(ViewState state) {
-
-                int start;
-                int count;
                 switch (state.getState()) {
                     case R.id.state_refreshing:
                         // TODO: reflect pending state on UI, maybe grey out the
@@ -72,28 +53,6 @@ public class ListCompositionArrayAdapter extends RecyclerView.Adapter {
                                             R.string.create_grocery_snackbar_hint,
                                             Snackbar.LENGTH_LONG).show();
                                 }
-
-                                saveToFireBase();
-                                break;
-                            case ADD:
-                                start = state.getStart();
-                                count = 1;
-                                saveNewItemsToFireBase(start, count);
-                                break;
-                            case INSERT:
-                                start = state.getStart();
-                                count = state.getCount();
-                                saveNewItemsToFireBase(start, count);
-                                break;
-                            case UPDATE:
-                                start = state.getStart();
-                                count = state.getCount();
-                                updateItemInFireBase(start, count);
-                                break;
-                            case REMOVE:
-                                saveToFireBase();
-                                break;
-                            case CLEAR:
                                 break;
                         }
                         break;
@@ -133,30 +92,4 @@ public class ListCompositionArrayAdapter extends RecyclerView.Adapter {
         return mIdeaInteractor.getIdeaCount();
     }
 
-    private void saveToFireBase() {
-        Plan plan = mIdeaInteractor.getPlan();
-        List<Idea> ideaList = plan.getIdeas();
-        mShoppingListDatabaseReference.child(plan.getId()).child(ConstantsAndUtils.IDEAS).setValue(
-                ideaList);
-    }
-
-    private void updateItemInFireBase(int start, int count) {
-        Plan plan = mIdeaInteractor.getPlan();
-        for (int i = 0; i < count; i++) {
-            int pos = start + count - 1;
-            Idea updatedIdea = mIdeaInteractor.getIdeaAtPos(pos);
-            mShoppingListDatabaseReference.child(plan.getId()).child(ConstantsAndUtils.IDEAS)
-                    .child(String.valueOf(pos)).setValue(updatedIdea);
-        }
-    }
-
-    private void saveNewItemsToFireBase(int start, int count) {
-        Plan plan = mIdeaInteractor.getPlan();
-        for (int i = 0; i < count; i++) {
-            int pos = start + count - 1;
-            Idea newIdea = mIdeaInteractor.getIdeaAtPos(pos);
-            mShoppingListDatabaseReference.child(plan.getId()).child(
-                    ConstantsAndUtils.IDEAS).child(String.valueOf(pos)).setValue(newIdea);
-        }
-    }
 }
