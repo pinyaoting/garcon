@@ -216,6 +216,7 @@ public class IngredientInteractor implements IdeaInteractorInterface {
         mDataStore.setIdeaState(new ViewState(
                 R.id.state_refreshing, ViewState.OPERATION.RELOAD));
         mDataStore.loadPendingIdeas(goal.getId());
+        mCloudRepository.savePlan(mDataStore.getPlan());
         mDataStore.setIdeaState(new ViewState(
                 R.id.state_loaded, ViewState.OPERATION.RELOAD));
     }
