@@ -1,6 +1,6 @@
 # Garçon de cuisine
 
-An app for dinner makers to search for recipe, create a shopping list, and send it to their significant others to have them buy the ingredients back.  [APK](garcon-debug.apk)
+An app for dinner makers to search for recipe, create a shopping list, and send it to their significant others to have them buy the ingredients back.  [download apk](garcon-debug.apk)
 
 ![Video Walkthrough](garcon.gif)
 
