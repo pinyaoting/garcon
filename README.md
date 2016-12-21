@@ -2,6 +2,11 @@
 
 An app for dinner makers to search for recipe, create a shopping list, and send it to their significant others to have them buy the ingredients back.
 
+![Video Walkthrough](garcon.gif)
+
+GIF created with [LiceCap](http://www.cockos.com/licecap/).
+
+
 ## Features
 
 ### Cooking simplified for home cooks
@@ -27,14 +32,6 @@ Money share among roommates for grocery easy to manage as we can track who got w
 ### Grab and Go
 All participant can get real time update when you grab something from the shelf. No time for shopping? We'll provide curbside pickup as well as home delivery, all on the click on a button.
  
-## Video Walkthrough
-
-Here's a walkthrough of implemented user stories:
-
-![Video Walkthrough](garcon.gif)
-
-GIF created with [LiceCap](http://www.cockos.com/licecap/).
-
 ## Architecture
 
 ![Architecture](architecture.png)
