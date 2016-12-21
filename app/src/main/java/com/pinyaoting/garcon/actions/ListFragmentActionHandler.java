@@ -57,7 +57,7 @@ public class ListFragmentActionHandler implements ListFragmentActionHandlerInter
         shareIntent.setType("text/plain");
         StringBuilder sharableContentBuilder = new StringBuilder();
         sharableContentBuilder
-                .append("http://pinyaoting.com/shared/")
+                .append("http://garcon.com/shared/")
                 .append(keyReference.getKey());
 
         // with app link

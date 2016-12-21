@@ -1,5 +1,10 @@
 package com.pinyaoting.garcon.activities;
 
+import static com.pinyaoting.garcon.adapters.HomeFragmentPagerAdapter.SAVED_GOALS;
+import static com.pinyaoting.garcon.adapters.HomeFragmentPagerAdapter.SAVED_IDEAS;
+import static com.pinyaoting.garcon.adapters.HomeFragmentPagerAdapter.SEARCH_GOAL;
+import static com.raizlabs.android.dbflow.config.FlowManager.getContext;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
@@ -21,7 +26,15 @@ import android.view.View;
 import android.widget.AdapterView;
 
 import com.batch.android.Batch;
-import com.crashlytics.android.Crashlytics;
+import com.firebase.ui.auth.AuthUI;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
+import com.google.firebase.database.ValueEventListener;
 import com.pinyaoting.garcon.R;
 import com.pinyaoting.garcon.actions.ListFragmentActionHandler;
 import com.pinyaoting.garcon.adapters.HomeFragmentPagerAdapter;
@@ -53,28 +66,12 @@ import com.pinyaoting.garcon.viewmodels.Idea;
 import com.pinyaoting.garcon.viewmodels.Plan;
 import com.pinyaoting.garcon.viewmodels.User;
 import com.pinyaoting.garcon.viewmodels.UserList;
-import com.firebase.ui.auth.AuthUI;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ServerValue;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
-
-import io.fabric.sdk.android.Fabric;
-
-import static com.pinyaoting.garcon.adapters.HomeFragmentPagerAdapter.SAVED_GOALS;
-import static com.pinyaoting.garcon.adapters.HomeFragmentPagerAdapter.SAVED_IDEAS;
-import static com.pinyaoting.garcon.adapters.HomeFragmentPagerAdapter.SEARCH_GOAL;
-import static com.raizlabs.android.dbflow.config.FlowManager.getContext;
 
 public class MainActivity extends AppCompatActivity implements InjectorInterface,
         GoalActionHandlerInterface.PreviewHandlerInterface,
@@ -108,7 +105,6 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Fabric.with(this, new Crashlytics());
         getActivityComponent().inject(MainActivity.this);
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);

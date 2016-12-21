@@ -25,9 +25,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="644988249f2c971638ca9c4dc70b4717bd02410c" />
-        <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="@string/google_maps_api_key"/>
 
@@ -46,7 +43,7 @@
                 <category android:name="android.intent.category.BROWSABLE"/>
 
                 <data
-                    android:host="doublesp.com"
+                    android:host="garcon.com"
                     android:pathPrefix="/shared"
                     android:scheme="http"/>
             </intent-filter>
