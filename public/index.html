@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset=utf-8 />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://www.gstatic.com/firebasejs/3.6.2/firebase.js"></script>
+  <script src="https://unpkg.com/react@15/dist/react.min.js"></script>
+  <script src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+  <script type="text/babel">
+
+    var config = {
+      apiKey: "AIzaSyCAtxaXlD-yuFarODVKPtSrnzZBc831fOY",
+      authDomain: "garcon-efffe.firebaseapp.com",
+      databaseURL: "https://garcon-efffe.firebaseio.com",
+      storageBucket: "garcon-efffe.appspot.com",
+      messagingSenderId: "797609406506",
+    };
+    var app = firebase.initializeApp(config);
+    var items;
+
+    function readList (listId) {
+      if (typeof items !== "undefined") {
+        return;
+      }
+      var ref = firebase.database().ref().child('shoppingLists').child(listId);
+      ref.once("value").then(function(snapshot) {
+        var data = snapshot.val();
+        items = data.ideas;
+        document.title = data.title;
+        ReactDOM.render(
+          <ItemList items={items}/>,
+          document.getElementById('container')
+        );
+      });
+    }
+
+    function initApp() {
+      // Listening for auth state changes.
+      // [START authstatelistener]
+      firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          readList(window.location.pathname.replace(/\//, ''));
+        }
+      });
+      // [END authstatelistener]
+    }
+
+    function signInAnonymously() {
+      if (firebase.auth().currentUser) {
+        return;
+      }
+      firebase.auth().signInAnonymously().catch(null);
+    }
+
+    window.onload = function() {
+      initApp();
+      signInAnonymously();
+    };
+
+    function ItemList(props) {
+      const items = props.items;
+      const listItems = items.map((item) =>
+        <li key={item.id}>
+        {item.content}
+      </li>
+      );
+      return (
+        <ul>{listItems}</ul>
+      );
+    }
+  </script>
+</head>
+<body>
+  <div id="container"></div>
+</body>
+</html>
