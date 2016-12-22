@@ -44,7 +44,6 @@
 
                 <data
                     android:host="garcon-efffe.firebaseapp.com"
-                    android:pathPrefix="/shared"
                     android:scheme="https"/>
             </intent-filter>
         </activity>

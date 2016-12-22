@@ -542,12 +542,11 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
 
     private void handleDeeplink() {
         Intent intent = getIntent();
-        final Uri data = intent.getData();
-        if (data == null) {
+        final Uri url = intent.getData();
+        if (url == null) {
             return;
         }
-        int index = data.toString().indexOf("shared/") + "shared/".length();
-        String listId = data.toString().substring(index);
+        String listId = url.getPath().substring(1);
         if (listId == null) {
             return;
         }
