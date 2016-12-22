@@ -3,7 +3,7 @@ package com.pinyaoting.garcon.adapters;
 import com.pinyaoting.garcon.R;
 import com.pinyaoting.garcon.interfaces.domain.IdeaInteractorInterface;
 import com.pinyaoting.garcon.viewholders.IdeaViewHolder;
-import com.pinyaoting.garcon.viewmodels.Idea;
+import com.pinyaoting.garcon.viewstates.Idea;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;

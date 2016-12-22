@@ -1,6 +1,6 @@
 package com.pinyaoting.garcon.interfaces.presentation;
 
-import com.pinyaoting.garcon.viewmodels.Goal;
+import com.pinyaoting.garcon.viewstates.Goal;
 
 public interface GoalDetailActionHandlerInterface {
 

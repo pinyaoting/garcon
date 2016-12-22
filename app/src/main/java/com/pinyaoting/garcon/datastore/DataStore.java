@@ -6,11 +6,11 @@ import com.pinyaoting.garcon.R;
 import com.pinyaoting.garcon.interfaces.domain.DataStoreInterface;
 import com.pinyaoting.garcon.interfaces.presentation.ViewState;
 import com.pinyaoting.garcon.utils.ConstantsAndUtils;
-import com.pinyaoting.garcon.viewmodels.Goal;
-import com.pinyaoting.garcon.viewmodels.GoalReducer;
-import com.pinyaoting.garcon.viewmodels.Idea;
-import com.pinyaoting.garcon.viewmodels.IdeaReducer;
-import com.pinyaoting.garcon.viewmodels.Plan;
+import com.pinyaoting.garcon.viewstates.Goal;
+import com.pinyaoting.garcon.viewstates.GoalReducer;
+import com.pinyaoting.garcon.viewstates.Idea;
+import com.pinyaoting.garcon.viewstates.IdeaReducer;
+import com.pinyaoting.garcon.viewstates.Plan;
 
 import java.util.ArrayList;
 import java.util.HashMap;

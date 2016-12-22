@@ -2,7 +2,7 @@ package com.pinyaoting.garcon.actions;
 
 import com.pinyaoting.garcon.interfaces.presentation.GoalDetailActionHandlerInterface;
 import com.pinyaoting.garcon.interfaces.presentation.GoalInteractorInterface;
-import com.pinyaoting.garcon.viewmodels.Goal;
+import com.pinyaoting.garcon.viewstates.Goal;
 
 public class GoalDetailActionHandler implements GoalDetailActionHandlerInterface {
 

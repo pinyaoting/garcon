@@ -10,7 +10,7 @@
 
         <variable
                 name="viewModel"
-                type="com.pinyaoting.garcon.viewmodels.Idea"/>
+                type="com.pinyaoting.garcon.viewstates.Idea"/>
 
     </data>
 

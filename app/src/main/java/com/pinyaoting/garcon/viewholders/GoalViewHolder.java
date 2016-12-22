@@ -7,7 +7,7 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.pinyaoting.garcon.databinding.ItemGoalBinding;
 import com.pinyaoting.garcon.interfaces.presentation.GoalActionHandlerInterface;
 import com.pinyaoting.garcon.utils.ImageUtils;
-import com.pinyaoting.garcon.viewmodels.Goal;
+import com.pinyaoting.garcon.viewstates.Goal;
 
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;

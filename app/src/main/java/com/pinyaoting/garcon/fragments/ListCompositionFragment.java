@@ -7,7 +7,7 @@ import com.pinyaoting.garcon.interfaces.presentation.InjectorInterface;
 import com.pinyaoting.garcon.interfaces.presentation.ListFragmentActionHandlerInterface;
 import com.pinyaoting.garcon.utils.ConstantsAndUtils;
 import com.pinyaoting.garcon.utils.ItemClickSupport;
-import com.pinyaoting.garcon.viewmodels.Idea;
+import com.pinyaoting.garcon.viewstates.Idea;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;

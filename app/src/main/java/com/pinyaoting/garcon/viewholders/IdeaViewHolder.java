@@ -8,7 +8,7 @@ import com.pinyaoting.garcon.R;
 import com.pinyaoting.garcon.databinding.ItemIdeaBinding;
 import com.pinyaoting.garcon.utils.BindingAdapterUtils;
 import com.pinyaoting.garcon.utils.ImageUtils;
-import com.pinyaoting.garcon.viewmodels.Idea;
+import com.pinyaoting.garcon.viewstates.Idea;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;

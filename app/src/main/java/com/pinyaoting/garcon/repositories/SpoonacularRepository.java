@@ -4,7 +4,7 @@ import android.app.Application;
 
 import com.pinyaoting.garcon.api.SpoonacularClient;
 import com.pinyaoting.garcon.database.RecipeDatabase;
-import com.pinyaoting.garcon.interfaces.data.RecipeV2RepositoryInterface;
+import com.pinyaoting.garcon.interfaces.data.RecipeRepositoryInterface;
 import com.pinyaoting.garcon.models.v2.IngredientV2;
 import com.pinyaoting.garcon.models.v2.RandomRecipeResponseV2;
 import com.pinyaoting.garcon.models.v2.RecipeResponseV2;
@@ -24,7 +24,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.observables.ConnectableObservable;
 import rx.schedulers.Schedulers;
 
-public class SpoonacularRepository implements RecipeV2RepositoryInterface {
+public class SpoonacularRepository implements RecipeRepositoryInterface {
 
     List<Observer<List<RecipeV2>>> mSubscribers;
     List<Observer<RecipeV2>> mDetailSubscribers;

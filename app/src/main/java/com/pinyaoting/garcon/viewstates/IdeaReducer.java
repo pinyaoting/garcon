@@ -1,4 +1,4 @@
-package com.pinyaoting.garcon.viewmodels;
+package com.pinyaoting.garcon.viewstates;
 
 public class IdeaReducer {
 

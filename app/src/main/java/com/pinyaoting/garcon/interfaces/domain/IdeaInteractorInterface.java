@@ -1,9 +1,10 @@
 package com.pinyaoting.garcon.interfaces.domain;
 
 import com.pinyaoting.garcon.interfaces.presentation.ViewState;
-import com.pinyaoting.garcon.viewmodels.Goal;
-import com.pinyaoting.garcon.viewmodels.Idea;
-import com.pinyaoting.garcon.viewmodels.Plan;
+import com.pinyaoting.garcon.viewstates.Goal;
+import com.pinyaoting.garcon.viewstates.Idea;
+import com.pinyaoting.garcon.viewstates.Plan;
+import com.pinyaoting.garcon.viewstates.User;
 
 import rx.Observer;
 
@@ -46,4 +47,6 @@ public interface IdeaInteractorInterface {
     int getPendingIdeasCount(String id);
 
     Idea getPendingIdea(String id, int pos);
+
+    void subscribePlan(final User currentUser);
 }

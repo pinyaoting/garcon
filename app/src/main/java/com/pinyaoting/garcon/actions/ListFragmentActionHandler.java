@@ -10,7 +10,7 @@ import com.pinyaoting.garcon.fragments.MapFragment;
 import com.pinyaoting.garcon.interfaces.domain.IdeaInteractorInterface;
 import com.pinyaoting.garcon.interfaces.presentation.ListFragmentActionHandlerInterface;
 import com.pinyaoting.garcon.utils.ConstantsAndUtils;
-import com.pinyaoting.garcon.viewmodels.Plan;
+import com.pinyaoting.garcon.viewstates.Plan;
 
 public class ListFragmentActionHandler implements ListFragmentActionHandlerInterface {
 
@@ -34,7 +34,7 @@ public class ListFragmentActionHandler implements ListFragmentActionHandlerInter
         shareIntent.setType("text/plain");
         StringBuilder sharableContentBuilder = new StringBuilder();
         sharableContentBuilder
-                .append("http://garcon.com/shared/")
+                .append("http://www.garcon.com/shared/")
                 .append(plan.getId());
 
         // with app link

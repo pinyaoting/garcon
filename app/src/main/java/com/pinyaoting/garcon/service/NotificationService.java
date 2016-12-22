@@ -63,7 +63,7 @@ public class NotificationService extends Service {
 
         StringBuilder sharableContentBuilder = new StringBuilder();
         sharableContentBuilder
-                .append("http://garcon.com/shared/")
+                .append("http://www.garcon.com/shared/")
                 .append(val);
 
         Intent intent = new Intent(Intent.ACTION_VIEW,

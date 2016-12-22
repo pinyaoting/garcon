@@ -69,7 +69,6 @@ public class GarconApplication extends MultiDexApplication {
 
         Push.setGCMSenderId("797609406506");
 
-        // TODO : switch to live Batch Api Key before shipping
         // Batch.setConfig(new Config("DEV585AF9F92C546FDFC55E6CEA121")); // devlopement
         Batch.setConfig(new Config("585AF9F92C1EB0B95B2171A0990A3F")); // live
         Push.setNotificationsColor(ContextCompat.getColor(this, R.color.colorPrimary));

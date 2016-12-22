@@ -9,25 +9,23 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
-import com.pinyaoting.garcon.R;
-import com.pinyaoting.garcon.databinding.ActivityAddFriendBinding;
-import com.pinyaoting.garcon.databinding.SingleAddFriendBinding;
-import com.pinyaoting.garcon.utils.ConstantsAndUtils;
-import com.pinyaoting.garcon.utils.ImageUtils;
-import com.pinyaoting.garcon.utils.ToolbarBindingUtils;
-import com.pinyaoting.garcon.viewmodels.User;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.pinyaoting.garcon.R;
+import com.pinyaoting.garcon.databinding.ActivityAddFriendBinding;
+import com.pinyaoting.garcon.databinding.SingleAddFriendBinding;
+import com.pinyaoting.garcon.utils.ConstantsAndUtils;
+import com.pinyaoting.garcon.utils.ImageUtils;
+import com.pinyaoting.garcon.utils.ToolbarBindingUtils;
+import com.pinyaoting.garcon.viewstates.User;
 
 import java.util.ArrayList;
 
@@ -93,8 +91,8 @@ public class AddFriendActivity extends AppCompatActivity {
                 TextDrawable initial = initialConfig.build(String.valueOf(name.charAt(0)), color);
 
                 holder.binding.intialsImage.setImageDrawable(initial);
-                holder.mEmail.setText(emailDecoded);
-                holder.mName.setText(user.getName());
+                holder.binding.friendEmailAddress.setText(emailDecoded);
+                holder.binding.friendName.setText(user.getName());
                 holder.binding.llAddFriend.setBackgroundColor(bgColor);
 
                 if (email.equals(ConstantsAndUtils.getOwner(AddFriendActivity.this))) {
@@ -109,9 +107,9 @@ public class AddFriendActivity extends AppCompatActivity {
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 User thisUser = dataSnapshot.getValue(User.class);
                                 if (thisUser != null) {
-                                    holder.mAddFriendButton.setSelected(true);
+                                    holder.binding.addFriendButton.setSelected(true);
                                 } else {
-                                    holder.mAddFriendButton.setSelected(false);
+                                    holder.binding.addFriendButton.setSelected(false);
                                 }
                             }
 
@@ -134,26 +132,19 @@ public class AddFriendActivity extends AppCompatActivity {
 
     public static class AddFriendViewHolder extends RecyclerView.ViewHolder {
         SingleAddFriendBinding binding;
-        TextView mEmail;
-        TextView mName;
-        ImageButton mAddFriendButton;
 
         public AddFriendViewHolder(View itemView) {
             super(itemView);
             binding = SingleAddFriendBinding.bind(itemView);
 
-            // TODO: use data bind
-            mEmail = (TextView) itemView.findViewById(R.id.friend_email_address);
-            mName = (TextView) itemView.findViewById(R.id.friend_name);
-            mAddFriendButton = (ImageButton) itemView.findViewById(R.id.add_friend_button);
-
-            mAddFriendButton.setOnClickListener(new View.OnClickListener() {
+            binding.addFriendButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     User user = mFirebaseRecyclerAdapter.getItem(getAdapterPosition());
                     if (userFriends.contains(user.getEmail())) {
                         if (user.getEmail().equals(
-                                ConstantsAndUtils.getOwner(mEmail.getContext()))) {
+                                ConstantsAndUtils.getOwner(
+                                        binding.friendEmailAddress.getContext()))) {
                             Snackbar.make(sRelativeLayout, R.string.cannot_remove_self,
                                     Snackbar.LENGTH_SHORT).show();
                             return;
@@ -161,12 +152,12 @@ public class AddFriendActivity extends AppCompatActivity {
                         mListsDatabaseReference.child(ConstantsAndUtils.getOwner(view.getContext()))
                                 .child(user.getEmail()).removeValue();
                         userFriends.remove(user.getEmail());
-                        mAddFriendButton.setSelected(false);
+                        binding.addFriendButton.setSelected(false);
                     } else {
                         userFriends.add(user.getEmail());
                         mListsDatabaseReference.child(ConstantsAndUtils.getOwner(view.getContext()))
                                 .child(user.getEmail()).setValue(user);
-                        mAddFriendButton.setSelected(true);
+                        binding.addFriendButton.setSelected(true);
                     }
                 }
             });

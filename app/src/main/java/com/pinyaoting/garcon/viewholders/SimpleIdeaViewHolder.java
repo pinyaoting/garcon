@@ -5,7 +5,7 @@ import android.view.View;
 
 import com.pinyaoting.garcon.databinding.ItemIdeaBinding;
 import com.pinyaoting.garcon.utils.BindingAdapterUtils;
-import com.pinyaoting.garcon.viewmodels.Idea;
+import com.pinyaoting.garcon.viewstates.Idea;
 
 /**
  * Created by pinyaoting on 12/6/16.

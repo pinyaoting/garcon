@@ -1,7 +1,7 @@
 package com.pinyaoting.garcon.interfaces.presentation;
 
-import com.pinyaoting.garcon.viewmodels.Goal;
-import com.pinyaoting.garcon.viewmodels.Idea;
+import com.pinyaoting.garcon.viewstates.Goal;
+import com.pinyaoting.garcon.viewstates.Idea;
 
 import java.util.List;
 

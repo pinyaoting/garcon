@@ -7,7 +7,7 @@ import java.util.List;
 
 import rx.Observer;
 
-public interface RecipeV2RepositoryInterface {
+public interface RecipeRepositoryInterface {
 
     void subscribe(Observer<List<RecipeV2>> observer);
 

@@ -6,7 +6,7 @@ import com.pinyaoting.garcon.R;
 import com.pinyaoting.garcon.api.SpoonacularClient;
 import com.pinyaoting.garcon.interfaces.api.SpoonacularApiEndpointInterface;
 import com.pinyaoting.garcon.interfaces.data.CloudRepositoryInterface;
-import com.pinyaoting.garcon.interfaces.data.RecipeV2RepositoryInterface;
+import com.pinyaoting.garcon.interfaces.data.RecipeRepositoryInterface;
 import com.pinyaoting.garcon.interfaces.scopes.DataLayerScope;
 import com.pinyaoting.garcon.repositories.FirebaseRepository;
 import com.pinyaoting.garcon.repositories.SpoonacularRepository;
@@ -37,7 +37,7 @@ public class DataLayerModule {
 
     @Provides
     @DataLayerScope
-    public RecipeV2RepositoryInterface providesRecipeV2Repository(Application application,
+    public RecipeRepositoryInterface providesRecipeV2Repository(Application application,
                                                                   SpoonacularClient client) {
         return new SpoonacularRepository(application, client);
     }

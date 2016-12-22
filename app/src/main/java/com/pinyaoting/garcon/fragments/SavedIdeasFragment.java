@@ -31,9 +31,9 @@ import com.pinyaoting.garcon.interfaces.presentation.ListCompositionHandlerInter
 import com.pinyaoting.garcon.interfaces.presentation.SavedIdeasActionHandlerInterface;
 import com.pinyaoting.garcon.utils.ConstantsAndUtils;
 import com.pinyaoting.garcon.utils.ImageUtils;
-import com.pinyaoting.garcon.viewmodels.Idea;
-import com.pinyaoting.garcon.viewmodels.Plan;
-import com.pinyaoting.garcon.viewmodels.UserList;
+import com.pinyaoting.garcon.viewstates.Idea;
+import com.pinyaoting.garcon.viewstates.Plan;
+import com.pinyaoting.garcon.viewstates.UserList;
 
 import java.util.HashSet;
 import java.util.Set;

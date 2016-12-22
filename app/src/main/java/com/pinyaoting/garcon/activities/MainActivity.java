@@ -61,11 +61,11 @@ import com.pinyaoting.garcon.utils.TabUtils;
 import com.pinyaoting.garcon.utils.ToolbarBindingUtils;
 import com.pinyaoting.garcon.view.AutoCompleteSearchView;
 import com.pinyaoting.garcon.viewholders.GoalViewHolder;
-import com.pinyaoting.garcon.viewmodels.Goal;
-import com.pinyaoting.garcon.viewmodels.Idea;
-import com.pinyaoting.garcon.viewmodels.Plan;
-import com.pinyaoting.garcon.viewmodels.User;
-import com.pinyaoting.garcon.viewmodels.UserList;
+import com.pinyaoting.garcon.viewstates.Goal;
+import com.pinyaoting.garcon.viewstates.Idea;
+import com.pinyaoting.garcon.viewstates.Plan;
+import com.pinyaoting.garcon.viewstates.User;
+import com.pinyaoting.garcon.viewstates.UserList;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
     private DatabaseReference mUsersDatabaseReference;
     private DatabaseReference mListDatabaseReference;
     private DatabaseReference mShoppingListDatabaseReference;
-    private String mUsername;
+    private User mUser;
     private Fragment mDialogFragment;
     private HomeFragmentPagerAdapter mPagerAdapter;
     private Transition mChangeTransform;
@@ -193,7 +193,7 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
     public void compose(Goal goal) {
         // load ingredients from recipe
         dismissDialogIfNotNull();
-        loadList(newListId(goal.getTitle()), goal);
+        loadList(newListId(goal.getTitle()), goal, false);
         mDialogFragment = ListCompositionFragment.newInstance();
         binding.activityMainToolbarContainer.toolbarTitle.setText(
                 getString(R.string.create_grocery_hint));
@@ -204,12 +204,16 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
 
     @Override
     public void compose(String listId) {
+        compose(listId, false);
+    }
+
+    private void compose(String listId, boolean requestAccess) {
         // load existing list
         if (listId == null) {
             listId = newListId(null);
         }
         dismissDialogIfNotNull();
-        loadList(listId, null);
+        loadList(listId, null, requestAccess);
         mDialogFragment = ListCompositionFragment.newInstance();
         binding.activityMainToolbarContainer.toolbarTitle.setText(
                 getString(R.string.create_grocery_hint));
@@ -222,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
     public void compose() {
         // create new list
         dismissDialogIfNotNull();
-        loadList(newListId(null), null);
+        loadList(newListId(null), null, false);
         mDialogFragment = ListCompositionFragment.newInstance();
         binding.activityMainToolbarContainer.toolbarTitle.setText(
                 getString(R.string.create_grocery_hint));
@@ -289,7 +293,7 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
         return keyReference.getKey();
     }
 
-    private void loadList(final String listId, final Goal goal) {
+    private void loadList(final String listId, final Goal goal, final boolean requestAccess) {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference listsDatabaseReference = firebaseDatabase.getReference().child(
                 ConstantsAndUtils.SHOPPING_LISTS).child(listId);
@@ -299,6 +303,9 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
                 Plan plan = dataSnapshot.getValue(Plan.class);
                 if (plan != null) {
                     mIdeaInteractor.setPlan(plan);
+                }
+                if (requestAccess) {
+                    mIdeaInteractor.subscribePlan(mUser);
                 }
                 List<Idea> ideas = plan.getIdeas();
                 if (ideas != null && !ideas.isEmpty()) {
@@ -371,12 +378,11 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
     }
 
     private void onSignedInInitialize(FirebaseUser user) {
-        mUsername = user.getDisplayName();
         // Add user to db
         HashMap<String, Object> timestampJoined = new HashMap<>();
         timestampJoined.put(ConstantsAndUtils.TIMESTAMP, ServerValue.TIMESTAMP);
-        User currentUser = new User(mUsername, user.getEmail().replace(".", ","), timestampJoined);
-        mUsersDatabaseReference.child(user.getEmail().replace(".", ",")).setValue(currentUser);
+        mUser = new User(user.getDisplayName(), user.getEmail().replace(".", ","), timestampJoined);
+        mUsersDatabaseReference.child(user.getEmail().replace(".", ",")).setValue(mUser);
 
         startService(new Intent(this, NotificationService.class));
 
@@ -517,7 +523,7 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
     }
 
     private void onSignedOutCleanup() {
-        mUsername = ConstantsAndUtils.ANONYMOUS;
+        mUser = null;
         stopService(new Intent(this, NotificationService.class));
     }
 
@@ -545,7 +551,7 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
         if (listId == null) {
             return;
         }
-        compose(listId);
+        compose(listId, true);
     }
 
     private void dismissDialogIfNotNull() {

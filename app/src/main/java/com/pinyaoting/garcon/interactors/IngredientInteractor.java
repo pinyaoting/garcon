@@ -1,18 +1,21 @@
 package com.pinyaoting.garcon.interactors;
 
+import android.content.Context;
+
 import com.pinyaoting.garcon.R;
 import com.pinyaoting.garcon.interfaces.data.CloudRepositoryInterface;
-import com.pinyaoting.garcon.interfaces.data.RecipeV2RepositoryInterface;
+import com.pinyaoting.garcon.interfaces.data.RecipeRepositoryInterface;
 import com.pinyaoting.garcon.interfaces.domain.DataStoreInterface;
 import com.pinyaoting.garcon.interfaces.domain.IdeaInteractorInterface;
 import com.pinyaoting.garcon.interfaces.presentation.ViewState;
 import com.pinyaoting.garcon.models.v2.IngredientV2;
 import com.pinyaoting.garcon.utils.ConstantsAndUtils;
-import com.pinyaoting.garcon.viewmodels.Goal;
-import com.pinyaoting.garcon.viewmodels.Idea;
-import com.pinyaoting.garcon.viewmodels.IdeaMeta;
-import com.pinyaoting.garcon.viewmodels.IdeaReducer;
-import com.pinyaoting.garcon.viewmodels.Plan;
+import com.pinyaoting.garcon.viewstates.Goal;
+import com.pinyaoting.garcon.viewstates.Idea;
+import com.pinyaoting.garcon.viewstates.IdeaMeta;
+import com.pinyaoting.garcon.viewstates.IdeaReducer;
+import com.pinyaoting.garcon.viewstates.Plan;
+import com.pinyaoting.garcon.viewstates.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,14 +30,17 @@ public class IngredientInteractor implements IdeaInteractorInterface {
     public static final int INGREDIENT_INTERACTOR_BATCH_SIZE = 10;
     public static final long INGREDIENT_INTERACTOR_DEBOUNCE_TIME_IN_MILLIES = 500;
 
+    Context mContext;
     DataStoreInterface mDataStore;
-    RecipeV2RepositoryInterface mRecipeRepository;
+    RecipeRepositoryInterface mRecipeRepository;
     CloudRepositoryInterface mCloudRepository;
     PublishSubject<String> mSearchDebouncer;
 
-    public IngredientInteractor(DataStoreInterface ideaDataStore,
-                                RecipeV2RepositoryInterface recipeRepository,
+    public IngredientInteractor(Context context,
+            DataStoreInterface ideaDataStore,
+            RecipeRepositoryInterface recipeRepository,
             CloudRepositoryInterface cloudRepository) {
+        mContext = context;
         mDataStore = ideaDataStore;
         mRecipeRepository = recipeRepository;
         mCloudRepository = cloudRepository;
@@ -242,4 +248,12 @@ public class IngredientInteractor implements IdeaInteractorInterface {
     private void searchIngredientsWithDebounce(final String keyword) {
         getDebouncer().onNext(keyword);
     }
+
+    public void subscribePlan(final User currentUser) {
+        Plan plan = mDataStore.getPlan();
+        String userEmail = ConstantsAndUtils.getOwner(mContext);
+        mCloudRepository.share(plan, userEmail, currentUser);
+    }
+
+
 }

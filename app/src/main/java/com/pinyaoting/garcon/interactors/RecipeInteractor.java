@@ -1,19 +1,19 @@
 package com.pinyaoting.garcon.interactors;
 
+import android.content.Context;
+
 import com.pinyaoting.garcon.R;
-import com.pinyaoting.garcon.interfaces.data.RecipeV2RepositoryInterface;
+import com.pinyaoting.garcon.interfaces.data.RecipeRepositoryInterface;
 import com.pinyaoting.garcon.interfaces.domain.DataStoreInterface;
 import com.pinyaoting.garcon.interfaces.presentation.GoalInteractorInterface;
 import com.pinyaoting.garcon.interfaces.presentation.ViewState;
 import com.pinyaoting.garcon.models.v2.IngredientV2;
 import com.pinyaoting.garcon.models.v2.RecipeV2;
 import com.pinyaoting.garcon.models.v2.SavedRecipe;
-import com.pinyaoting.garcon.viewmodels.Goal;
-import com.pinyaoting.garcon.viewmodels.GoalReducer;
-import com.pinyaoting.garcon.viewmodels.Idea;
-import com.pinyaoting.garcon.viewmodels.IdeaMeta;
-
-import android.content.Context;
+import com.pinyaoting.garcon.viewstates.Goal;
+import com.pinyaoting.garcon.viewstates.GoalReducer;
+import com.pinyaoting.garcon.viewstates.Idea;
+import com.pinyaoting.garcon.viewstates.IdeaMeta;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -25,7 +25,7 @@ import rx.Observer;
 import rx.functions.Action1;
 import rx.subjects.PublishSubject;
 
-public class RecipeV2Interactor implements GoalInteractorInterface {
+public class RecipeInteractor implements GoalInteractorInterface {
 
     public static final int RECIPEV2_INTERACTOR_BATCH_SIZE = 10;
     public static final long RECIPEV2_INTERACTOR_DEBOUNCE_TIME_IN_MILLIES = 500;
@@ -39,12 +39,12 @@ public class RecipeV2Interactor implements GoalInteractorInterface {
 
     Context mContext;
     DataStoreInterface mDataStore;
-    RecipeV2RepositoryInterface mRecipeRepository;
+    RecipeRepositoryInterface mRecipeRepository;
     PublishSubject<String> mSearchDebouncer;
     PublishSubject<Integer> mBookmarkDebouncer;
 
-    public RecipeV2Interactor(Context context, DataStoreInterface dataStore,
-                              RecipeV2RepositoryInterface recipeRepository) {
+    public RecipeInteractor(Context context, DataStoreInterface dataStore,
+                              RecipeRepositoryInterface recipeRepository) {
         mContext = context;
         mDataStore = dataStore;
         mRecipeRepository = recipeRepository;

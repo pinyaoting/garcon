@@ -5,9 +5,9 @@ import android.content.Context;
 import com.pinyaoting.garcon.R;
 import com.pinyaoting.garcon.datastore.DataStore;
 import com.pinyaoting.garcon.interactors.IngredientInteractor;
-import com.pinyaoting.garcon.interactors.RecipeV2Interactor;
+import com.pinyaoting.garcon.interactors.RecipeInteractor;
 import com.pinyaoting.garcon.interfaces.data.CloudRepositoryInterface;
-import com.pinyaoting.garcon.interfaces.data.RecipeV2RepositoryInterface;
+import com.pinyaoting.garcon.interfaces.data.RecipeRepositoryInterface;
 import com.pinyaoting.garcon.interfaces.domain.DataStoreInterface;
 import com.pinyaoting.garcon.interfaces.presentation.GoalInteractorInterface;
 import com.pinyaoting.garcon.interfaces.scopes.DomainLayerScope;
@@ -39,16 +39,16 @@ public class DomainLayerModule {
     public com.pinyaoting.garcon.interfaces.domain.IdeaInteractorInterface
     providesRecipeV2IdeaInteractor(
             DataStoreInterface ideaDataStore,
-            RecipeV2RepositoryInterface recipeRepository,
+            RecipeRepositoryInterface recipeRepository,
             CloudRepositoryInterface cloudRepository) {
-        return new IngredientInteractor(ideaDataStore, recipeRepository, cloudRepository);
+        return new IngredientInteractor(mContext, ideaDataStore, recipeRepository, cloudRepository);
     }
 
     @Provides
     @DomainLayerScope
     public GoalInteractorInterface providesIdeaSearchInteractor(DataStoreInterface ideaDataStore,
-                                                                RecipeV2RepositoryInterface recipeRepository) {
-        return new RecipeV2Interactor(mContext, ideaDataStore, recipeRepository);
+                                                                RecipeRepositoryInterface recipeRepository) {
+        return new RecipeInteractor(mContext, ideaDataStore, recipeRepository);
     }
 
 }

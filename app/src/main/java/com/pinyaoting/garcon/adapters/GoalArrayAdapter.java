@@ -10,7 +10,7 @@ import com.pinyaoting.garcon.interfaces.presentation.GoalActionHandlerInterface;
 import com.pinyaoting.garcon.interfaces.presentation.GoalInteractorInterface;
 import com.pinyaoting.garcon.interfaces.presentation.ViewState;
 import com.pinyaoting.garcon.viewholders.GoalViewHolder;
-import com.pinyaoting.garcon.viewmodels.Goal;
+import com.pinyaoting.garcon.viewstates.Goal;
 
 import rx.Observer;
 

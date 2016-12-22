@@ -13,7 +13,7 @@ import com.pinyaoting.garcon.interfaces.presentation.GoalInteractorInterface;
 import com.pinyaoting.garcon.interfaces.presentation.InjectorInterface;
 import com.pinyaoting.garcon.interfaces.presentation.ViewState;
 import com.pinyaoting.garcon.utils.ImageUtils;
-import com.pinyaoting.garcon.viewmodels.Goal;
+import com.pinyaoting.garcon.viewstates.Goal;
 
 import android.content.Context;
 import android.content.res.ColorStateList;

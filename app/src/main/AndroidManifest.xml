@@ -43,7 +43,7 @@
                 <category android:name="android.intent.category.BROWSABLE"/>
 
                 <data
-                    android:host="garcon.com"
+                    android:host="www.garcon.com"
                     android:pathPrefix="/shared"
                     android:scheme="http"/>
             </intent-filter>

@@ -12,7 +12,7 @@ import com.pinyaoting.garcon.R;
 import com.pinyaoting.garcon.databinding.ItemIdeaSuggestionsBinding;
 import com.pinyaoting.garcon.interfaces.domain.IdeaInteractorInterface;
 import com.pinyaoting.garcon.interfaces.presentation.ViewState;
-import com.pinyaoting.garcon.viewmodels.Idea;
+import com.pinyaoting.garcon.viewstates.Idea;
 
 import rx.Observer;
 

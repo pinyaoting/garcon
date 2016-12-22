@@ -13,7 +13,7 @@
 
         <variable
             name="viewModel"
-            type="com.pinyaoting.garcon.viewmodels.Goal"/>
+            type="com.pinyaoting.garcon.viewstates.Goal"/>
     </data>
 
     <FrameLayout xmlns:app="http://schemas.android.com/apk/res-auto"
