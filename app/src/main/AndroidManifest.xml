@@ -47,12 +47,6 @@
                     android:scheme="https"/>
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.pinyaoting.garcon.activities.ShareActivity"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name="com.pinyaoting.garcon.activities.AddFriendActivity"
-            android:screenOrientation="portrait"/>
 
         <service android:name="com.batch.android.BatchPushService"/>
 

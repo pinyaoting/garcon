@@ -7,11 +7,9 @@ import android.content.Intent;
 
 import com.pinyaoting.garcon.R;
 import com.pinyaoting.garcon.activities.MainActivity;
-import com.pinyaoting.garcon.activities.ShareActivity;
 import com.pinyaoting.garcon.fragments.MapFragment;
 import com.pinyaoting.garcon.interfaces.domain.IdeaInteractorInterface;
 import com.pinyaoting.garcon.interfaces.presentation.ListFragmentActionHandlerInterface;
-import com.pinyaoting.garcon.utils.ConstantsAndUtils;
 import com.pinyaoting.garcon.viewstates.Plan;
 
 public class ListFragmentActionHandler implements ListFragmentActionHandlerInterface {
@@ -29,7 +27,7 @@ public class ListFragmentActionHandler implements ListFragmentActionHandlerInter
     }
 
     @Override
-    public void onExternalShareButtonClick() {
+    public void onShareButtonClick() {
         Plan plan = mIdeaInteractor.getPlan();
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
@@ -42,13 +40,6 @@ public class ListFragmentActionHandler implements ListFragmentActionHandlerInter
         // with app link
         shareIntent.putExtra(Intent.EXTRA_TEXT, sharableContentBuilder.toString());
         mShareHandler.share(shareIntent);
-    }
-
-    @Override
-    public void onShareButtonClick() {
-        Intent shareIntent = new Intent(mContext, ShareActivity.class);
-        shareIntent.putExtra(ConstantsAndUtils.LIST_ID, mIdeaInteractor.getPlan().getId());
-        mContext.startActivity(shareIntent);
     }
 
     @Override

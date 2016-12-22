@@ -44,15 +44,6 @@
             <com.getbase.floatingactionbutton.FloatingActionButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="@{() -> handler.onExternalShareButtonClick()}"
-                android:src="@drawable/ic_send"
-                android:tint="@color/colorButton"
-                app:fab_colorNormal="@color/colorUpOverlayDark"
-                app:fab_title="@string/external_share"/>
-
-            <com.getbase.floatingactionbutton.FloatingActionButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:onClick="@{() -> handler.onShareButtonClick()}"
                 android:src="@drawable/ic_share"
                 android:tint="@color/colorButton"
