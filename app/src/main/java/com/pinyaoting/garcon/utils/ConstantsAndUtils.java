@@ -26,6 +26,7 @@ public class ConstantsAndUtils {
     public static final int LATEST = 25;
     static final String SPOONACULAR_IMAGE_CDN_BASE_URL =
             "https://spoonacular.com/cdn/ingredients_100x100/";
+    public static final String SHARED_LIST_URL = "https://garcon-efffe.firebaseapp.com/shared/";
 
 
     public static String getOwner(Context context) {

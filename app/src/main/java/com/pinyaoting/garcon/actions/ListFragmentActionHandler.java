@@ -1,5 +1,7 @@
 package com.pinyaoting.garcon.actions;
 
+import static com.pinyaoting.garcon.utils.ConstantsAndUtils.SHARED_LIST_URL;
+
 import android.content.Context;
 import android.content.Intent;
 
@@ -34,7 +36,7 @@ public class ListFragmentActionHandler implements ListFragmentActionHandlerInter
         shareIntent.setType("text/plain");
         StringBuilder sharableContentBuilder = new StringBuilder();
         sharableContentBuilder
-                .append("http://www.garcon.com/shared/")
+                .append(SHARED_LIST_URL)
                 .append(plan.getId());
 
         // with app link

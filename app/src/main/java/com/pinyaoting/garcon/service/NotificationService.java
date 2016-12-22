@@ -1,5 +1,7 @@
 package com.pinyaoting.garcon.service;
 
+import static com.pinyaoting.garcon.utils.ConstantsAndUtils.SHARED_LIST_URL;
+
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -63,7 +65,7 @@ public class NotificationService extends Service {
 
         StringBuilder sharableContentBuilder = new StringBuilder();
         sharableContentBuilder
-                .append("http://www.garcon.com/shared/")
+                .append(SHARED_LIST_URL)
                 .append(val);
 
         Intent intent = new Intent(Intent.ACTION_VIEW,

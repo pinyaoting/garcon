@@ -43,9 +43,9 @@
                 <category android:name="android.intent.category.BROWSABLE"/>
 
                 <data
-                    android:host="www.garcon.com"
+                    android:host="garcon-efffe.firebaseapp.com"
                     android:pathPrefix="/shared"
-                    android:scheme="http"/>
+                    android:scheme="https"/>
             </intent-filter>
         </activity>
         <activity
