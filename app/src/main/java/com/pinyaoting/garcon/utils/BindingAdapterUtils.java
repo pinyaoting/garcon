@@ -18,8 +18,8 @@ public class BindingAdapterUtils {
     public static void loadImage(ImageView view, String url) {
         Glide.with(view.getContext())
                 .load(url)
+                .placeholder(R.drawable.ic_placeholder)
                 .fitCenter()
-                .placeholder(R.drawable.background_3)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(view);
     }

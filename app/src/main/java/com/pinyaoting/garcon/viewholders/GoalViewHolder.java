@@ -1,19 +1,20 @@
 package com.pinyaoting.garcon.viewholders;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.pinyaoting.garcon.databinding.ItemGoalBinding;
-import com.pinyaoting.garcon.interfaces.presentation.GoalActionHandlerInterface;
-import com.pinyaoting.garcon.utils.ImageUtils;
-import com.pinyaoting.garcon.viewstates.Goal;
-
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.pinyaoting.garcon.R;
+import com.pinyaoting.garcon.databinding.ItemGoalBinding;
+import com.pinyaoting.garcon.interfaces.presentation.GoalActionHandlerInterface;
+import com.pinyaoting.garcon.utils.ImageUtils;
+import com.pinyaoting.garcon.viewstates.Goal;
 
 public class GoalViewHolder extends RecyclerView.ViewHolder {
 
@@ -96,5 +97,9 @@ public class GoalViewHolder extends RecyclerView.ViewHolder {
 
     public void executePendingBindings() {
         binding.executePendingBindings();
+    }
+
+    public void recycle() {
+        binding.ivGoalImage.setImageResource(R.drawable.ic_placeholder);
     }
 }

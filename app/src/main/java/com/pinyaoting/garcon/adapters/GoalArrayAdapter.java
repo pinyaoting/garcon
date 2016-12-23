@@ -1,5 +1,7 @@
 package com.pinyaoting.garcon.adapters;
 
+import static com.raizlabs.android.dbflow.config.FlowManager.getContext;
+
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,8 +15,6 @@ import com.pinyaoting.garcon.viewholders.GoalViewHolder;
 import com.pinyaoting.garcon.viewstates.Goal;
 
 import rx.Observer;
-
-import static com.raizlabs.android.dbflow.config.FlowManager.getContext;
 
 public class GoalArrayAdapter
         extends RecyclerView.Adapter {
@@ -98,6 +98,15 @@ public class GoalArrayAdapter
             viewHolder.setHandler(mActionHandler);
             viewHolder.executePendingBindings();
         }
+    }
+
+    @Override
+    public void onViewRecycled(RecyclerView.ViewHolder holder) {
+        if (holder instanceof GoalViewHolder) {
+            GoalViewHolder viewHolder = (GoalViewHolder) holder;
+            viewHolder.recycle();
+        }
+        super.onViewRecycled(holder);
     }
 
     @Override
