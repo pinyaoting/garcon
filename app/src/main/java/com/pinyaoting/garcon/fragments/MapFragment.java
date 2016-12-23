@@ -18,7 +18,6 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,7 +82,6 @@ public class MapFragment extends Fragment implements LocationListener, OnMapRead
 
 
     public MapFragment() {
-        Log.d(TAG, "Constructor");
     }
 
     public static MapFragment newInstance() {
@@ -141,7 +139,6 @@ public class MapFragment extends Fragment implements LocationListener, OnMapRead
 
     @Override
     public void onResume() {
-        Log.d(TAG, "onResume()");
         super.onResume();
 
         // map stuff
@@ -158,7 +155,6 @@ public class MapFragment extends Fragment implements LocationListener, OnMapRead
 
     @Override
     public void onPause() {
-        Log.d(TAG, "onPause()");
         super.onPause();
 
         // map stuff
@@ -167,8 +163,6 @@ public class MapFragment extends Fragment implements LocationListener, OnMapRead
 
     @Override
     public void onMapReady(GoogleMap map) {
-        Log.d(TAG, "onMapReady()");
-
         UiSettings uiSettings;
 
         mMap = map;
@@ -285,7 +279,6 @@ public class MapFragment extends Fragment implements LocationListener, OnMapRead
         mClusterManager.clearItems();
         for (Result store : stores) {
             com.pinyaoting.garcon.googleplace.gplace.Location location = store.getGeometry().getLocation();
-            Log.d(TAG, "Add store to cluster master: " + location.toString());
             mClusterManager.addItem(new LocationClusterItem(store));
         }
         mClusterManager.cluster();
@@ -311,8 +304,6 @@ public class MapFragment extends Fragment implements LocationListener, OnMapRead
             loc2.setLatitude(lastKnownLocation.latitude);
             loc2.setLongitude(lastKnownLocation.longitude);
 
-            Log.d(TAG, "lastKnownLocation: " + lastKnownLocation);
-
             float distanceInMeters = loc1.distanceTo(loc2);
             if (distanceInMeters < 50) {
                 return;
@@ -325,8 +316,6 @@ public class MapFragment extends Fragment implements LocationListener, OnMapRead
 
         latAndLng = (lastKnownLocation != null) ? Double.toString(lastKnownLocation.latitude) + "," +
                 Double.toString(lastKnownLocation.longitude) : null;
-
-        Log.d(TAG, "Move camera to: " + lastKnownLocation);
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lastKnownLocation, 13));
 
@@ -354,7 +343,6 @@ public class MapFragment extends Fragment implements LocationListener, OnMapRead
         // Note that this can be NULL if last location isn't already known.
         if (mCurrentLocation != null) {
             // Print current location if not null
-            Log.d("DEBUG", "current location: " + mCurrentLocation.toString());
             LatLng latLng = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
         }
         // Begin polling for new location updates.
@@ -406,7 +394,6 @@ public class MapFragment extends Fragment implements LocationListener, OnMapRead
     @Override
     public boolean onClusterClick(Cluster<LocationClusterItem> cluster) {
         // Show a toast with some info when the cluster is clicked.
-        Log.d(TAG, "onClusterClick()");
         float currentZoom = mMap.getCameraPosition().zoom;
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(cluster.getPosition(), currentZoom + 1));
         return true;
@@ -414,7 +401,6 @@ public class MapFragment extends Fragment implements LocationListener, OnMapRead
 
     @Override
     public boolean onClusterItemClick(LocationClusterItem locationClusterItem) {
-        Log.d(TAG, "onClusterItemClick: " + locationClusterItem);
         final Result store = locationClusterItem.getStore();
 //        Toast.makeText(getActivity(), store.getName() + "\n" + store.getVicinity(), Toast.LENGTH_SHORT).show();
 
@@ -504,7 +490,6 @@ public class MapFragment extends Fragment implements LocationListener, OnMapRead
             if (e instanceof HttpException) {
                 HttpException response = (HttpException) e;
                 int code = response.code();
-                Log.d(TAG, "Rx Subscriber error with code: " + code);
             } else if (e instanceof IllegalFormatConversionException) {
 
             }
@@ -513,7 +498,6 @@ public class MapFragment extends Fragment implements LocationListener, OnMapRead
         @Override
         public void onNext(GPlace response) {
             List<Result> results = response.getResults();
-            Log.d(TAG, "results: " + results.size());
             if (clearOldList) {
                 mStoreList.clear();
             }
