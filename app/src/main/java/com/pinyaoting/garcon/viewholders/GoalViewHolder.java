@@ -30,10 +30,10 @@ public class GoalViewHolder extends RecyclerView.ViewHolder {
         binding.setPos(position);
     }
 
-    public void setViewModel(Goal viewModel) {
-        binding.setViewModel(viewModel);
+    public void setViewState(Goal viewState) {
+        binding.setViewState(viewState);
 
-        if (viewModel.getSubTitle() == null) {
+        if (viewState.getSubTitle() == null) {
             binding.ivGoalSubTitle.setAlpha(0.0f);
             binding.btnGoalSubTitle.setAlpha(0.0f);
         } else {
@@ -84,7 +84,7 @@ public class GoalViewHolder extends RecyclerView.ViewHolder {
         };
 
         Glide.with(binding.ivGoalImage.getContext())
-                .load(viewModel.getImageUrl())
+                .load(viewState.getImageUrl())
                 .asBitmap()
                 .fitCenter()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)

@@ -52,7 +52,7 @@ public class IdeaSuggestionsAdapter extends ArrayAdapter<Idea> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position
-        Idea viewModel = getItem(position);
+        Idea viewState = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
         // Check if an existing view is being reused, otherwise inflate the view
         ViewHolder viewHolder; // view lookup cache stored in tag
@@ -68,7 +68,7 @@ public class IdeaSuggestionsAdapter extends ArrayAdapter<Idea> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         viewHolder.binding.setPos(position);
-        viewHolder.binding.setViewModel(viewModel);
+        viewHolder.binding.setViewState(viewState);
 
         // Return the completed view to render on screen
         return convertView;

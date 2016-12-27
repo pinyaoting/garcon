@@ -15,7 +15,7 @@
             type="com.pinyaoting.garcon.interfaces.presentation.GoalActionHandlerInterface"/>
 
         <variable
-            name="viewModel"
+            name="viewState"
             type="com.pinyaoting.garcon.viewstates.Goal"/>
     </data>
 
@@ -66,7 +66,7 @@
             android:paddingStart="@dimen/goal_preview_text_padding"
             android:paddingRight="@dimen/goal_preview_text_padding"
             android:paddingEnd="@dimen/goal_preview_text_padding"
-            android:text='@{viewModel.title}'
+            android:text='@{viewState.title}'
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             android:textColor="@color/colorUp"
             android:transitionName="@string/transition_goal_title"
@@ -104,7 +104,7 @@
                     android:gravity="center_vertical"
                     android:maxLines="1"
                     android:onClick="@{() -> handler.onPreviewButtonClick(viewHolder, pos)}"
-                    android:text='@{viewModel.subTitle}'
+                    android:text='@{viewState.subTitle}'
                     android:textColor="@color/colorUpOverlay"
                     tools:text="ready in 16 minutes"/>
 

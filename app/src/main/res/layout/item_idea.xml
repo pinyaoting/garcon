@@ -9,7 +9,7 @@
                 type="int"/>
 
         <variable
-                name="viewModel"
+                name="viewState"
                 type="com.pinyaoting.garcon.viewstates.Idea"/>
 
     </data>
@@ -37,10 +37,10 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginStart="10dp"
                 android:gravity="center_vertical|left|start"
-                android:text='@{viewModel.content}'
+                android:text='@{viewState.content}'
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                 android:textColor="@color/colorBackground"
-                app:crossout='@{viewModel.crossedOut}'
+                app:crossout='@{viewState.crossedOut}'
                 tools:text="egg"/>
 
     </LinearLayout>

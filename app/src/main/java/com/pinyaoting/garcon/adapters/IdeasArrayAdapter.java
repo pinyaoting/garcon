@@ -1,16 +1,16 @@
 package com.pinyaoting.garcon.adapters;
 
-import com.pinyaoting.garcon.R;
-import com.pinyaoting.garcon.interfaces.domain.IdeaInteractorInterface;
-import com.pinyaoting.garcon.viewholders.IdeaViewHolder;
-import com.pinyaoting.garcon.viewstates.Idea;
+import static com.raizlabs.android.dbflow.config.FlowManager.getContext;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import static com.raizlabs.android.dbflow.config.FlowManager.getContext;
+import com.pinyaoting.garcon.R;
+import com.pinyaoting.garcon.interfaces.domain.IdeaInteractorInterface;
+import com.pinyaoting.garcon.viewholders.IdeaViewHolder;
+import com.pinyaoting.garcon.viewstates.Idea;
 
 /**
  * Created by pinyaoting on 12/6/16.
@@ -39,11 +39,11 @@ public class IdeasArrayAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        Idea viewModel = mIdeaInteractor.getPendingIdea(mGoalId, position);
+        Idea viewState = mIdeaInteractor.getPendingIdea(mGoalId, position);
         if (holder instanceof IdeaViewHolder) {
             IdeaViewHolder viewHolder = (IdeaViewHolder) holder;
             viewHolder.setPosition(position);
-            viewHolder.setViewModel(viewModel);
+            viewHolder.setViewState(viewState);
             viewHolder.executePendingBindings();
         }
     }

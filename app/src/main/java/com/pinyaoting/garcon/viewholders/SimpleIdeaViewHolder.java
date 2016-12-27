@@ -24,14 +24,14 @@ public class SimpleIdeaViewHolder extends RecyclerView.ViewHolder {
         binding.setPos(position);
     }
 
-    public void setViewModel(Idea viewModel) {
-        binding.setViewModel(viewModel);
-        if (viewModel == null ||
-                viewModel.getMeta() == null ||
-                viewModel.getMeta().getImageUrl() == null) {
+    public void setViewState(Idea viewState) {
+        binding.setViewState(viewState);
+        if (viewState == null ||
+                viewState.getMeta() == null ||
+                viewState.getMeta().getImageUrl() == null) {
             return;
         }
-        BindingAdapterUtils.loadImage(binding.ivIdea, viewModel.getMeta().getImageUrl());
+        BindingAdapterUtils.loadImage(binding.ivIdea, viewState.getMeta().getImageUrl());
     }
 
     public void executePendingBindings() {

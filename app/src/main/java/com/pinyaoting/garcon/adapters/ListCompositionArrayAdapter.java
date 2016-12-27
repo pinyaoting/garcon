@@ -78,11 +78,11 @@ public class ListCompositionArrayAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        Idea idea = mIdeaInteractor.getIdeaAtPos(position);
+        Idea viewState = mIdeaInteractor.getIdeaAtPos(position);
         if (holder instanceof IdeaViewHolder) {
             IdeaViewHolder ideaViewHolder = (IdeaViewHolder) holder;
             ideaViewHolder.setPosition(position);
-            ideaViewHolder.setViewModel(idea);
+            ideaViewHolder.setViewState(viewState);
             ideaViewHolder.executePendingBindings();
         }
     }

@@ -92,11 +92,11 @@ public class GoalArrayAdapter
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        Goal viewModel = mInteractor.getGoalAtPos(position);
+        Goal viewState = mInteractor.getGoalAtPos(position);
         if (holder instanceof GoalViewHolder) {
             GoalViewHolder viewHolder = (GoalViewHolder) holder;
             viewHolder.setPosition(position);
-            viewHolder.setViewModel(viewModel);
+            viewHolder.setViewState(viewState);
             viewHolder.executePendingBindings();
         }
     }

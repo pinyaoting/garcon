@@ -8,7 +8,7 @@
             type="int"/>
 
         <variable
-            name="viewModel"
+            name="viewState"
             type="com.pinyaoting.garcon.viewstates.Idea"/>
     </data>
 
@@ -23,7 +23,7 @@
             android:layout_height="@dimen/activity_list_composition_idea_height"
             android:gravity="center"
             android:maxLines="1"
-            android:text='@{viewModel.content}'
+            android:text='@{viewState.content}'
             android:textColor="@color/colorButton"/>
 
     </FrameLayout>

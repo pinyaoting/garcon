@@ -1,5 +1,19 @@
 package com.pinyaoting.garcon.fragments;
 
+import android.content.Context;
+import android.content.res.ColorStateList;
+import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.graphics.Palette;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
@@ -14,20 +28,6 @@ import com.pinyaoting.garcon.interfaces.presentation.InjectorInterface;
 import com.pinyaoting.garcon.interfaces.presentation.ViewState;
 import com.pinyaoting.garcon.utils.ImageUtils;
 import com.pinyaoting.garcon.viewstates.Goal;
-
-import android.content.Context;
-import android.content.res.ColorStateList;
-import android.databinding.DataBindingUtil;
-import android.graphics.Bitmap;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.graphics.Palette;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import javax.inject.Inject;
 
@@ -89,7 +89,7 @@ public class GoalPreviewFragment extends Fragment {
                                     Goal updatedGoal = mGoalInteractor.getGoalAtPos(mPos);
                                     mIdeasArrayAdapter.setGoalId(updatedGoal.getId());
                                     mIdeasArrayAdapter.notifyDataSetChanged();
-                                    binding.setViewModel(updatedGoal);
+                                    binding.setViewState(updatedGoal);
                                     binding.executePendingBindings();
                             }
                     }
@@ -119,11 +119,11 @@ public class GoalPreviewFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Goal viewModel = mGoalInteractor.getGoalAtPos(mPos);
+        Goal viewState = mGoalInteractor.getGoalAtPos(mPos);
         binding.setPos(mPos);
-        binding.setViewModel(viewModel);
+        binding.setViewState(viewState);
 
-        if (viewModel.getSubTitle() == null) {
+        if (viewState.getSubTitle() == null) {
             binding.ivGoalPreviewSubTitle.setAlpha(0.0f);
             binding.tvGoalPreviewSubTitle.setAlpha(0.0f);
         } else {
@@ -160,9 +160,9 @@ public class GoalPreviewFragment extends Fragment {
             }
         };
 
-        if (viewModel.getImageUrl() != null) {
+        if (viewState.getImageUrl() != null) {
             Glide.with(binding.ivIdeaBackgroundImage.getContext())
-                    .load(viewModel.getImageUrl())
+                    .load(viewState.getImageUrl())
                     .asBitmap()
                     .fitCenter()
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
