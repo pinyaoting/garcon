@@ -46,15 +46,15 @@ public class TabUtils {
         TabLayout.Tab tab;
 
         tab = layout.getTabAt(0);
-        tab.setIcon(R.drawable.ic_library_books);
+        tab.setIcon(R.drawable.ic_restaurant);
         tab.getIcon().setColorFilter(selectedTabIconColor, PorterDuff.Mode.SRC_IN);
 
         tab = layout.getTabAt(1);
-        tab.setIcon(R.drawable.ic_bookmark);
+        tab.setIcon(R.drawable.ic_shopping_cart);
         tab.getIcon().setColorFilter(tabIconColor, PorterDuff.Mode.SRC_IN);
 
         tab = layout.getTabAt(2);
-        tab.setIcon(R.drawable.ic_shopping_cart);
+        tab.setIcon(R.drawable.ic_event_note);
         tab.getIcon().setColorFilter(tabIconColor, PorterDuff.Mode.SRC_IN);
     }
 }

@@ -6,7 +6,7 @@ import com.pinyaoting.garcon.fragments.GoalDetailViewPagerFragment;
 import com.pinyaoting.garcon.fragments.GoalPreviewFragment;
 import com.pinyaoting.garcon.fragments.GoalSearchFragment;
 import com.pinyaoting.garcon.fragments.ListCompositionFragment;
-import com.pinyaoting.garcon.fragments.SavedIdeasFragment;
+import com.pinyaoting.garcon.fragments.SavedGoalsFragment;
 import com.pinyaoting.garcon.interfaces.scopes.PresentationLayerScope;
 
 import dagger.Subcomponent;
@@ -21,7 +21,7 @@ public interface MainActivitySubComponent {
 
     void inject(GoalPreviewFragment fragment);
 
-    void inject(SavedIdeasFragment fragment);
+    void inject(SavedGoalsFragment fragment);
 
     void inject(GoalDetailViewPagerFragment fragment);
 

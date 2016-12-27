@@ -1,15 +1,5 @@
 package com.pinyaoting.garcon.fragments;
 
-import com.pinyaoting.garcon.R;
-import com.pinyaoting.garcon.databinding.FragmentGoalSearchBinding;
-import com.pinyaoting.garcon.interfaces.presentation.GoalActionHandlerInterface;
-import com.pinyaoting.garcon.interfaces.presentation.GoalInteractorInterface;
-import com.pinyaoting.garcon.interfaces.presentation.InjectorInterface;
-import com.pinyaoting.garcon.interfaces.presentation.ListCompositionHandlerInterface;
-import com.pinyaoting.garcon.interfaces.presentation.ViewState;
-import com.pinyaoting.garcon.utils.ConstantsAndUtils;
-import com.pinyaoting.garcon.utils.ImageUtils;
-
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -23,6 +13,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.pinyaoting.garcon.R;
+import com.pinyaoting.garcon.databinding.FragmentGoalSearchBinding;
+import com.pinyaoting.garcon.interfaces.presentation.GoalActionHandlerInterface;
+import com.pinyaoting.garcon.interfaces.presentation.GoalInteractorInterface;
+import com.pinyaoting.garcon.interfaces.presentation.InjectorInterface;
+import com.pinyaoting.garcon.interfaces.presentation.ViewState;
+import com.pinyaoting.garcon.utils.ConstantsAndUtils;
+import com.pinyaoting.garcon.utils.ImageUtils;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -61,9 +60,6 @@ public class GoalSearchFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater,
                 R.layout.fragment_goal_search, container, false);
-        if (getActivity() instanceof ListCompositionHandlerInterface) {
-            binding.setHandler((ListCompositionHandlerInterface) getActivity());
-        }
         binding.rvIdeaSearchResults.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.rvIdeaSearchResults.setAdapter(mAdapter);
         binding.rvIdeaSearchResults.addOnScrollListener(new RecyclerView.OnScrollListener() {

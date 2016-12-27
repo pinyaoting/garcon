@@ -20,6 +20,11 @@ public class GoalActionHandler implements GoalActionHandlerInterface {
     }
 
     @Override
+    public void onPreviewButtonClick(int pos) {
+        mPreviewHandler.preview(pos);
+    }
+
+    @Override
     public void onPreviewButtonClick(GoalViewHolder holder, int pos) {
         mPreviewHandler.preview(holder, pos);
     }

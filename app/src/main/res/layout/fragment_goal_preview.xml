@@ -172,21 +172,10 @@ Salt, to taste"/>
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="@{() -> handler.onCreateIdeaListClick(pos)}"
-                android:src="@drawable/ic_create"
+                android:src="@drawable/ic_add_shopping_cart"
                 android:tint="@color/colorButton"
                 app:fab_colorNormal="@color/colorDownOverlayDark"
                 app:fab_title="@string/create_list"/>
-
-            <com.getbase.floatingactionbutton.FloatingActionButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="@{() -> handler.onBookmarkClick(pos)}"
-                android:src="@drawable/bookmark"
-                android:tint="@color/colorButton"
-                app:bookmark_title='@{viewModel.bookmarked}'
-                app:fab_colorNormal="@color/colorRightOverlayDark"
-                app:fab_title="@string/save_recipe"
-                app:selected='@{!viewModel.bookmarked}'/>
 
         </com.getbase.floatingactionbutton.FloatingActionsMenu>
 

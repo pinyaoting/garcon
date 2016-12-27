@@ -1,11 +1,5 @@
 package com.pinyaoting.garcon.utils;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.pinyaoting.garcon.R;
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
@@ -21,6 +15,12 @@ import android.util.DisplayMetrics;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.pinyaoting.garcon.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +55,7 @@ public class ImageUtils {
                         Palette.Swatch vibrant = palette.getVibrantSwatch();
                         if (vibrant != null) {
                             int colorFrom = ((ColorDrawable) container.getBackground()).getColor();
-                            int colorTo = vibrant.getRgb();
+                            int colorTo = getIlluminatedColor(vibrant.getRgb());
 
                             ValueAnimator colorAnimation = ValueAnimator.ofObject(
                                     new ArgbEvaluator(), colorFrom, colorTo);

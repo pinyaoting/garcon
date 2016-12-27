@@ -2,6 +2,19 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="viewState"
+            type="com.pinyaoting.garcon.viewstates.Goal"/>
+        <variable
+            name="pos"
+            type="int"/>
+
+        <variable
+            name="handler"
+            type="com.pinyaoting.garcon.interfaces.presentation.GoalActionHandlerInterface"/>
+    </data>
+
     <FrameLayout
         android:id="@+id/llSinglePlan"
         android:layout_width="match_parent"
@@ -18,8 +31,8 @@
             android:scaleType="centerCrop"
             android:src="@drawable/ic_placeholder"/>
 
-        <LinearLayout
-            android:id="@+id/llDescriptionBox"
+        <FrameLayout
+            android:id="@+id/flDescriptionBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -28,28 +41,28 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/single_plan"
+                android:id="@+id/tvSavedGoalTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingEnd="10dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:paddingStart="10dp"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
+                android:maxLines="2"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                 android:textColor="@color/colorButton"
-                tools:text="Grocery List"/>
+                android:text='@{viewState.title}'
+                tools:text="Perperoni Pizza"/>
 
-            <TextView
-                android:id="@+id/owner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingEnd="11dp"
-                android:paddingLeft="11dp"
-                android:paddingRight="11dp"
-                android:paddingStart="11dp"
-                android:textColor="@color/colorButton"
-                tools:text="pinyaoting"/>
+        </FrameLayout>
 
-        </LinearLayout>
+        <Button
+            android:id="@+id/btnGoalDetail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:onClick="@{() -> handler.onPreviewButtonClick(pos)}"
+        />
+
     </FrameLayout>
 </layout>

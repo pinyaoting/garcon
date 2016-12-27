@@ -5,22 +5,23 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.pinyaoting.garcon.R;
 import com.pinyaoting.garcon.fragments.GoalSearchFragment;
-import com.pinyaoting.garcon.fragments.SavedIdeasFragment;
+import com.pinyaoting.garcon.fragments.ListCompositionFragment;
+import com.pinyaoting.garcon.fragments.SavedGoalsFragment;
 
 public class HomeFragmentPagerAdapter extends FragmentPagerAdapter {
 
     public static final int SEARCH_GOAL = 0;
-    public static final int SAVED_GOALS = 1;
-    public static final int SAVED_IDEAS = 2;
+    public static final int MY_IDEAS = 1;
+    public static final int SAVED_GOALS = 2;
+
 
     private String tabTitles[] =
-            new String[]{"Explore Goals", "Saved Goals", "Saved Ideas"};
+            new String[]{"Explore Goals", "My Ideas", "Saved Goals"};
     private Context mContext;
     private GoalSearchFragment mGoalSearchFragment;
-    private GoalSearchFragment mSavedGoalFragment;
-    private SavedIdeasFragment mSavedIdeasFragment;
+    private SavedGoalsFragment mSavedGoalFragment;
+    private ListCompositionFragment mMyIdeasFragment;
 
     public HomeFragmentPagerAdapter(FragmentManager fm, Context context) {
         super(fm);
@@ -32,10 +33,10 @@ public class HomeFragmentPagerAdapter extends FragmentPagerAdapter {
         switch (position) {
             case SEARCH_GOAL:
                 return getGoalSearchFragment();
+            case MY_IDEAS:
+                return getMyIdeasFragment();
             case SAVED_GOALS:
                 return getSavedGoalFragment();
-            case SAVED_IDEAS:
-                return getSavedIdeasFragment();
             default:
                 return null;
         }
@@ -48,18 +49,18 @@ public class HomeFragmentPagerAdapter extends FragmentPagerAdapter {
         return mGoalSearchFragment;
     }
 
-    public GoalSearchFragment getSavedGoalFragment() {
+    public SavedGoalsFragment getSavedGoalFragment() {
         if (mSavedGoalFragment == null) {
-            mSavedGoalFragment = GoalSearchFragment.newInstance();
+            mSavedGoalFragment = SavedGoalsFragment.newInstance();
         }
         return mSavedGoalFragment;
     }
 
-    public SavedIdeasFragment getSavedIdeasFragment() {
-        if (mSavedIdeasFragment == null) {
-            mSavedIdeasFragment = SavedIdeasFragment.newInstance();
+    public ListCompositionFragment getMyIdeasFragment() {
+        if (mMyIdeasFragment == null) {
+            mMyIdeasFragment = ListCompositionFragment.newInstance();
         }
-        return mSavedIdeasFragment;
+        return mMyIdeasFragment;
     }
 
     @Override
@@ -69,19 +70,6 @@ public class HomeFragmentPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        String title = null;
-        switch (position) {
-            case SEARCH_GOAL:
-                title = mContext.getString(R.string.explore_goals);
-                break;
-            case SAVED_GOALS:
-                title = mContext.getString(R.string.saved_goals);
-                break;
-            case SAVED_IDEAS:
-                title = mContext.getString(R.string.saved_ideas);
-                break;
-            default:
-        }
-        return title;
+        return "";
     }
 }

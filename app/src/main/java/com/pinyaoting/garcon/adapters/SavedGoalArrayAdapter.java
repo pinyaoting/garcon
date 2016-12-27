@@ -11,19 +11,22 @@ import com.pinyaoting.garcon.R;
 import com.pinyaoting.garcon.interfaces.presentation.GoalActionHandlerInterface;
 import com.pinyaoting.garcon.interfaces.presentation.GoalInteractorInterface;
 import com.pinyaoting.garcon.interfaces.presentation.ViewState;
-import com.pinyaoting.garcon.viewholders.GoalViewHolder;
+import com.pinyaoting.garcon.viewholders.SavedGoalViewHolder;
 import com.pinyaoting.garcon.viewstates.Goal;
 
 import rx.Observer;
 
-public class GoalArrayAdapter
-        extends RecyclerView.Adapter {
+/**
+ * Created by pinyaoting on 12/27/16.
+ */
+
+public class SavedGoalArrayAdapter extends RecyclerView.Adapter {
 
     GoalInteractorInterface mInteractor;
     GoalActionHandlerInterface mActionHandler;
 
-    public GoalArrayAdapter(GoalInteractorInterface interactor,
-                            GoalActionHandlerInterface actionHandler) {
+    public SavedGoalArrayAdapter(GoalInteractorInterface interactor,
+            GoalActionHandlerInterface actionHandler) {
         mInteractor = interactor;
         mActionHandler = actionHandler;
         mInteractor.subscribeToGoalStateChange(new Observer<ViewState>() {
@@ -84,27 +87,27 @@ public class GoalArrayAdapter
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
-        View view = inflater.inflate(R.layout.item_goal, parent, false);
-        GoalViewHolder viewHolder = new GoalViewHolder(view);
+        View view = inflater.inflate(R.layout.item_saved_goal, parent, false);
+        SavedGoalViewHolder viewHolder = new SavedGoalViewHolder(view);
         viewHolder.setHandler(mActionHandler);
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        Goal viewModel = mInteractor.getGoalAtPos(position);
-        if (holder instanceof GoalViewHolder) {
-            GoalViewHolder viewHolder = (GoalViewHolder) holder;
+        Goal viewState = mInteractor.getGoalAtPos(position);
+        if (holder instanceof SavedGoalViewHolder) {
+            SavedGoalViewHolder viewHolder = (SavedGoalViewHolder) holder;
             viewHolder.setPosition(position);
-            viewHolder.setViewModel(viewModel);
+            viewHolder.setViewState(viewState);
             viewHolder.executePendingBindings();
         }
     }
 
     @Override
     public void onViewRecycled(RecyclerView.ViewHolder holder) {
-        if (holder instanceof GoalViewHolder) {
-            GoalViewHolder viewHolder = (GoalViewHolder) holder;
+        if (holder instanceof SavedGoalViewHolder) {
+            SavedGoalViewHolder viewHolder = (SavedGoalViewHolder) holder;
             viewHolder.recycle();
         }
         super.onViewRecycled(holder);
@@ -114,4 +117,5 @@ public class GoalArrayAdapter
     public int getItemCount() {
         return mInteractor.getGoalCount();
     }
+
 }

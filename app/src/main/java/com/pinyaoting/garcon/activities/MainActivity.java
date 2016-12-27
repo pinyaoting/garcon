@@ -1,7 +1,7 @@
 package com.pinyaoting.garcon.activities;
 
 import static com.pinyaoting.garcon.adapters.HomeFragmentPagerAdapter.SAVED_GOALS;
-import static com.pinyaoting.garcon.adapters.HomeFragmentPagerAdapter.SAVED_IDEAS;
+import static com.pinyaoting.garcon.adapters.HomeFragmentPagerAdapter.MY_IDEAS;
 import static com.pinyaoting.garcon.adapters.HomeFragmentPagerAdapter.SEARCH_GOAL;
 import static com.raizlabs.android.dbflow.config.FlowManager.getContext;
 
@@ -47,14 +47,14 @@ import com.pinyaoting.garcon.fragments.GoalDetailViewPagerFragment;
 import com.pinyaoting.garcon.fragments.GoalPreviewFragment;
 import com.pinyaoting.garcon.fragments.GoalSearchFragment;
 import com.pinyaoting.garcon.fragments.ListCompositionFragment;
-import com.pinyaoting.garcon.fragments.SavedIdeasFragment;
+import com.pinyaoting.garcon.fragments.SavedGoalsFragment;
 import com.pinyaoting.garcon.interfaces.domain.IdeaInteractorInterface;
 import com.pinyaoting.garcon.interfaces.presentation.GoalActionHandlerInterface;
 import com.pinyaoting.garcon.interfaces.presentation.GoalDetailActionHandlerInterface;
 import com.pinyaoting.garcon.interfaces.presentation.GoalInteractorInterface;
 import com.pinyaoting.garcon.interfaces.presentation.InjectorInterface;
 import com.pinyaoting.garcon.interfaces.presentation.ListCompositionHandlerInterface;
-import com.pinyaoting.garcon.interfaces.presentation.SavedIdeasActionHandlerInterface;
+import com.pinyaoting.garcon.interfaces.presentation.SavedGoalsActionHandlerInterface;
 import com.pinyaoting.garcon.service.NotificationService;
 import com.pinyaoting.garcon.utils.ConstantsAndUtils;
 import com.pinyaoting.garcon.utils.TabUtils;
@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
         GoalActionHandlerInterface.PreviewHandlerInterface,
         GoalDetailActionHandlerInterface.ListCompositionDialogHandlerInterface,
         ListFragmentActionHandler.IdeaShareHandlerInterface,
-        SavedIdeasActionHandlerInterface,
+        SavedGoalsActionHandlerInterface,
         ListCompositionHandlerInterface {
 
     public static final int RC_SIGN_IN = 1;
@@ -183,10 +183,17 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
     }
 
     @Override
+    public void preview(int pos) {
+        dismissDialogIfNotNull();
+        mDialogFragment = GoalDetailViewPagerFragment.newInstance(pos);
+        showDetailFragment();
+    }
+
+    @Override
     public void preview(GoalViewHolder holder, int pos) {
         dismissDialogIfNotNull();
         mDialogFragment = GoalDetailViewPagerFragment.newInstance(pos);
-        showFragmentWithTransition(holder);
+        showDetailFragmentWithTransition(holder);
     }
 
     @Override
@@ -242,7 +249,14 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
         dismissDialogIfNotNull();
     }
 
-    private void showFragmentWithTransition(GoalViewHolder holder) {
+    private void showDetailFragment() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.activity_home, mDialogFragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    private void showDetailFragmentWithTransition(GoalViewHolder holder) {
         int curr = binding.viewpager.getCurrentItem();
         GoalSearchFragment exitFragment = (GoalSearchFragment) mPagerAdapter.getItem(curr);
 
@@ -368,7 +382,7 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
     }
 
     @Override
-    public void inject(SavedIdeasFragment fragment) {
+    public void inject(SavedGoalsFragment fragment) {
         getActivityComponent().inject(fragment);
     }
 
@@ -469,7 +483,7 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
                         break;
                     case SAVED_GOALS:
                         break;
-                    case SAVED_IDEAS:
+                    case MY_IDEAS:
                         break;
                 }
 
@@ -527,19 +541,6 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
         stopService(new Intent(this, NotificationService.class));
     }
 
-    public void onBookmarkClick(View view) {
-        // TODO: move this to GoalActionHandler
-        int currentFlag = mGoalInteractor.getDisplayGoalFlag();
-        switch (currentFlag) {
-            case R.id.flag_explore_recipes:
-                mGoalInteractor.setDisplayGoalFlag(R.id.flag_saved_recipes);
-                break;
-            case R.id.flag_saved_recipes:
-                mGoalInteractor.setDisplayGoalFlag(R.id.flag_explore_recipes);
-                break;
-        }
-    }
-
     private void handleDeeplink() {
         Intent intent = getIntent();
         final Uri url = intent.getData();
@@ -569,13 +570,13 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
                 title = getString(R.string.app_name);
                 titleSize = getResources().getInteger(R.integer.app_title_size);
                 break;
-            case SAVED_GOALS:
-                mGoalInteractor.setDisplayGoalFlag(R.id.flag_saved_recipes);
-                title = getString(R.string.saved_goals);
+            case MY_IDEAS:
+                title = getString(R.string.my_ideas_hint);
                 titleSize = getResources().getInteger(R.integer.toolbar_title_size);
                 break;
-            case SAVED_IDEAS:
-                title = getString(R.string.saved_grocery_hint);
+            case SAVED_GOALS:
+                mGoalInteractor.setDisplayGoalFlag(R.id.flag_saved_recipes);
+                title = getString(R.string.saved_goals_hint);
                 titleSize = getResources().getInteger(R.integer.toolbar_title_size);
                 break;
             default:

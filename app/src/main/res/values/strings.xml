@@ -1,12 +1,12 @@
 <resources>
     <string name="app_name">Garçon</string>
     <string name="create_grocery_list">Create List</string>
-    <string name="saved_ideas">Grocery List</string>
+    <string name="my_ideas">Grocery List</string>
     <string name="create_grocery_hint">Start searching for groceries here</string>
     <string name="create_grocery_snackbar_hint">Looks like your grocery list is empty, start adding groceries to the list by tapping on the
         search icon above.
     </string>
-    <string name="saved_grocery_hint">Saved Grocery List</string>
+    <string name="my_ideas_hint">My Shopping Cart</string>
 
     <string name="google_maps_api_key">AIzaSyCBjupD4UBQ4puue5J2uqjKpjpvpTJeB50</string>
     <string name="fabric_api_key">58083912c035206135aea30a9df62233cd1f2cf5</string>
@@ -22,7 +22,8 @@
     <string name="facebook_application_id" translatable="false">392989124371977</string>
     <string name="facebook_login_protocol_scheme" translatable="false">fb392989124371977</string>
     <string name="custom_list">Custom list</string>
-    <string name="saved_goals">Saved Recipes</string>
+    <string name="saved_goals">Recent</string>
+    <string name="saved_goals_hint">Recently viewed recipes</string>
     <string name="explore_goals">Explore</string>
     <string name="owner">Owner: %1s</string>
     <string name="add_friends">Add New Friend</string>
@@ -30,7 +31,7 @@
     <string name="share_list">Share List</string>
     <string name="save_recipe">Save Recipe</string>
     <string name="remove_recipe">Remove Recipe</string>
-    <string name="create_list">Create Grocery List</string>
+    <string name="create_list">Add to cart</string>
     <string name="search_goal">Search Recipe</string>
     <string name="nearby_stores">Nearby Stores</string>
     <string name="default_idea_prefix">Groceries List</string>

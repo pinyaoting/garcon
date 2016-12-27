@@ -1,13 +1,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-
-        <variable
-            name="handler"
-            type="com.pinyaoting.garcon.interfaces.presentation.ListCompositionHandlerInterface"/>
-    </data>
-
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
@@ -49,18 +42,6 @@
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
                 android:clipToPadding="false"/>
-
-            <android.support.design.widget.FloatingActionButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|right|end"
-                android:layout_margin="16dp"
-                android:onClick="@{() -> handler.compose()}"
-                android:src="@drawable/ic_create"
-                android:tint="@color/colorButton"
-                app:backgroundTint="@color/colorUpOverlayDark"
-                app:fabSize="normal"
-                app:fab_title="@string/create_grocery_list"/>
 
         </android.support.percent.PercentFrameLayout>
     </android.support.v4.widget.SwipeRefreshLayout>

@@ -8,12 +8,13 @@ import com.pinyaoting.garcon.actions.ListFragmentActionHandler;
 import com.pinyaoting.garcon.activities.MainActivity;
 import com.pinyaoting.garcon.adapters.GoalArrayAdapter;
 import com.pinyaoting.garcon.adapters.ListCompositionArrayAdapter;
+import com.pinyaoting.garcon.adapters.SavedGoalArrayAdapter;
 import com.pinyaoting.garcon.interfaces.domain.IdeaInteractorInterface;
 import com.pinyaoting.garcon.interfaces.presentation.GoalActionHandlerInterface;
 import com.pinyaoting.garcon.interfaces.presentation.GoalDetailActionHandlerInterface;
 import com.pinyaoting.garcon.interfaces.presentation.GoalInteractorInterface;
 import com.pinyaoting.garcon.interfaces.presentation.ListFragmentActionHandlerInterface;
-import com.pinyaoting.garcon.interfaces.presentation.SavedIdeasActionHandlerInterface;
+import com.pinyaoting.garcon.interfaces.presentation.SavedGoalsActionHandlerInterface;
 import com.pinyaoting.garcon.interfaces.scopes.PresentationLayerScope;
 
 import java.util.Map;
@@ -68,6 +69,14 @@ public class MainActivityModule {
 
     @Provides
     @PresentationLayerScope
+    @Named("SavedGoal")
+    public RecyclerView.Adapter<RecyclerView.ViewHolder> providesSavedGoalArrayAdapter(
+            GoalInteractorInterface interactor, GoalActionHandlerInterface actionHandler) {
+        return new SavedGoalArrayAdapter(interactor, actionHandler);
+    }
+
+    @Provides
+    @PresentationLayerScope
     public GoalActionHandlerInterface providesGoalActionHandler(
             GoalInteractorInterface interactor) {
         return new GoalActionHandler(mActivity, interactor);
@@ -82,7 +91,7 @@ public class MainActivityModule {
 
     @Provides
     @PresentationLayerScope
-    public SavedIdeasActionHandlerInterface providesSavedIdeasActionHandler() {
+    public SavedGoalsActionHandlerInterface providesSavedGoalsActionHandler() {
         return mActivity;
     }
 

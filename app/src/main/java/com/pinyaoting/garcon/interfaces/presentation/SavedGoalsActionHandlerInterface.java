@@ -1,6 +1,6 @@
 package com.pinyaoting.garcon.interfaces.presentation;
 
-public interface SavedIdeasActionHandlerInterface {
+public interface SavedGoalsActionHandlerInterface {
 
     void compose(String listId);
 
