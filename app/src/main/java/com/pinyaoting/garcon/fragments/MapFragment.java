@@ -118,7 +118,8 @@ public class MapFragment extends Fragment implements LocationListener, OnMapRead
 
     @Override
     public void onStop() {
-        if (!searchNearbyStoresSubscription.isUnsubscribed()) {
+        if (searchNearbyStoresSubscription != null &&
+                !searchNearbyStoresSubscription.isUnsubscribed()) {
             searchNearbyStoresSubscription.unsubscribe();
         }
         super.onStop();

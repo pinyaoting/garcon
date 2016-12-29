@@ -149,11 +149,12 @@ public class GoalPreviewFragment extends Fragment {
                         if (vibrant != null) {
                             int color = vibrant.getRgb();
                             int colorWithAlpha = ImageUtils.getTransparentColor(color);
-                            ColorStateList colorStateList = ColorStateList.valueOf(color);
-                            binding.tvGoalIndex.setBackgroundTintList(colorStateList);
-                            binding.tvTitle.setTextColor(color);
+                            binding.tvGoalPreviewIndex.setBackgroundTintList(
+                                    ColorStateList.valueOf(color));
+                            binding.tvGoalPreviewTitle.setTextColor(color);
                             binding.tvGoalPreviewSubTitle.setTextColor(colorWithAlpha);
-                            binding.ivGoalPreviewSubTitle.setImageTintList(colorStateList);
+                            binding.ivGoalPreviewSubTitle.setImageTintList(
+                                    ColorStateList.valueOf(color));
                         }
                     }
                 });
