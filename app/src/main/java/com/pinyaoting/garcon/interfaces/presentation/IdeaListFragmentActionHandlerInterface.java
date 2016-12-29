@@ -8,4 +8,6 @@ public interface IdeaListFragmentActionHandlerInterface {
 
     void onNearbyStoreButtonClick();
 
+    void onEmptyButtonClick();
+
 }

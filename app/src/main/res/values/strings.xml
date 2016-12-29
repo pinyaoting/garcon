@@ -34,6 +34,7 @@
     <string name="create_list">Add to cart</string>
     <string name="search_goal">Search Recipe</string>
     <string name="nearby_stores">Nearby Stores</string>
+    <string name="empty_cart">Empty Cart</string>
     <string name="default_idea_prefix">Groceries List</string>
     <string name="initials">Initials of user</string>
     <string name="cannot_remove_self">Cannot remove yourself.</string>

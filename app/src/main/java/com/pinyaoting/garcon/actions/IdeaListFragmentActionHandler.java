@@ -56,6 +56,11 @@ public class IdeaListFragmentActionHandler implements IdeaListFragmentActionHand
                 .commit();
     }
 
+    @Override
+    public void onEmptyButtonClick() {
+        mIdeaInteractor.removeAllIdeas();
+    }
+
     public interface IdeaShareHandlerInterface {
         void share(Intent intent);
 

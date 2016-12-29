@@ -159,6 +159,16 @@ public class IngredientInteractor implements IdeaInteractorInterface {
     }
 
     @Override
+    public void removeAllIdeas() {
+        mDataStore.setIdeaState(new ViewState(
+                R.id.state_refreshing, ViewState.OPERATION.RELOAD));
+        mDataStore.clearIdeas();
+        mCloudRepository.savePlan(getPlan());
+        mDataStore.setIdeaState(new ViewState(
+                R.id.state_loaded, ViewState.OPERATION.RELOAD));
+    }
+
+    @Override
     public void subscribeIdeaStateChange(Observer<ViewState> observer) {
         mDataStore.subscribeToIdeaStateChanges(observer);
     }
