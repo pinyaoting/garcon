@@ -2,38 +2,40 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools">
 
-    <android.support.design.widget.CoordinatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-                                                     android:id="@+id/timeline_content"
-                                                     android:layout_width="match_parent"
-                                                     android:layout_height="match_parent"
-                                                     tools:context="com.pinyaoting.garcon.activities.MainActivity">
+    <RelativeLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/rlHome"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.pinyaoting.garcon.activities.MainActivity">
 
-        <RelativeLayout
-            android:id="@+id/activity_home"
+        <android.support.design.widget.CoordinatorLayout
+            android:id="@+id/clContent"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="0dp"
+            android:layout_above="@+id/tabs"
+            android:layout_alignParentTop="true">
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/viewpager"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_above="@+id/tabs"
-                android:layout_alignParentTop="true"
+                android:layout_height="match_parent"
                 android:background="@android:color/transparent"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-            <android.support.design.widget.TabLayout
-                android:id="@+id/tabs"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:background="@color/colorTabLayout"
-                app:tabIndicatorColor="@color/colorIndicator"
-                app:tabMode="fixed"
-                app:tabSelectedTextColor="@color/colorText"
-                app:tabTextColor="@color/colorButtonUnselected"/>
+        </android.support.design.widget.CoordinatorLayout>
 
-        </RelativeLayout>
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@color/colorTabLayout"
+            app:tabIndicatorColor="@color/colorIndicator"
+            app:tabMode="fixed"
+            app:tabSelectedTextColor="@color/colorText"
+            app:tabTextColor="@color/colorButtonUnselected"/>
 
-    </android.support.design.widget.CoordinatorLayout>
+    </RelativeLayout>
+
 </layout>

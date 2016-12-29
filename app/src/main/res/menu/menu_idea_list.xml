@@ -9,6 +9,12 @@
         app:actionViewClass="com.pinyaoting.garcon.view.AutoCompleteSearchView"
         app:showAsAction="ifRoom|collapseActionView"/>
     <item
+        android:id="@+id/action_remove"
+        android:icon="@android:drawable/ic_menu_delete"
+        android:orderInCategory="5"
+        android:title="@string/empty_cart"
+        app:showAsAction="ifRoom"/>
+    <item
         android:id="@+id/sign_out_menu"
         android:title="@string/sign_out"
         app:showAsAction="never"/>

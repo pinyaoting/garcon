@@ -222,6 +222,10 @@ public class IdeaListFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_remove) {
+            mActionHandler.onEmptyButtonClick();
+            return true;
+        }
         return ToolbarUtils.onOptionsItemSelected(getActivity(), item) ||
                 super.onOptionsItemSelected(item);
     }

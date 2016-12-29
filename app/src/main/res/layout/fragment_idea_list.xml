@@ -47,7 +47,7 @@
                 android:onClick="@{() -> handler.onShareButtonClick()}"
                 android:src="@drawable/ic_share"
                 android:tint="@color/colorButton"
-                app:fab_colorNormal="@color/colorUpOverlayDark"
+                app:fab_colorNormal="@color/colorDownOverlayDark"
                 app:fab_title="@string/share_list"/>
 
             <com.getbase.floatingactionbutton.FloatingActionButton
@@ -56,7 +56,7 @@
                 android:onClick="@{() -> handler.onSearchButtonClick()}"
                 android:src="@drawable/ic_search"
                 android:tint="@color/colorButton"
-                app:fab_colorNormal="@color/colorDownOverlayDark"
+                app:fab_colorNormal="@color/colorRightOverlayDark"
                 app:fab_title="@string/search_goal"/>
 
             <com.getbase.floatingactionbutton.FloatingActionButton
@@ -65,17 +65,8 @@
                 android:onClick="@{() -> handler.onNearbyStoreButtonClick()}"
                 android:src="@drawable/ic_shopping_cart"
                 android:tint="@color/colorButton"
-                app:fab_colorNormal="@color/colorRightOverlayDark"
-                app:fab_title="@string/nearby_stores"/>
-
-            <com.getbase.floatingactionbutton.FloatingActionButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="@{() -> handler.onEmptyButtonClick()}"
-                android:src="@drawable/ic_remove_shopping_cart"
-                android:tint="@color/colorButton"
                 app:fab_colorNormal="@color/colorLeftOverlayDark"
-                app:fab_title="@string/empty_cart"/>
+                app:fab_title="@string/nearby_stores"/>
 
         </com.getbase.floatingactionbutton.FloatingActionsMenu>
 

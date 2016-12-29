@@ -51,7 +51,7 @@ public class IdeaListFragmentActionHandler implements IdeaListFragmentActionHand
     @Override
     public void onNearbyStoreButtonClick() {
         ((MainActivity) mContext).getSupportFragmentManager().beginTransaction()
-                .replace(R.id.activity_home, MapFragment.newInstance(), "MapFragment")
+                .replace(R.id.rlHome, MapFragment.newInstance(), "MapFragment")
                 .addToBackStack(null)
                 .commit();
     }

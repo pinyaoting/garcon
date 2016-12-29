@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
             @Override
             public void onNext(Plan plan) {
                 if (mIdeaInteractor.getIdeaCount() == 0) {
-                    Snackbar.make(binding.viewpager,
+                    Snackbar.make(binding.clContent,
                             R.string.create_grocery_snackbar_hint,
                             Snackbar.LENGTH_SHORT).show();
                 }
@@ -203,7 +203,7 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
 
     private void showDetailFragment() {
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.activity_home, mDialogFragment)
+                .replace(R.id.rlHome, mDialogFragment)
                 .addToBackStack(null)
                 .commit();
     }
@@ -221,7 +221,7 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
         mDialogFragment.setEnterTransition(mFadeTransform);
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.activity_home, mDialogFragment)
+                .replace(R.id.rlHome, mDialogFragment)
                 .addSharedElement(holder.binding.ivGoalImage,
                         getString(R.string.transition_goal_image))
                 .addSharedElement(holder.binding.tvGoalIndex,
@@ -234,7 +234,7 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
 
     private void showFragment() {
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.activity_home, mDialogFragment)
+                .replace(R.id.rlHome, mDialogFragment)
                 .addToBackStack(null)
                 .commit();
     }
