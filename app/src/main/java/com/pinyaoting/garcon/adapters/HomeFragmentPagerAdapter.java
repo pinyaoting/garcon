@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.pinyaoting.garcon.fragments.GoalSearchFragment;
-import com.pinyaoting.garcon.fragments.ListCompositionFragment;
+import com.pinyaoting.garcon.fragments.IdeaListFragment;
 import com.pinyaoting.garcon.fragments.SavedGoalsFragment;
 
 public class HomeFragmentPagerAdapter extends FragmentPagerAdapter {
@@ -21,7 +21,7 @@ public class HomeFragmentPagerAdapter extends FragmentPagerAdapter {
     private Context mContext;
     private GoalSearchFragment mGoalSearchFragment;
     private SavedGoalsFragment mSavedGoalFragment;
-    private ListCompositionFragment mMyIdeasFragment;
+    private IdeaListFragment mMyIdeasFragment;
 
     public HomeFragmentPagerAdapter(FragmentManager fm, Context context) {
         super(fm);
@@ -56,9 +56,9 @@ public class HomeFragmentPagerAdapter extends FragmentPagerAdapter {
         return mSavedGoalFragment;
     }
 
-    public ListCompositionFragment getMyIdeasFragment() {
+    public IdeaListFragment getMyIdeasFragment() {
         if (mMyIdeasFragment == null) {
-            mMyIdeasFragment = ListCompositionFragment.newInstance();
+            mMyIdeasFragment = IdeaListFragment.newInstance();
         }
         return mMyIdeasFragment;
     }

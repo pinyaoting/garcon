@@ -1,6 +1,6 @@
 package com.pinyaoting.garcon.interfaces.presentation;
 
-public interface ListFragmentActionHandlerInterface {
+public interface IdeaListFragmentActionHandlerInterface {
 
     void onShareButtonClick();
 

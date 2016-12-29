@@ -9,20 +9,20 @@ import android.view.ViewGroup;
 
 import com.pinyaoting.garcon.R;
 import com.pinyaoting.garcon.interfaces.domain.IdeaInteractorInterface;
-import com.pinyaoting.garcon.interfaces.presentation.ListFragmentActionHandlerInterface;
+import com.pinyaoting.garcon.interfaces.presentation.IdeaListFragmentActionHandlerInterface;
 import com.pinyaoting.garcon.interfaces.presentation.ViewState;
 import com.pinyaoting.garcon.viewholders.IdeaViewHolder;
 import com.pinyaoting.garcon.viewstates.Idea;
 
 import rx.Observer;
 
-public class ListCompositionArrayAdapter extends RecyclerView.Adapter {
+public class IdeaListArrayAdapter extends RecyclerView.Adapter {
 
     IdeaInteractorInterface mIdeaInteractor;
-    ListFragmentActionHandlerInterface mIdeaActionHandler;
+    IdeaListFragmentActionHandlerInterface mIdeaActionHandler;
 
-    public ListCompositionArrayAdapter(IdeaInteractorInterface ideaInteractor,
-                                       ListFragmentActionHandlerInterface ideaActionHandler) {
+    public IdeaListArrayAdapter(IdeaInteractorInterface ideaInteractor,
+                                       IdeaListFragmentActionHandlerInterface ideaActionHandler) {
         mIdeaInteractor = ideaInteractor;
         mIdeaActionHandler = ideaActionHandler;
 

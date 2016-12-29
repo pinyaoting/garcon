@@ -9,16 +9,16 @@ import com.pinyaoting.garcon.R;
 import com.pinyaoting.garcon.activities.MainActivity;
 import com.pinyaoting.garcon.fragments.MapFragment;
 import com.pinyaoting.garcon.interfaces.domain.IdeaInteractorInterface;
-import com.pinyaoting.garcon.interfaces.presentation.ListFragmentActionHandlerInterface;
+import com.pinyaoting.garcon.interfaces.presentation.IdeaListFragmentActionHandlerInterface;
 import com.pinyaoting.garcon.viewstates.Plan;
 
-public class ListFragmentActionHandler implements ListFragmentActionHandlerInterface {
+public class IdeaListFragmentActionHandler implements IdeaListFragmentActionHandlerInterface {
 
     Context mContext;
     IdeaShareHandlerInterface mShareHandler;
     IdeaInteractorInterface mIdeaInteractor;
 
-    public ListFragmentActionHandler(Context context, IdeaInteractorInterface ideaInteractor) {
+    public IdeaListFragmentActionHandler(Context context, IdeaInteractorInterface ideaInteractor) {
         mContext = context;
         if (context instanceof IdeaShareHandlerInterface) {
             mShareHandler = (IdeaShareHandlerInterface) context;

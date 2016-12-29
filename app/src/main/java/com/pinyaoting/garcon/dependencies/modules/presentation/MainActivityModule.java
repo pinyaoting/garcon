@@ -4,16 +4,16 @@ import android.support.v7.widget.RecyclerView;
 
 import com.pinyaoting.garcon.actions.GoalActionHandler;
 import com.pinyaoting.garcon.actions.GoalDetailActionHandler;
-import com.pinyaoting.garcon.actions.ListFragmentActionHandler;
+import com.pinyaoting.garcon.actions.IdeaListFragmentActionHandler;
 import com.pinyaoting.garcon.activities.MainActivity;
 import com.pinyaoting.garcon.adapters.GoalArrayAdapter;
-import com.pinyaoting.garcon.adapters.ListCompositionArrayAdapter;
+import com.pinyaoting.garcon.adapters.IdeaListArrayAdapter;
 import com.pinyaoting.garcon.adapters.SavedGoalArrayAdapter;
 import com.pinyaoting.garcon.interfaces.domain.IdeaInteractorInterface;
 import com.pinyaoting.garcon.interfaces.presentation.GoalActionHandlerInterface;
 import com.pinyaoting.garcon.interfaces.presentation.GoalDetailActionHandlerInterface;
 import com.pinyaoting.garcon.interfaces.presentation.GoalInteractorInterface;
-import com.pinyaoting.garcon.interfaces.presentation.ListFragmentActionHandlerInterface;
+import com.pinyaoting.garcon.interfaces.presentation.IdeaListFragmentActionHandlerInterface;
 import com.pinyaoting.garcon.interfaces.scopes.PresentationLayerScope;
 
 import java.util.Map;
@@ -37,17 +37,17 @@ public class MainActivityModule {
     @Provides
     @PresentationLayerScope
     @Named("Composition")
-    public RecyclerView.Adapter<RecyclerView.ViewHolder> providesListCompositionArrayAdapter(
+    public RecyclerView.Adapter<RecyclerView.ViewHolder> providesIdeaListArrayAdapter(
             IdeaInteractorInterface ideaInteractor,
-            ListFragmentActionHandlerInterface ideaActionHandler) {
-        return new ListCompositionArrayAdapter(ideaInteractor, ideaActionHandler);
+            IdeaListFragmentActionHandlerInterface ideaActionHandler) {
+        return new IdeaListArrayAdapter(ideaInteractor, ideaActionHandler);
     }
 
     @Provides
     @PresentationLayerScope
-    public ListFragmentActionHandlerInterface providesListFragmentActionHandler(
+    public IdeaListFragmentActionHandlerInterface providesListFragmentActionHandler(
             IdeaInteractorInterface ideaInteractor) {
-        return new ListFragmentActionHandler(mActivity, ideaInteractor);
+        return new IdeaListFragmentActionHandler(mActivity, ideaInteractor);
     }
 
     @Provides

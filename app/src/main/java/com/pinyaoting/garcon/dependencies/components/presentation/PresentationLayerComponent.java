@@ -10,7 +10,7 @@ import dagger.Component;
 @Component(dependencies = DomainLayerComponent.class)
 public interface PresentationLayerComponent {
 
-    MainActivitySubComponent newListCompositionActivitySubComponent(
+    MainActivitySubComponent newMainActivitySubComponent(
             MainActivityModule activityModule);
 
 }

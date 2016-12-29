@@ -6,7 +6,7 @@ public interface GoalDetailActionHandlerInterface {
 
     void onCreateIdeaListClick(int pos);
 
-    interface ListCompositionDialogHandlerInterface {
+    interface IdeaListHandlerInterface {
 
         void compose(Goal goal);
 

@@ -28,7 +28,7 @@ import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.pinyaoting.garcon.R;
-import com.pinyaoting.garcon.actions.ListFragmentActionHandler;
+import com.pinyaoting.garcon.actions.IdeaListFragmentActionHandler;
 import com.pinyaoting.garcon.adapters.HomeFragmentPagerAdapter;
 import com.pinyaoting.garcon.adapters.IdeaSuggestionsAdapter;
 import com.pinyaoting.garcon.application.GarconApplication;
@@ -38,7 +38,7 @@ import com.pinyaoting.garcon.dependencies.modules.presentation.MainActivityModul
 import com.pinyaoting.garcon.fragments.GoalDetailViewPagerFragment;
 import com.pinyaoting.garcon.fragments.GoalPreviewFragment;
 import com.pinyaoting.garcon.fragments.GoalSearchFragment;
-import com.pinyaoting.garcon.fragments.ListCompositionFragment;
+import com.pinyaoting.garcon.fragments.IdeaListFragment;
 import com.pinyaoting.garcon.fragments.SavedGoalsFragment;
 import com.pinyaoting.garcon.interfaces.domain.IdeaInteractorInterface;
 import com.pinyaoting.garcon.interfaces.presentation.GoalActionHandlerInterface;
@@ -60,8 +60,8 @@ import rx.Observer;
 
 public class MainActivity extends AppCompatActivity implements InjectorInterface,
         GoalActionHandlerInterface.PreviewHandlerInterface,
-        GoalDetailActionHandlerInterface.ListCompositionDialogHandlerInterface,
-        ListFragmentActionHandler.IdeaShareHandlerInterface {
+        GoalDetailActionHandlerInterface.IdeaListHandlerInterface,
+        IdeaListFragmentActionHandler.IdeaShareHandlerInterface {
 
     public static final int RC_SIGN_IN = 1;
     ActivityMainBinding binding;
@@ -169,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
         if (mActivityComponent == null) {
             mActivityComponent =
                     ((GarconApplication) getApplication()).getPresentationLayerComponent()
-                            .newListCompositionActivitySubComponent(
+                            .newMainActivitySubComponent(
                                     new MainActivityModule(this, R.id.idea_category_recipe_v2));
         }
         return mActivityComponent;
@@ -201,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
         dismissDialogIfNotNull();
         mIdeaInteractor.loadExternalPlan(listId);
 
-        mDialogFragment = ListCompositionFragment.newInstance();
+        mDialogFragment = IdeaListFragment.newInstance();
         binding.activityMainToolbarContainer.toolbarTitle.setText(
                 getString(R.string.create_grocery_hint));
         binding.activityMainToolbarContainer.toolbarTitle.setTextSize(
@@ -284,7 +284,7 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
     }
 
     @Override
-    public void inject(ListCompositionFragment fragment) {
+    public void inject(IdeaListFragment fragment) {
         getActivityComponent().inject(fragment);
     }
 
@@ -368,7 +368,7 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if (mDialogFragment != null && mDialogFragment instanceof ListCompositionFragment) {
+                if (mDialogFragment != null && mDialogFragment instanceof IdeaListFragment) {
                     if (mIdeaInteractor.getSuggestionCount() < 1) {
                         return true;
                     }
@@ -401,7 +401,7 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
                 if (query.isEmpty()) {
                     return true;
                 }
-                if (mDialogFragment != null && mDialogFragment instanceof ListCompositionFragment) {
+                if (mDialogFragment != null && mDialogFragment instanceof IdeaListFragment) {
                     // show auto complete for ingredients
                     mIdeaInteractor.getSuggestions(query);
                     return true;

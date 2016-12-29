@@ -14,10 +14,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.pinyaoting.garcon.R;
-import com.pinyaoting.garcon.databinding.FragmentListCompositionBinding;
+import com.pinyaoting.garcon.databinding.FragmentIdeaListBinding;
 import com.pinyaoting.garcon.interfaces.domain.IdeaInteractorInterface;
 import com.pinyaoting.garcon.interfaces.presentation.InjectorInterface;
-import com.pinyaoting.garcon.interfaces.presentation.ListFragmentActionHandlerInterface;
+import com.pinyaoting.garcon.interfaces.presentation.IdeaListFragmentActionHandlerInterface;
 import com.pinyaoting.garcon.utils.ConstantsAndUtils;
 import com.pinyaoting.garcon.utils.ItemClickSupport;
 import com.pinyaoting.garcon.viewstates.Idea;
@@ -27,26 +27,26 @@ import javax.inject.Named;
 
 import jp.wasabeef.blurry.Blurry;
 
-public class ListCompositionFragment extends Fragment {
+public class IdeaListFragment extends Fragment {
 
     static final String LIST_COMPOSITION_VIEW_MODELS = "LIST_COMPOSITION_VIEW_MODELS";
     static final String LIST_COMPOSITION_LIST_ID = "LIST_COMPOSITION_LIST_ID";
     static final int LIST_COMPOSITION_BACKGROUND_IMAGE_ROTATION_INTERVAL = 5000;
-    public static FragmentListCompositionBinding binding;
+    public static FragmentIdeaListBinding binding;
     @Inject
     @Named("Composition")
     RecyclerView.Adapter<RecyclerView.ViewHolder> mAdapter;
     @Inject
-    ListFragmentActionHandlerInterface mActionHandler;
+    IdeaListFragmentActionHandlerInterface mActionHandler;
     @Inject
     IdeaInteractorInterface mIdeaInteractor;
 
-    public ListCompositionFragment() {
+    public IdeaListFragment() {
         // Required empty public constructor
     }
 
-    public static ListCompositionFragment newInstance() {
-        ListCompositionFragment fragment = new ListCompositionFragment();
+    public static IdeaListFragment newInstance() {
+        IdeaListFragment fragment = new IdeaListFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -61,7 +61,7 @@ public class ListCompositionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_list_composition, container,
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_idea_list, container,
                 false);
         binding.rvIdeas.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.rvIdeas.setAdapter(mAdapter);

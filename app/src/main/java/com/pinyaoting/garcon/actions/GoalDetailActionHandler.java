@@ -6,11 +6,11 @@ import com.pinyaoting.garcon.viewstates.Goal;
 
 public class GoalDetailActionHandler implements GoalDetailActionHandlerInterface {
 
-    ListCompositionDialogHandlerInterface mDialogHandler;
+    IdeaListHandlerInterface mDialogHandler;
     GoalInteractorInterface mInteractor;
 
     public GoalDetailActionHandler(
-            ListCompositionDialogHandlerInterface dialogHandler,
+            IdeaListHandlerInterface dialogHandler,
             GoalInteractorInterface interactor) {
         mDialogHandler = dialogHandler;
         mInteractor = interactor;

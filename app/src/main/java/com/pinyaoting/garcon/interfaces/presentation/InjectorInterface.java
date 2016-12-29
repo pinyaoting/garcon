@@ -3,12 +3,12 @@ package com.pinyaoting.garcon.interfaces.presentation;
 import com.pinyaoting.garcon.fragments.GoalDetailViewPagerFragment;
 import com.pinyaoting.garcon.fragments.GoalPreviewFragment;
 import com.pinyaoting.garcon.fragments.GoalSearchFragment;
-import com.pinyaoting.garcon.fragments.ListCompositionFragment;
+import com.pinyaoting.garcon.fragments.IdeaListFragment;
 import com.pinyaoting.garcon.fragments.SavedGoalsFragment;
 
 public interface InjectorInterface {
 
-    void inject(ListCompositionFragment fragment);
+    void inject(IdeaListFragment fragment);
 
     void inject(GoalSearchFragment fragment);
 
