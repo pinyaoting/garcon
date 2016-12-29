@@ -6,10 +6,14 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -17,6 +21,7 @@ import com.pinyaoting.garcon.R;
 import com.pinyaoting.garcon.databinding.FragmentSavedGoalsBinding;
 import com.pinyaoting.garcon.interfaces.presentation.InjectorInterface;
 import com.pinyaoting.garcon.utils.ConstantsAndUtils;
+import com.pinyaoting.garcon.utils.ToolbarUtils;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -44,8 +49,7 @@ public class SavedGoalsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-        }
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -53,6 +57,10 @@ public class SavedGoalsFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_saved_goals, container,
                 false);
+        ToolbarUtils.configureTitle(
+                binding.activityMainToolbarContainer,
+                getString(R.string.saved_goals_hint),
+                getResources().getInteger(R.integer.toolbar_title_size));
         binding.rvSavedIdeas.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.rvSavedIdeas.setAdapter(mAdapter);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(),
@@ -103,5 +111,27 @@ public class SavedGoalsFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
+        inflater.inflate(R.menu.menu_goal_review, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return ToolbarUtils.onOptionsItemSelected(getActivity(), item) ||
+                super.onOptionsItemSelected(item);
+    }
+
+    public void didGainFocus() {
+        if (binding == null || binding.activityMainToolbarContainer == null ||
+                binding.activityMainToolbarContainer.toolbar == null) {
+            return;
+        }
+        ToolbarUtils.bind((AppCompatActivity)getActivity(),
+                binding.activityMainToolbarContainer.toolbar);
     }
 }

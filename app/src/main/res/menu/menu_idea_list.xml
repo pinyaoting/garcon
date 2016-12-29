@@ -3,9 +3,9 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_search"
-        android:icon="@android:drawable/ic_menu_search"
+        android:icon="@android:drawable/ic_menu_add"
         android:orderInCategory="5"
-        android:title="Search"
+        android:title="@string/idea_search_hint"
         app:actionViewClass="com.pinyaoting.garcon.view.AutoCompleteSearchView"
         app:showAsAction="ifRoom|collapseActionView"/>
     <item

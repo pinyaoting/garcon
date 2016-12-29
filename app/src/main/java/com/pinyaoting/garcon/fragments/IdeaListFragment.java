@@ -6,20 +6,30 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import com.pinyaoting.garcon.R;
+import com.pinyaoting.garcon.adapters.IdeaSuggestionsAdapter;
 import com.pinyaoting.garcon.databinding.FragmentIdeaListBinding;
 import com.pinyaoting.garcon.interfaces.domain.IdeaInteractorInterface;
-import com.pinyaoting.garcon.interfaces.presentation.InjectorInterface;
 import com.pinyaoting.garcon.interfaces.presentation.IdeaListFragmentActionHandlerInterface;
+import com.pinyaoting.garcon.interfaces.presentation.InjectorInterface;
 import com.pinyaoting.garcon.utils.ConstantsAndUtils;
 import com.pinyaoting.garcon.utils.ItemClickSupport;
+import com.pinyaoting.garcon.utils.ToolbarUtils;
+import com.pinyaoting.garcon.view.AutoCompleteSearchView;
 import com.pinyaoting.garcon.viewstates.Idea;
 
 import javax.inject.Inject;
@@ -55,6 +65,7 @@ public class IdeaListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -63,6 +74,10 @@ public class IdeaListFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_idea_list, container,
                 false);
+        ToolbarUtils.configureTitle(
+                binding.activityMainToolbarContainer,
+                getString(R.string.my_ideas_hint),
+                getResources().getInteger(R.integer.toolbar_title_size));
         binding.rvIdeas.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.rvIdeas.setAdapter(mAdapter);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(),
@@ -153,5 +168,70 @@ public class IdeaListFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
+        inflater.inflate(R.menu.menu_idea_list, menu);
+
+        final MenuItem searchItem = menu.findItem(R.id.action_search);
+
+        if (searchItem == null) {
+            return;
+        }
+        final AutoCompleteSearchView searchView =
+                (AutoCompleteSearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setAdapter(new IdeaSuggestionsAdapter(
+                getActivity(), mIdeaInteractor));
+        searchView.setQueryHint(getString(R.string.idea_search_hint));
+        searchView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                mIdeaInteractor.acceptSuggestedIdeaAtPos(position);
+                searchView.setQuery("", false);
+                searchView.clearFocus();
+
+            }
+        });
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if (mIdeaInteractor.getSuggestionCount() < 1) {
+                    return true;
+                }
+                mIdeaInteractor.acceptSuggestedIdeaAtPos(0);
+                searchView.setQuery("", false);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                String query = s.trim();
+                if (query.isEmpty()) {
+                    return true;
+                }
+                // show auto complete for ingredients
+                mIdeaInteractor.getSuggestions(query);
+                return true;
+            }
+        });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return ToolbarUtils.onOptionsItemSelected(getActivity(), item) ||
+                super.onOptionsItemSelected(item);
+    }
+
+    public void didGainFocus() {
+        if (binding == null || binding.activityMainToolbarContainer == null ||
+                binding.activityMainToolbarContainer.toolbar == null) {
+            return;
+        }
+        ToolbarUtils.bind((AppCompatActivity)getActivity(),
+                binding.activityMainToolbarContainer.toolbar);
     }
 }

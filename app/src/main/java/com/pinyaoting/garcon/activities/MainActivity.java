@@ -11,17 +11,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 
 import com.batch.android.Batch;
 import com.firebase.ui.auth.AuthUI;
@@ -30,7 +23,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.pinyaoting.garcon.R;
 import com.pinyaoting.garcon.actions.IdeaListFragmentActionHandler;
 import com.pinyaoting.garcon.adapters.HomeFragmentPagerAdapter;
-import com.pinyaoting.garcon.adapters.IdeaSuggestionsAdapter;
 import com.pinyaoting.garcon.application.GarconApplication;
 import com.pinyaoting.garcon.databinding.ActivityMainBinding;
 import com.pinyaoting.garcon.dependencies.components.presentation.MainActivitySubComponent;
@@ -46,8 +38,6 @@ import com.pinyaoting.garcon.interfaces.presentation.GoalDetailActionHandlerInte
 import com.pinyaoting.garcon.interfaces.presentation.GoalInteractorInterface;
 import com.pinyaoting.garcon.interfaces.presentation.InjectorInterface;
 import com.pinyaoting.garcon.utils.TabUtils;
-import com.pinyaoting.garcon.utils.ToolbarBindingUtils;
-import com.pinyaoting.garcon.view.AutoCompleteSearchView;
 import com.pinyaoting.garcon.viewholders.GoalViewHolder;
 import com.pinyaoting.garcon.viewstates.Goal;
 import com.pinyaoting.garcon.viewstates.Plan;
@@ -84,7 +74,6 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
         getActivityComponent().inject(MainActivity.this);
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        ToolbarBindingUtils.bind(this, binding.activityMainToolbarContainer.toolbar);
         mPagerAdapter = new HomeFragmentPagerAdapter(
                 getSupportFragmentManager(), MainActivity.this);
         binding.viewpager.setAdapter(mPagerAdapter);
@@ -202,10 +191,6 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
         mIdeaInteractor.loadExternalPlan(listId);
 
         mDialogFragment = IdeaListFragment.newInstance();
-        binding.activityMainToolbarContainer.toolbarTitle.setText(
-                getString(R.string.create_grocery_hint));
-        binding.activityMainToolbarContainer.toolbarTitle.setTextSize(
-                getResources().getInteger(R.integer.toolbar_title_size));
         showFragment();
     }
 
@@ -340,94 +325,6 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        // Inflate the menu; this adds items to the action bar if it is present.
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu, menu);
-
-        final MenuItem searchItem = menu.findItem(R.id.action_search);
-
-        if (searchItem == null) {
-            return true;
-        }
-        final AutoCompleteSearchView searchView =
-                (AutoCompleteSearchView) MenuItemCompat.getActionView(searchItem);
-        searchView.setAdapter(new IdeaSuggestionsAdapter(
-                MainActivity.this, mIdeaInteractor));
-        searchView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                mIdeaInteractor.acceptSuggestedIdeaAtPos(position);
-                searchView.setQuery("", false);
-                searchView.clearFocus();
-
-            }
-        });
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                if (mDialogFragment != null && mDialogFragment instanceof IdeaListFragment) {
-                    if (mIdeaInteractor.getSuggestionCount() < 1) {
-                        return true;
-                    }
-                    mIdeaInteractor.acceptSuggestedIdeaAtPos(0);
-                    searchView.setQuery("", false);
-                    return true;
-                }
-                int currentViewPagerIndex = binding.viewpager.getCurrentItem();
-                switch (currentViewPagerIndex) {
-                    case SEARCH_GOAL:
-                        mGoalInteractor.search(query);
-                        break;
-                    case MY_IDEAS:
-                        break;
-                    case SAVED_GOALS:
-                        break;
-                }
-
-                // WORKAROUND: to avoid issues with some emulators and keyboard devices
-                // firing twice if a keyboard enter is used
-                // see https://code.google.com/p/android/issues/detail?id=24599
-                searchView.clearFocus();
-
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-                String query = s.trim();
-                if (query.isEmpty()) {
-                    return true;
-                }
-                if (mDialogFragment != null && mDialogFragment instanceof IdeaListFragment) {
-                    // show auto complete for ingredients
-                    mIdeaInteractor.getSuggestions(query);
-                    return true;
-                } else {
-                    // TODO: add auto complete for recipes
-                }
-
-                return true;
-            }
-        });
-
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.sign_out_menu:
-                AuthUI.getInstance().signOut(this);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
     public void onBackPressed() {
         super.onBackPressed();
         if (mDialogFragment != null) {
@@ -456,41 +353,20 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
     }
 
     private void didGainFocus(int position) {
-        configureTitle(position);
-        processData(position);
-    }
-
-    private void configureTitle(int position) {
-        binding.activityMainToolbarContainer.appBar.setExpanded(true, true);
-        String title = getString(R.string.app_name);
-        float titleSize = getResources().getInteger(R.integer.app_title_size);
         switch (position) {
             case SEARCH_GOAL:
                 mGoalInteractor.setDisplayGoalFlag(R.id.flag_explore_recipes);
-                title = getString(R.string.app_name);
-                titleSize = getResources().getInteger(R.integer.app_title_size);
-                break;
-            case MY_IDEAS:
-                title = getString(R.string.my_ideas_hint);
-                titleSize = getResources().getInteger(R.integer.toolbar_title_size);
+                mPagerAdapter.getGoalSearchFragment().didGainFocus();
                 break;
             case SAVED_GOALS:
                 mGoalInteractor.setDisplayGoalFlag(R.id.flag_saved_recipes);
-                title = getString(R.string.saved_goals_hint);
-                titleSize = getResources().getInteger(R.integer.toolbar_title_size);
+                mPagerAdapter.getSavedGoalFragment().didGainFocus();
                 break;
-            default:
-                break;
-        }
-        binding.activityMainToolbarContainer.toolbarTitle.setText(title);
-        binding.activityMainToolbarContainer.toolbarTitle.setTextSize(titleSize);
-    }
-
-    private void processData(int position) {
-        switch (position) {
             case MY_IDEAS:
                 mIdeaInteractor.loadPlan(mIdeaInteractor.myPlanId(), mEmptyPlanObserver);
+                mPagerAdapter.getMyIdeasFragment().didGainFocus();
                 break;
         }
+        invalidateOptionsMenu();
     }
 }
