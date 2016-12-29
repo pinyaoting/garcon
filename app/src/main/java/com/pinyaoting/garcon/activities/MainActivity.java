@@ -1,17 +1,15 @@
 package com.pinyaoting.garcon.activities;
 
-import static com.pinyaoting.garcon.adapters.HomeFragmentPagerAdapter.SAVED_GOALS;
 import static com.pinyaoting.garcon.adapters.HomeFragmentPagerAdapter.MY_IDEAS;
+import static com.pinyaoting.garcon.adapters.HomeFragmentPagerAdapter.SAVED_GOALS;
 import static com.pinyaoting.garcon.adapters.HomeFragmentPagerAdapter.SEARCH_GOAL;
-import static com.raizlabs.android.dbflow.config.FlowManager.getContext;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
@@ -29,12 +27,6 @@ import com.batch.android.Batch;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ServerValue;
-import com.google.firebase.database.ValueEventListener;
 import com.pinyaoting.garcon.R;
 import com.pinyaoting.garcon.actions.ListFragmentActionHandler;
 import com.pinyaoting.garcon.adapters.HomeFragmentPagerAdapter;
@@ -53,32 +45,23 @@ import com.pinyaoting.garcon.interfaces.presentation.GoalActionHandlerInterface;
 import com.pinyaoting.garcon.interfaces.presentation.GoalDetailActionHandlerInterface;
 import com.pinyaoting.garcon.interfaces.presentation.GoalInteractorInterface;
 import com.pinyaoting.garcon.interfaces.presentation.InjectorInterface;
-import com.pinyaoting.garcon.interfaces.presentation.ListCompositionHandlerInterface;
-import com.pinyaoting.garcon.interfaces.presentation.SavedGoalsActionHandlerInterface;
-import com.pinyaoting.garcon.service.NotificationService;
-import com.pinyaoting.garcon.utils.ConstantsAndUtils;
 import com.pinyaoting.garcon.utils.TabUtils;
 import com.pinyaoting.garcon.utils.ToolbarBindingUtils;
 import com.pinyaoting.garcon.view.AutoCompleteSearchView;
 import com.pinyaoting.garcon.viewholders.GoalViewHolder;
 import com.pinyaoting.garcon.viewstates.Goal;
-import com.pinyaoting.garcon.viewstates.Idea;
 import com.pinyaoting.garcon.viewstates.Plan;
-import com.pinyaoting.garcon.viewstates.User;
-import com.pinyaoting.garcon.viewstates.UserList;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 
 import javax.inject.Inject;
+
+import rx.Observer;
 
 public class MainActivity extends AppCompatActivity implements InjectorInterface,
         GoalActionHandlerInterface.PreviewHandlerInterface,
         GoalDetailActionHandlerInterface.ListCompositionDialogHandlerInterface,
-        ListFragmentActionHandler.IdeaShareHandlerInterface,
-        SavedGoalsActionHandlerInterface,
-        ListCompositionHandlerInterface {
+        ListFragmentActionHandler.IdeaShareHandlerInterface {
 
     public static final int RC_SIGN_IN = 1;
     ActivityMainBinding binding;
@@ -87,17 +70,13 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
     GoalInteractorInterface mGoalInteractor;
     @Inject
     IdeaInteractorInterface mIdeaInteractor;
-    private FirebaseDatabase mFirebaseDatabase;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
-    private DatabaseReference mUsersDatabaseReference;
-    private DatabaseReference mListDatabaseReference;
-    private DatabaseReference mShoppingListDatabaseReference;
-    private User mUser;
     private Fragment mDialogFragment;
     private HomeFragmentPagerAdapter mPagerAdapter;
     private Transition mChangeTransform;
     private Transition mFadeTransform;
+    Observer<Plan> mEmptyPlanObserver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,12 +92,11 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
             @Override
             public void onPageScrolled(
                     int position, float positionOffset, int positionOffsetPixels) {
-
             }
 
             @Override
             public void onPageSelected(int position) {
-                configureTitle(position);
+                didGainFocus(position);
             }
 
             @Override
@@ -129,14 +107,7 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
         binding.tabs.setupWithViewPager(binding.viewpager);
         TabUtils.bindIcons(MainActivity.this, binding.viewpager, binding.tabs);
 
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
         mFirebaseAuth = FirebaseAuth.getInstance();
-
-        mUsersDatabaseReference = mFirebaseDatabase.getReference().child(ConstantsAndUtils.USERS);
-        mListDatabaseReference = mFirebaseDatabase.getReference().child(
-                ConstantsAndUtils.USER_LISTS).child(ConstantsAndUtils.getOwner(this));
-        mShoppingListDatabaseReference = mFirebaseDatabase.getReference().child(
-                ConstantsAndUtils.SHOPPING_LISTS);
 
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -144,10 +115,12 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // User is signed in
-                    onSignedInInitialize(user);
+                    mIdeaInteractor.onSignedInInitialize(user);
+                    // startService(new Intent(this, NotificationService.class));
                 } else {
                     // User is signed out
-                    onSignedOutCleanup();
+                    mIdeaInteractor.onSignedOutCleanup();
+                    // stopService(new Intent(this, NotificationService.class));
                     startActivityForResult(
                             AuthUI.getInstance()
                                     .createSignInIntentBuilder()
@@ -170,6 +143,26 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
         mFadeTransform = TransitionInflater.from(this).
                 inflateTransition(android.R.transition.fade);
 
+        mEmptyPlanObserver = new Observer<Plan>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(Plan plan) {
+                if (mIdeaInteractor.getIdeaCount() == 0) {
+                    Snackbar.make(binding.viewpager,
+                            R.string.create_grocery_snackbar_hint,
+                            Snackbar.LENGTH_SHORT).show();
+                }
+            }
+        };
     }
 
     public MainActivitySubComponent getActivityComponent() {
@@ -197,43 +190,17 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
     }
 
     @Override
-    public void compose(Goal goal) {
-        // load ingredients from recipe
+    public void compose(final Goal goal) {
         dismissDialogIfNotNull();
-        loadList(newListId(goal.getTitle()), goal, false);
-        mDialogFragment = ListCompositionFragment.newInstance();
-        binding.activityMainToolbarContainer.toolbarTitle.setText(
-                getString(R.string.create_grocery_hint));
-        binding.activityMainToolbarContainer.toolbarTitle.setTextSize(
-                getResources().getInteger(R.integer.toolbar_title_size));
-        showFragment();
+        mIdeaInteractor.setPendingIdeas(goal);
+        binding.viewpager.setCurrentItem(MY_IDEAS);
     }
 
-    @Override
-    public void compose(String listId) {
-        compose(listId, false);
-    }
-
-    private void compose(String listId, boolean requestAccess) {
+    private void compose(String listId) {
         // load existing list
-        if (listId == null) {
-            listId = newListId(null);
-        }
         dismissDialogIfNotNull();
-        loadList(listId, null, requestAccess);
-        mDialogFragment = ListCompositionFragment.newInstance();
-        binding.activityMainToolbarContainer.toolbarTitle.setText(
-                getString(R.string.create_grocery_hint));
-        binding.activityMainToolbarContainer.toolbarTitle.setTextSize(
-                getResources().getInteger(R.integer.toolbar_title_size));
-        showFragment();
-    }
+        mIdeaInteractor.loadExternalPlan(listId);
 
-    @Override
-    public void compose() {
-        // create new list
-        dismissDialogIfNotNull();
-        loadList(newListId(null), null, false);
         mDialogFragment = ListCompositionFragment.newInstance();
         binding.activityMainToolbarContainer.toolbarTitle.setText(
                 getString(R.string.create_grocery_hint));
@@ -285,56 +252,6 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
                 .replace(R.id.activity_home, mDialogFragment)
                 .addToBackStack(null)
                 .commit();
-    }
-
-    private String newListId(String listName) {
-        if (listName == null) {
-            listName = ConstantsAndUtils.getDefaultTitle(this);
-        }
-        // create empty plan and persists to FireBase
-        DatabaseReference keyReference = mListDatabaseReference.push();
-
-        HashMap<String, Object> timestampCreated = new HashMap<>();
-        timestampCreated.put(ConstantsAndUtils.TIMESTAMP, ServerValue.TIMESTAMP);
-        UserList userList = new UserList(
-                listName,
-                ConstantsAndUtils.getOwner(this),
-                timestampCreated);
-        keyReference.setValue(userList);
-        Plan plan = mIdeaInteractor.createPlan(keyReference.getKey(), listName);
-        mShoppingListDatabaseReference.child(keyReference.getKey()).setValue(plan);
-
-        return keyReference.getKey();
-    }
-
-    private void loadList(final String listId, final Goal goal, final boolean requestAccess) {
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference listsDatabaseReference = firebaseDatabase.getReference().child(
-                ConstantsAndUtils.SHOPPING_LISTS).child(listId);
-        listsDatabaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Plan plan = dataSnapshot.getValue(Plan.class);
-                if (plan != null) {
-                    mIdeaInteractor.setPlan(plan);
-                }
-                if (requestAccess) {
-                    mIdeaInteractor.subscribePlan(mUser);
-                }
-                List<Idea> ideas = plan.getIdeas();
-                if (ideas != null && !ideas.isEmpty()) {
-                    return;
-                }
-                if (goal != null) {
-                    mIdeaInteractor.loadPendingIdeas(goal);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
     }
 
     @Override
@@ -391,23 +308,6 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
         getActivityComponent().inject(fragment);
     }
 
-    private void onSignedInInitialize(FirebaseUser user) {
-        // Add user to db
-        HashMap<String, Object> timestampJoined = new HashMap<>();
-        timestampJoined.put(ConstantsAndUtils.TIMESTAMP, ServerValue.TIMESTAMP);
-        mUser = new User(user.getDisplayName(), user.getEmail().replace(".", ","), timestampJoined);
-        mUsersDatabaseReference.child(user.getEmail().replace(".", ",")).setValue(mUser);
-
-        startService(new Intent(this, NotificationService.class));
-
-        // add user information to sharedPref
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(
-                getContext());
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(ConstantsAndUtils.EMAIL, user.getEmail().replace(".", ","));
-        editor.putString(ConstantsAndUtils.NAME, user.getDisplayName());
-        editor.apply();
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -481,9 +381,9 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
                     case SEARCH_GOAL:
                         mGoalInteractor.search(query);
                         break;
-                    case SAVED_GOALS:
-                        break;
                     case MY_IDEAS:
+                        break;
+                    case SAVED_GOALS:
                         break;
                 }
 
@@ -531,14 +431,9 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
     public void onBackPressed() {
         super.onBackPressed();
         if (mDialogFragment != null) {
-            configureTitle(binding.viewpager.getCurrentItem());
+            didGainFocus(binding.viewpager.getCurrentItem());
         }
         mDialogFragment = null;
-    }
-
-    private void onSignedOutCleanup() {
-        mUser = null;
-        stopService(new Intent(this, NotificationService.class));
     }
 
     private void handleDeeplink() {
@@ -551,13 +446,18 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
         if (listId == null) {
             return;
         }
-        compose(listId, true);
+        compose(listId);
     }
 
     private void dismissDialogIfNotNull() {
         if (mDialogFragment != null) {
             onBackPressed();
         }
+    }
+
+    private void didGainFocus(int position) {
+        configureTitle(position);
+        processData(position);
     }
 
     private void configureTitle(int position) {
@@ -584,5 +484,13 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
         }
         binding.activityMainToolbarContainer.toolbarTitle.setText(title);
         binding.activityMainToolbarContainer.toolbarTitle.setTextSize(titleSize);
+    }
+
+    private void processData(int position) {
+        switch (position) {
+            case MY_IDEAS:
+                mIdeaInteractor.loadPlan(mIdeaInteractor.myPlanId(), mEmptyPlanObserver);
+                break;
+        }
     }
 }

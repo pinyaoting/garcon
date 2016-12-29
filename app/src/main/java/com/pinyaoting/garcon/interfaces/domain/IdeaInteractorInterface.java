@@ -1,10 +1,10 @@
 package com.pinyaoting.garcon.interfaces.domain;
 
+import com.google.firebase.auth.FirebaseUser;
 import com.pinyaoting.garcon.interfaces.presentation.ViewState;
 import com.pinyaoting.garcon.viewstates.Goal;
 import com.pinyaoting.garcon.viewstates.Idea;
 import com.pinyaoting.garcon.viewstates.Plan;
-import com.pinyaoting.garcon.viewstates.User;
 
 import rx.Observer;
 
@@ -34,11 +34,13 @@ public interface IdeaInteractorInterface {
 
     Plan getPlan();
 
-    void setPlan(Plan plan);
-
     Plan createPlan(String id, String name);
 
-    void loadPendingIdeas(Goal goal);
+    void loadExternalPlan(String planId);
+
+    void loadPlan(String planId, Observer<Plan> observer);
+
+    void setPendingIdeas(Goal goal);
 
     void discardPlanIfEmpty();
 
@@ -48,5 +50,10 @@ public interface IdeaInteractorInterface {
 
     Idea getPendingIdea(String id, int pos);
 
-    void subscribePlan(final User currentUser);
+    String myPlanId();
+
+    void onSignedInInitialize(FirebaseUser user);
+
+    void onSignedOutCleanup();
+
 }

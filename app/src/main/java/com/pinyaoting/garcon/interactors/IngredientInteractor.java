@@ -1,7 +1,11 @@
 package com.pinyaoting.garcon.interactors;
 
+import static com.raizlabs.android.dbflow.config.FlowManager.getContext;
+
 import android.content.Context;
 
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
 import com.pinyaoting.garcon.R;
 import com.pinyaoting.garcon.interfaces.data.CloudRepositoryInterface;
 import com.pinyaoting.garcon.interfaces.data.RecipeRepositoryInterface;
@@ -9,18 +13,19 @@ import com.pinyaoting.garcon.interfaces.domain.DataStoreInterface;
 import com.pinyaoting.garcon.interfaces.domain.IdeaInteractorInterface;
 import com.pinyaoting.garcon.interfaces.presentation.ViewState;
 import com.pinyaoting.garcon.models.v2.IngredientV2;
+import com.pinyaoting.garcon.models.v2.User;
 import com.pinyaoting.garcon.utils.ConstantsAndUtils;
 import com.pinyaoting.garcon.viewstates.Goal;
 import com.pinyaoting.garcon.viewstates.Idea;
 import com.pinyaoting.garcon.viewstates.IdeaMeta;
 import com.pinyaoting.garcon.viewstates.IdeaReducer;
 import com.pinyaoting.garcon.viewstates.Plan;
-import com.pinyaoting.garcon.viewstates.User;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import rx.Observable;
 import rx.Observer;
 import rx.functions.Action1;
 import rx.subjects.PublishSubject;
@@ -35,6 +40,8 @@ public class IngredientInteractor implements IdeaInteractorInterface {
     RecipeRepositoryInterface mRecipeRepository;
     CloudRepositoryInterface mCloudRepository;
     PublishSubject<String> mSearchDebouncer;
+    User mUser;
+    Goal mPendingGoal;
 
     public IngredientInteractor(Context context,
             DataStoreInterface ideaDataStore,
@@ -75,6 +82,26 @@ public class IngredientInteractor implements IdeaInteractorInterface {
             public void onNext(List<IngredientV2> ingredientV2s) {
                 mIngredients.clear();
                 mIngredients.addAll(ingredientV2s);
+            }
+        });
+        mCloudRepository.subscribe(new Observer<DataSnapshot>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(DataSnapshot dataSnapshot) {
+                Plan plan = dataSnapshot.getValue(Plan.class);
+                mDataStore.setPlan(plan);
+                mDataStore.setIdeaState(new ViewState(
+                        R.id.state_loaded,
+                        ViewState.OPERATION.RELOAD));
             }
         });
     }
@@ -126,7 +153,8 @@ public class IngredientInteractor implements IdeaInteractorInterface {
         mDataStore.setIdeaState(new ViewState(
                 R.id.state_refreshing, ViewState.OPERATION.REMOVE, pos, 1));
         mDataStore.removeIdea(pos);
-        mCloudRepository.savePlan(mDataStore.getPlan());
+        Plan plan = getPlan();
+        mCloudRepository.savePlan(plan);
         mDataStore.setIdeaState(new ViewState(
                 R.id.state_loaded, ViewState.OPERATION.REMOVE, pos, 1));
     }
@@ -167,20 +195,10 @@ public class IngredientInteractor implements IdeaInteractorInterface {
     }
 
     @Override
-    public void setPlan(Plan plan) {
-        mDataStore.setIdeaState(new ViewState(
-                R.id.state_refreshing,
-                ViewState.OPERATION.RELOAD));
-        mDataStore.setPlan(plan);
-        mCloudRepository.savePlan(mDataStore.getPlan());
-        mDataStore.setIdeaState(new ViewState(
-                R.id.state_loaded,
-                ViewState.OPERATION.RELOAD));
-    }
-
-    @Override
     public Plan createPlan(String id, String name) {
-        return mDataStore.createPlan(id, name);
+        Plan plan = mDataStore.createPlan(id, name);
+        mCloudRepository.newPlan(plan);
+        return plan;
     }
 
     @Override
@@ -195,6 +213,57 @@ public class IngredientInteractor implements IdeaInteractorInterface {
     @Override
     public void clearPlan() {
         mDataStore.clearPlan();
+    }
+
+    @Override
+    public void loadPlan(String planId, final Observer<Plan> observer) {
+        mDataStore.setIdeaState(new ViewState(
+                R.id.state_refreshing,
+                ViewState.OPERATION.RELOAD));
+        mCloudRepository.loadPlan(planId, new Observer<DataSnapshot>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(DataSnapshot dataSnapshot) {
+                Plan plan = dataSnapshot.getValue(Plan.class);
+                if (mPendingGoal != null) {
+                    loadPendingIdeas(mPendingGoal);
+                    mPendingGoal = null;
+                }
+                Observable.just(plan).subscribe(observer);
+            }
+        });
+    }
+
+    @Override
+    public void loadExternalPlan(String planId) {
+        mDataStore.setIdeaState(new ViewState(
+                R.id.state_refreshing,
+                ViewState.OPERATION.RELOAD));
+        mCloudRepository.loadPlan(planId, new Observer<DataSnapshot>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(DataSnapshot dataSnapshot) {
+                subscribePlan();
+            }
+        });
     }
 
     @Override
@@ -218,10 +287,14 @@ public class IngredientInteractor implements IdeaInteractorInterface {
     }
 
     @Override
-    public void loadPendingIdeas(Goal goal) {
+    public void setPendingIdeas(Goal goal) {
+        mPendingGoal = goal;
+    }
+
+    private void loadPendingIdeas(Goal goal) {
         mDataStore.setIdeaState(new ViewState(
                 R.id.state_refreshing, ViewState.OPERATION.RELOAD));
-        mDataStore.loadPendingIdeas(goal.getId());
+        mDataStore.mergePendingIdeas(goal.getId());
         mCloudRepository.savePlan(mDataStore.getPlan());
         mDataStore.setIdeaState(new ViewState(
                 R.id.state_loaded, ViewState.OPERATION.RELOAD));
@@ -249,11 +322,41 @@ public class IngredientInteractor implements IdeaInteractorInterface {
         getDebouncer().onNext(keyword);
     }
 
-    public void subscribePlan(final User currentUser) {
+    public void subscribePlan() {
         Plan plan = mDataStore.getPlan();
         String userEmail = ConstantsAndUtils.getOwner(mContext);
-        mCloudRepository.share(plan, userEmail, currentUser);
+        mCloudRepository.share(plan, userEmail);
     }
 
+    @Override
+    public String myPlanId() {
+        return mCloudRepository.myPlanId();
+    }
+
+    @Override
+    public void onSignedInInitialize(FirebaseUser user) {
+        mCloudRepository.onSignedInInitialize(user);
+        mCloudRepository.populateListId(new Observer<String>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(String planId) {
+                createPlan(planId, ConstantsAndUtils.getDefaultTitle(getContext()));
+            }
+        });
+    }
+
+    @Override
+    public void onSignedOutCleanup() {
+        mCloudRepository.onSignedOutCleanup();
+    }
 
 }

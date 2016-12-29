@@ -1,4 +1,4 @@
-package com.pinyaoting.garcon.viewstates;
+package com.pinyaoting.garcon.models.v2;
 
 
 import com.google.firebase.database.Exclude;

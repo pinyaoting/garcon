@@ -1,7 +1,10 @@
 package com.pinyaoting.garcon.interfaces.data;
 
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
 import com.pinyaoting.garcon.viewstates.Plan;
-import com.pinyaoting.garcon.viewstates.User;
+
+import rx.Observer;
 
 /**
  * Created by pinyaoting on 12/21/16.
@@ -9,10 +12,19 @@ import com.pinyaoting.garcon.viewstates.User;
 
 public interface CloudRepositoryInterface {
 
+    void loadPlan(String planId);
+    void loadPlan(String planId, Observer<DataSnapshot> observer);
+    void subscribe(Observer<DataSnapshot> observer);
+    void newPlan(Plan plan);
     void savePlan(Plan plan);
     void updateItemInPlan(Plan plan, int start, int count);
     void addNewItemsToPlan(Plan plan, int start, int count);
     void removePlan(Plan plan);
 
-    void share(Plan plan, final String userEmail, final User currentUser);
+    void share(Plan plan, final String userEmail);
+
+    void onSignedInInitialize(FirebaseUser user);
+    void onSignedOutCleanup();
+    void populateListId(Observer<String> observer);
+    String myPlanId();
 }

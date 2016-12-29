@@ -2,8 +2,13 @@
 <html>
 <head>
   <meta charset=utf-8 />
+  <meta name="google-play-app" content="app-id=com.pinyaoting.garcon">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css"></link>
+  <link rel="stylesheet" type="text/css" href="smart-app-banner.css">
+  <link rel="apple-touch-icon" href="icon.png">
+  <link rel="android-touch-icon" href="icon.png" />
+  <link rel="windows-touch-icon" href="icon.png" />
   <style>
     li.list-item {
         height: 66px;
@@ -30,8 +35,11 @@
   <script src="https://unpkg.com/react@15/dist/react.min.js"></script>
   <script src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
   <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+  <script type="text/javascript" src="smart-app-banner.js"></script>
+  <script type="text/javascript">
+  </script>
   <script type="text/babel">
-
+	  
     var config = {
       apiKey: "AIzaSyCAtxaXlD-yuFarODVKPtSrnzZBc831fOY",
       authDomain: "garcon-efffe.firebaseapp.com",
@@ -76,9 +84,21 @@
       firebase.auth().signInAnonymously().catch(null);
     }
 
+    function setupSmartBanner () {
+      new SmartBanner({
+        daysHidden: 15,
+        daysReminder: 90,
+        title: 'Garçon',
+        author: 'pinyaoting',
+        button: 'OPEN',
+        force: 'android'
+      });
+    }
+
     window.onload = function() {
       initApp();
       signInAnonymously();
+      setupSmartBanner();
     };
 
     function ItemList(props) {

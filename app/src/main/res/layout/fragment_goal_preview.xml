@@ -155,29 +155,16 @@ Salt, to taste"/>
             </LinearLayout>
         </ScrollView>
 
-        <com.getbase.floatingactionbutton.FloatingActionsMenu
-            android:id="@+id/multiple_actions"
+        <android.support.design.widget.FloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right|end"
             android:layout_margin="16dp"
-            app:fabSize="normal"
-            app:fab_addButtonColorNormal="@color/colorUpOverlayDark"
-            app:fab_addButtonColorPressed="@color/colorUpOverlayDark"
-            app:fab_labelStyle="@style/menu_labels_style"
-            app:layout_anchor="@id/ivIdeaBackgroundImage"
-            app:layout_anchorGravity="bottom|right|end">
-
-            <com.getbase.floatingactionbutton.FloatingActionButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="@{() -> handler.onCreateIdeaListClick(pos)}"
-                android:src="@drawable/ic_add_shopping_cart"
-                android:tint="@color/colorButton"
-                app:fab_colorNormal="@color/colorDownOverlayDark"
-                app:fab_title="@string/create_list"/>
-
-        </com.getbase.floatingactionbutton.FloatingActionsMenu>
+            android:onClick="@{() -> handler.onCreateIdeaListClick(pos)}"
+            android:src="@drawable/ic_add_shopping_cart"
+            android:tint="@color/colorButton"
+            app:fab_colorNormal="@color/colorDownOverlayDark"
+            app:fab_title="@string/create_list"/>
 
     </FrameLayout>
 </layout>

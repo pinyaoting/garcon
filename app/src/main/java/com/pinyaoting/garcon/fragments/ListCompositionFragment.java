@@ -1,14 +1,5 @@
 package com.pinyaoting.garcon.fragments;
 
-import com.pinyaoting.garcon.R;
-import com.pinyaoting.garcon.databinding.FragmentListCompositionBinding;
-import com.pinyaoting.garcon.interfaces.domain.IdeaInteractorInterface;
-import com.pinyaoting.garcon.interfaces.presentation.InjectorInterface;
-import com.pinyaoting.garcon.interfaces.presentation.ListFragmentActionHandlerInterface;
-import com.pinyaoting.garcon.utils.ConstantsAndUtils;
-import com.pinyaoting.garcon.utils.ItemClickSupport;
-import com.pinyaoting.garcon.viewstates.Idea;
-
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -21,6 +12,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.pinyaoting.garcon.R;
+import com.pinyaoting.garcon.databinding.FragmentListCompositionBinding;
+import com.pinyaoting.garcon.interfaces.domain.IdeaInteractorInterface;
+import com.pinyaoting.garcon.interfaces.presentation.InjectorInterface;
+import com.pinyaoting.garcon.interfaces.presentation.ListFragmentActionHandlerInterface;
+import com.pinyaoting.garcon.utils.ConstantsAndUtils;
+import com.pinyaoting.garcon.utils.ItemClickSupport;
+import com.pinyaoting.garcon.viewstates.Idea;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -39,7 +39,7 @@ public class ListCompositionFragment extends Fragment {
     @Inject
     ListFragmentActionHandlerInterface mActionHandler;
     @Inject
-    IdeaInteractorInterface mInteractor;
+    IdeaInteractorInterface mIdeaInteractor;
 
     public ListCompositionFragment() {
         // Required empty public constructor
@@ -75,26 +75,26 @@ public class ListCompositionFragment extends Fragment {
                 new ItemClickSupport.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClicked(RecyclerView recyclerView, int position, View v) {
-                mInteractor.removeIdea(position);
+                mIdeaInteractor.removeIdea(position);
                 return false;
             }
         }).setOnItemSwipeTouchListener(new ItemClickSupport.OnItemSwipeTouchListener() {
             @Override
             public void onSwipeRight(RecyclerView recyclerView, int position, View v) {
-                Idea idea = mInteractor.getIdeaAtPos(position);
+                Idea idea = mIdeaInteractor.getIdeaAtPos(position);
                 if (idea.isCrossedOut()) {
                     return;
                 }
-                mInteractor.crossoutIdea(position);
+                mIdeaInteractor.crossoutIdea(position);
             }
 
             @Override
             public void onSwipeLeft(RecyclerView recyclerView, int position, View v) {
-                Idea idea = mInteractor.getIdeaAtPos(position);
+                Idea idea = mIdeaInteractor.getIdeaAtPos(position);
                 if (!idea.isCrossedOut()) {
                     return;
                 }
-                mInteractor.uncrossoutIdea(position);
+                mIdeaInteractor.uncrossoutIdea(position);
             }
 
             @Override
@@ -131,8 +131,8 @@ public class ListCompositionFragment extends Fragment {
     @Override
     public void onDestroyView() {
         ItemClickSupport.removeFrom(binding.rvIdeas);
-        mInteractor.discardPlanIfEmpty();
-        mInteractor.clearPlan();
+        mIdeaInteractor.discardPlanIfEmpty();
+        mIdeaInteractor.clearPlan();
         super.onDestroyView();
     }
 

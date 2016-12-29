@@ -14,8 +14,10 @@ import com.pinyaoting.garcon.viewstates.Plan;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import rx.Observable;
 import rx.Observer;
@@ -329,9 +331,23 @@ public class DataStore implements DataStoreInterface {
     }
 
     @Override
-    public void loadPendingIdeas(String id) {
-        if (getPendingIdeas().containsKey(id)) {
-            setIdeas(getPendingIdeas().get(id));
+    public void mergePendingIdeas(String id) {
+        if (!getPendingIdeas().containsKey(id)) {
+            return;
+        }
+        List<Idea> current = getIdeas();
+        Set<String> dup = new HashSet<>();
+        for (Idea idea : current) {
+            dup.add(idea.getContent());
+        }
+        for (Idea idea : getPendingIdeas().get(id)) {
+            if (dup.contains(idea.getContent())) {
+                // TODO: increase quantity instead
+                continue;
+            }
+            current.add(idea);
+            mIdeaReducers.put(idea.getId(), new IdeaReducer(idea));
+            dup.add(idea.getContent());
         }
     }
 

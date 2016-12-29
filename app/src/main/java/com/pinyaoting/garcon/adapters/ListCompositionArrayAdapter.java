@@ -1,9 +1,7 @@
 package com.pinyaoting.garcon.adapters;
 
-import static com.pinyaoting.garcon.fragments.ListCompositionFragment.binding;
 import static com.raizlabs.android.dbflow.config.FlowManager.getContext;
 
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,11 +46,6 @@ public class ListCompositionArrayAdapter extends RecyclerView.Adapter {
                         switch (state.getOperation()) {
                             case RELOAD:
                                 notifyDataSetChanged();
-                                if (mIdeaInteractor.getIdeaCount() == 0) {
-                                    Snackbar.make(binding.rvIdeas,
-                                            R.string.create_grocery_snackbar_hint,
-                                            Snackbar.LENGTH_LONG).show();
-                                }
                                 break;
                         }
                         break;

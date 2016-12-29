@@ -79,7 +79,7 @@ public interface DataStoreInterface {
 
     void setPendingIdeas(String id, List<Idea> pendingIdeas);
 
-    void loadPendingIdeas(String id);
+    void mergePendingIdeas(String id);
 
     int getPendingIdeasCount(String id);
 

@@ -14,7 +14,6 @@ import com.pinyaoting.garcon.interfaces.presentation.GoalActionHandlerInterface;
 import com.pinyaoting.garcon.interfaces.presentation.GoalDetailActionHandlerInterface;
 import com.pinyaoting.garcon.interfaces.presentation.GoalInteractorInterface;
 import com.pinyaoting.garcon.interfaces.presentation.ListFragmentActionHandlerInterface;
-import com.pinyaoting.garcon.interfaces.presentation.SavedGoalsActionHandlerInterface;
 import com.pinyaoting.garcon.interfaces.scopes.PresentationLayerScope;
 
 import java.util.Map;
@@ -87,12 +86,6 @@ public class MainActivityModule {
     public GoalDetailActionHandlerInterface providesGoalDetailActionHandler(
             GoalInteractorInterface interactor) {
         return new GoalDetailActionHandler(mActivity, interactor);
-    }
-
-    @Provides
-    @PresentationLayerScope
-    public SavedGoalsActionHandlerInterface providesSavedGoalsActionHandler() {
-        return mActivity;
     }
 
 }

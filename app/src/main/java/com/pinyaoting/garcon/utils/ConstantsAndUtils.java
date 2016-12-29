@@ -7,9 +7,6 @@ import android.preference.PreferenceManager;
 
 import com.pinyaoting.garcon.R;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-
 public class ConstantsAndUtils {
     public static final String USER_LISTS = "userLists";
     public static final String SHOPPING_LISTS = "shoppingLists";
@@ -19,8 +16,7 @@ public class ConstantsAndUtils {
     public static final String EMAIL = "email";
     public static final String NAME = "name";
     public static final String IDEAS = "ideas";
-    public static final String LIST_ID = "listId";
-    public static final String USER_FRIENDS = "userFriends";
+    public static final String PLAN_ID = "planId";
     public static final String SHARED_WITH = "sharedWith";
     public static final String NOTIFY = "notify";
     public static final int LATEST = 25;
@@ -36,14 +32,7 @@ public class ConstantsAndUtils {
     }
 
     public static String getDefaultTitle(Context context) {
-        Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd");
-        StringBuilder titleBuilder = new StringBuilder(
-                context.getString(R.string.default_idea_prefix));
-        titleBuilder.append(" ");
-        titleBuilder.append(formatter.format(calendar.getTime()));
-
-        return titleBuilder.toString();
+        return context.getString(R.string.default_idea_prefix);
     }
 
     public static String getSpoonacularImageUrl(String path) {
