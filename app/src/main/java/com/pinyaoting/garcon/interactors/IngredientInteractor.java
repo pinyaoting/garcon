@@ -112,7 +112,7 @@ public class IngredientInteractor implements IdeaInteractorInterface {
                 R.id.state_refreshing, ViewState.OPERATION.ADD, mDataStore.getIdeaCount() - 1));
         Idea idea = mDataStore.getSuggestionAtPos(pos);
         mDataStore.addIdea(idea);
-        mCloudRepository.addNewItemsToPlan(mDataStore.getPlan(),
+        mCloudRepository.addNewItemsToPlan(getPlan(),
                 mDataStore.getIdeaCount() - 1, 1);
         mDataStore.setIdeaState(new ViewState(
                 R.id.state_loaded, ViewState.OPERATION.ADD, mDataStore.getIdeaCount() - 1));
@@ -128,7 +128,7 @@ public class IngredientInteractor implements IdeaInteractorInterface {
             reducer.setCrossedOut(true);
         }
         mDataStore.moveIdeaToBottom(pos);
-        mCloudRepository.savePlan(mDataStore.getPlan());
+        mCloudRepository.savePlan(getPlan());
         mDataStore.setIdeaState(new ViewState(
                 R.id.state_loaded, ViewState.OPERATION.REMOVE));
     }
@@ -143,7 +143,7 @@ public class IngredientInteractor implements IdeaInteractorInterface {
             reducer.setCrossedOut(false);
         }
         mDataStore.moveIdeaToTop(pos);
-        mCloudRepository.savePlan(mDataStore.getPlan());
+        mCloudRepository.savePlan(getPlan());
         mDataStore.setIdeaState(new ViewState(
                 R.id.state_loaded, ViewState.OPERATION.REMOVE));
     }
@@ -153,8 +153,7 @@ public class IngredientInteractor implements IdeaInteractorInterface {
         mDataStore.setIdeaState(new ViewState(
                 R.id.state_refreshing, ViewState.OPERATION.REMOVE, pos, 1));
         mDataStore.removeIdea(pos);
-        Plan plan = getPlan();
-        mCloudRepository.savePlan(plan);
+        mCloudRepository.savePlan(getPlan());
         mDataStore.setIdeaState(new ViewState(
                 R.id.state_loaded, ViewState.OPERATION.REMOVE, pos, 1));
     }
@@ -203,7 +202,7 @@ public class IngredientInteractor implements IdeaInteractorInterface {
 
     @Override
     public void discardPlanIfEmpty() {
-        Plan plan = mDataStore.getPlan();
+        Plan plan = getPlan();
         if (plan == null || plan.getId() == null) {
             return;
         }
@@ -295,7 +294,7 @@ public class IngredientInteractor implements IdeaInteractorInterface {
         mDataStore.setIdeaState(new ViewState(
                 R.id.state_refreshing, ViewState.OPERATION.RELOAD));
         mDataStore.mergePendingIdeas(goal.getId());
-        mCloudRepository.savePlan(mDataStore.getPlan());
+        mCloudRepository.savePlan(getPlan());
         mDataStore.setIdeaState(new ViewState(
                 R.id.state_loaded, ViewState.OPERATION.RELOAD));
     }
@@ -323,9 +322,8 @@ public class IngredientInteractor implements IdeaInteractorInterface {
     }
 
     public void subscribePlan() {
-        Plan plan = mDataStore.getPlan();
         String userEmail = ConstantsAndUtils.getOwner(mContext);
-        mCloudRepository.share(plan, userEmail);
+        mCloudRepository.share(getPlan(), userEmail);
     }
 
     @Override
