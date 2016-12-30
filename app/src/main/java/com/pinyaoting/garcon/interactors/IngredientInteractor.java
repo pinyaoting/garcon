@@ -61,6 +61,7 @@ public class IngredientInteractor implements IdeaInteractorInterface {
                     Idea idea = new Idea(ingredient.getId(),
                             R.id.idea_category_recipe_v2,
                             ingredient.getName(),
+                            ingredient.getOriginalString(),
                             false, R.id.idea_type_suggestion,
                             new IdeaMeta(
                                     ConstantsAndUtils.getSpoonacularImageUrl(ingredient.getImage()),

@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 
 import com.pinyaoting.garcon.R;
 import com.pinyaoting.garcon.interfaces.domain.IdeaInteractorInterface;
-import com.pinyaoting.garcon.viewholders.IdeaViewHolder;
+import com.pinyaoting.garcon.viewholders.IdeaDetailViewHolder;
 import com.pinyaoting.garcon.viewstates.Idea;
 
 /**
@@ -33,15 +33,15 @@ public class IdeasArrayAdapter extends RecyclerView.Adapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
-        View view = inflater.inflate(R.layout.item_idea, parent, false);
-        return new IdeaViewHolder(view);
+        View view = inflater.inflate(R.layout.item_idea_detail, parent, false);
+        return new IdeaDetailViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         Idea viewState = mIdeaInteractor.getPendingIdea(mGoalId, position);
-        if (holder instanceof IdeaViewHolder) {
-            IdeaViewHolder viewHolder = (IdeaViewHolder) holder;
+        if (holder instanceof IdeaDetailViewHolder) {
+            IdeaDetailViewHolder viewHolder = (IdeaDetailViewHolder) holder;
             viewHolder.setPosition(position);
             viewHolder.setViewState(viewState);
             viewHolder.executePendingBindings();

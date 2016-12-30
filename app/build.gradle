@@ -26,6 +26,7 @@ repositories {
     jcenter()
     maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
     maven { url 'http://dl.bintray.com/amulyakhare/maven' }
+    maven { url "https://jitpack.io" }
 }
 
 apply plugin: 'com.neenbedankt.android-apt'
@@ -77,6 +78,7 @@ dependencies {
     compile 'com.batch.android:batch-sdk:1.7+'
     compile 'com.google.android.gms:play-services:10.0.0'
     compile 'jp.wasabeef:blurry:2.0.3'
+    compile 'com.github.AndroidDeveloperLB:AutoFitTextView:4'
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -13,6 +13,7 @@ public class Idea {
     String id;
     int category;
     String content;
+    String detail;
     boolean crossedOut;
     int type; // R.id.idea_type_user_generated or R.id.idea_type_suggestion
     IdeaMeta meta;
@@ -20,11 +21,12 @@ public class Idea {
     public Idea() {
     }
 
-    public Idea(String id, int category, String content, boolean crossedOut, int type,
+    public Idea(String id, int category, String content, String detail, boolean crossedOut, int type,
                 IdeaMeta meta) {
         this.id = id;
         this.category = category;
         this.content = content;
+        this.detail = detail;
         this.crossedOut = crossedOut;
         this.type = type;
         this.meta = meta;
@@ -40,6 +42,10 @@ public class Idea {
 
     public String getContent() {
         return content;
+    }
+
+    public String getDetail() {
+        return detail;
     }
 
     public boolean isCrossedOut() {
@@ -69,6 +75,7 @@ public class Idea {
         result.put("id", getId());
         result.put("category", getCategory());
         result.put("content", getContent());
+        result.put("detail", getDetail());
         result.put("crossedOut", isCrossedOut());
         result.put("type", getType());
         result.put("meta", getMeta());

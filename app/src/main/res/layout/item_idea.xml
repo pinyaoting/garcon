@@ -16,7 +16,7 @@
 
     <LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
                   android:orientation="horizontal"
-                  android:id="@+id/flSimpleItemIdea"
+                  android:id="@+id/llItemIdea"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
                   android:background="@color/colorUpOverlay">
@@ -38,6 +38,7 @@
                 android:layout_marginStart="10dp"
                 android:gravity="center_vertical|left|start"
                 android:text='@{viewState.content}'
+                android:maxLines="1"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                 android:textColor="@color/colorBackground"
                 app:crossout='@{viewState.crossedOut}'

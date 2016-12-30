@@ -14,27 +14,31 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.pinyaoting.garcon.R;
-import com.pinyaoting.garcon.databinding.ItemIdeaBinding;
+import com.pinyaoting.garcon.databinding.ItemIdeaDetailBinding;
 import com.pinyaoting.garcon.utils.BindingAdapterUtils;
 import com.pinyaoting.garcon.utils.ImageUtils;
 import com.pinyaoting.garcon.viewstates.Idea;
 
-public class IdeaViewHolder extends RecyclerView.ViewHolder {
+/**
+ * Created by pinyaoting on 12/6/16.
+ */
 
-    ItemIdeaBinding binding;
+public class IdeaDetailViewHolder extends RecyclerView.ViewHolder {
 
-    public IdeaViewHolder(View itemView) {
+    ItemIdeaDetailBinding binding;
+
+    public IdeaDetailViewHolder(View itemView) {
         super(itemView);
-        binding = ItemIdeaBinding.bind(itemView);
+        binding = ItemIdeaDetailBinding.bind(itemView);
     }
 
     public void setPosition(int position) {
         binding.setPos(position);
         int color = ImageUtils.getColorForPosition(position);
-        binding.llItemIdea.setBackgroundColor(color);
+        binding.llItemIdeaDetail.setBackgroundColor(color);
     }
 
-    public void setViewState(final Idea viewState) {
+    public void setViewState(Idea viewState) {
         binding.setViewState(viewState);
 
         if (viewState == null ||
@@ -45,7 +49,7 @@ public class IdeaViewHolder extends RecyclerView.ViewHolder {
 
         if (viewState.isCrossedOut()) {
             // grey-out the line
-            binding.llItemIdea.setBackgroundColor(
+            binding.llItemIdeaDetail.setBackgroundColor(
                     ContextCompat.getColor(binding.ivIdea.getContext(), R.color.colorWhiteOverlay));
             BindingAdapterUtils.loadImage(binding.ivIdea, viewState.getMeta().getImageUrl());
             return;
@@ -55,7 +59,7 @@ public class IdeaViewHolder extends RecyclerView.ViewHolder {
         SimpleTarget target = new SimpleTarget<Bitmap>() {
             @Override
             public void onResourceReady(Bitmap bitmap,
-                                        GlideAnimation<? super Bitmap> glideAnimation) {
+                    GlideAnimation<? super Bitmap> glideAnimation) {
                 // insert the bitmap into the image view
                 binding.ivIdea.setImageBitmap(bitmap);
 
@@ -69,7 +73,7 @@ public class IdeaViewHolder extends RecyclerView.ViewHolder {
                         Palette.Swatch vibrant = palette.getVibrantSwatch();
                         if (vibrant != null) {
                             ColorDrawable bgDrawable = (ColorDrawable) binding
-                                    .llItemIdea.getBackground();
+                                    .llItemIdeaDetail.getBackground();
                             int colorFrom = bgDrawable.getColor();
                             int colorTo = vibrant.getRgb();
                             int colorToWithAlpha = ImageUtils.getIlluminatedColor(colorTo);
@@ -82,7 +86,7 @@ public class IdeaViewHolder extends RecyclerView.ViewHolder {
 
                                         @Override
                                         public void onAnimationUpdate(ValueAnimator animator) {
-                                            binding.llItemIdea
+                                            binding.llItemIdeaDetail
                                                     .setBackgroundColor(
                                                             (int) animator.getAnimatedValue());
                                         }

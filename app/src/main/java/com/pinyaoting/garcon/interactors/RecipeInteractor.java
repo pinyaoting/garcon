@@ -107,9 +107,16 @@ public class RecipeInteractor implements GoalInteractorInterface {
                     if (dedupSet.contains(ingredient.getName())) {
                         continue;
                     }
-                    Idea idea = new Idea(ingredient.getId(), R.id.idea_category_recipe_v2,
-                            ingredient.getName(), false, R.id.idea_type_user_generated,
-                            new IdeaMeta(ingredient.getImage(), ingredient.getName(),
+                    Idea idea = new Idea(
+                            ingredient.getId(),
+                            R.id.idea_category_recipe_v2,
+                            ingredient.getName(),
+                            ingredient.getOriginalString(),
+                            false,
+                            R.id.idea_type_user_generated,
+                            new IdeaMeta(
+                                    ingredient.getImage(),
+                                    ingredient.getName(),
                                     ingredient.getOriginalString()));
                     ideas.add(idea);
                     dedupSet.add(ingredient.getName());

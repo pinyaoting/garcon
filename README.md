@@ -51,6 +51,7 @@ All participant can get real time update when you grab something from the shelf.
 - [Blurry](https://github.com/wasabeef/Blurry) - An easy blur library for Android.
 - [Material Designed Floating Action Button](https://github.com/futuresimple/android-floating-action-button) - Floating Action Button for Android based on Material Design specification.
 - [Text Drawable](https://github.com/amulyakhare/TextDrawable) - This light-weight library provides images with letter/text like the Gmail app.
+- [AutoFitTextView](https://github.com/AndroidDeveloperLB/AutoFitTextView) - A TextView that automatically fit its font and line count based on its available size and content.
 
 ## License
 
