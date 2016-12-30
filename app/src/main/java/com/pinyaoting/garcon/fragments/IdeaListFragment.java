@@ -24,7 +24,7 @@ import com.pinyaoting.garcon.R;
 import com.pinyaoting.garcon.adapters.IdeaSuggestionsAdapter;
 import com.pinyaoting.garcon.databinding.FragmentIdeaListBinding;
 import com.pinyaoting.garcon.interfaces.domain.IdeaInteractorInterface;
-import com.pinyaoting.garcon.interfaces.presentation.IdeaListFragmentActionHandlerInterface;
+import com.pinyaoting.garcon.interfaces.presentation.IdeaListActionHandlerInterface;
 import com.pinyaoting.garcon.interfaces.presentation.InjectorInterface;
 import com.pinyaoting.garcon.utils.ConstantsAndUtils;
 import com.pinyaoting.garcon.utils.ItemClickSupport;
@@ -47,7 +47,7 @@ public class IdeaListFragment extends Fragment {
     @Named("Composition")
     RecyclerView.Adapter<RecyclerView.ViewHolder> mAdapter;
     @Inject
-    IdeaListFragmentActionHandlerInterface mActionHandler;
+    IdeaListActionHandlerInterface mActionHandler;
     @Inject
     IdeaInteractorInterface mIdeaInteractor;
 

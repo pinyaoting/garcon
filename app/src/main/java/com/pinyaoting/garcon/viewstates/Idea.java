@@ -15,19 +15,21 @@ public class Idea {
     String content;
     String detail;
     boolean crossedOut;
+    int quantity;
     int type; // R.id.idea_type_user_generated or R.id.idea_type_suggestion
     IdeaMeta meta;
 
     public Idea() {
     }
 
-    public Idea(String id, int category, String content, String detail, boolean crossedOut, int type,
-                IdeaMeta meta) {
+    public Idea(String id, int category, String content, String detail, boolean crossedOut,
+            int quantity, int type, IdeaMeta meta) {
         this.id = id;
         this.category = category;
         this.content = content;
         this.detail = detail;
         this.crossedOut = crossedOut;
+        this.quantity = quantity;
         this.type = type;
         this.meta = meta;
     }
@@ -50,6 +52,10 @@ public class Idea {
 
     public boolean isCrossedOut() {
         return crossedOut;
+    }
+
+    public int getQuantity() {
+        return quantity;
     }
 
     public int getType() {
@@ -77,6 +83,7 @@ public class Idea {
         result.put("content", getContent());
         result.put("detail", getDetail());
         result.put("crossedOut", isCrossedOut());
+        result.put("quantity", getQuantity());
         result.put("type", getType());
         result.put("meta", getMeta());
 

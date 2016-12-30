@@ -15,6 +15,7 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.pinyaoting.garcon.R;
 import com.pinyaoting.garcon.databinding.ItemIdeaBinding;
+import com.pinyaoting.garcon.interfaces.presentation.IdeaListActionHandlerInterface;
 import com.pinyaoting.garcon.utils.BindingAdapterUtils;
 import com.pinyaoting.garcon.utils.ImageUtils;
 import com.pinyaoting.garcon.viewstates.Idea;
@@ -101,6 +102,10 @@ public class IdeaViewHolder extends RecyclerView.ViewHolder {
                 .fitCenter()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(target);
+    }
+
+    public void setHandler(IdeaListActionHandlerInterface handler) {
+        binding.setHandler(handler);
     }
 
     public void executePendingBindings() {

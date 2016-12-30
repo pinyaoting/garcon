@@ -24,8 +24,16 @@ public class IdeaReducer {
         mIdea.content = content;
     }
 
+    public void setDetail(String detail) {
+        mIdea.detail = detail;
+    }
+
     public void setCrossedOut(boolean crossedOut) {
         mIdea.crossedOut = crossedOut;
+    }
+
+    public void setQuantity(int quantity) {
+        mIdea.quantity = quantity;
     }
 
     public void setType(int type) {

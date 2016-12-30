@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 
 import com.pinyaoting.garcon.R;
 import com.pinyaoting.garcon.interfaces.domain.IdeaInteractorInterface;
-import com.pinyaoting.garcon.interfaces.presentation.IdeaListFragmentActionHandlerInterface;
+import com.pinyaoting.garcon.interfaces.presentation.IdeaListActionHandlerInterface;
 import com.pinyaoting.garcon.interfaces.presentation.ViewState;
 import com.pinyaoting.garcon.viewholders.IdeaViewHolder;
 import com.pinyaoting.garcon.viewstates.Idea;
@@ -19,10 +19,10 @@ import rx.Observer;
 public class IdeaListArrayAdapter extends RecyclerView.Adapter {
 
     IdeaInteractorInterface mIdeaInteractor;
-    IdeaListFragmentActionHandlerInterface mIdeaActionHandler;
+    IdeaListActionHandlerInterface mIdeaActionHandler;
 
     public IdeaListArrayAdapter(IdeaInteractorInterface ideaInteractor,
-                                       IdeaListFragmentActionHandlerInterface ideaActionHandler) {
+                                       IdeaListActionHandlerInterface ideaActionHandler) {
         mIdeaInteractor = ideaInteractor;
         mIdeaActionHandler = ideaActionHandler;
 
@@ -66,6 +66,7 @@ public class IdeaListArrayAdapter extends RecyclerView.Adapter {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View view = inflater.inflate(R.layout.item_idea, parent, false);
         IdeaViewHolder holder = new IdeaViewHolder(view);
+        holder.setHandler(mIdeaActionHandler);
         return holder;
     }
 

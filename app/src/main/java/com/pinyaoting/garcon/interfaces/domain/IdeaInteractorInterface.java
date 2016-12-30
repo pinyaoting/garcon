@@ -58,4 +58,8 @@ public interface IdeaInteractorInterface {
 
     void onSignedOutCleanup();
 
+    void increaseQuantityAtPos(int pos);
+
+    void decreaseQuantityAtPos(int pos);
+
 }

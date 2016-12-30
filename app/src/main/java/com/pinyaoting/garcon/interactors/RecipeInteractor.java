@@ -113,6 +113,7 @@ public class RecipeInteractor implements GoalInteractorInterface {
                             ingredient.getName(),
                             ingredient.getOriginalString(),
                             false,
+                            1,
                             R.id.idea_type_user_generated,
                             new IdeaMeta(
                                     ingredient.getImage(),

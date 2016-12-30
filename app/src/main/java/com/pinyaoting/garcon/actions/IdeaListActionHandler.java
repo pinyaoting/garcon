@@ -9,16 +9,16 @@ import com.pinyaoting.garcon.R;
 import com.pinyaoting.garcon.activities.MainActivity;
 import com.pinyaoting.garcon.fragments.MapFragment;
 import com.pinyaoting.garcon.interfaces.domain.IdeaInteractorInterface;
-import com.pinyaoting.garcon.interfaces.presentation.IdeaListFragmentActionHandlerInterface;
+import com.pinyaoting.garcon.interfaces.presentation.IdeaListActionHandlerInterface;
 import com.pinyaoting.garcon.viewstates.Plan;
 
-public class IdeaListFragmentActionHandler implements IdeaListFragmentActionHandlerInterface {
+public class IdeaListActionHandler implements IdeaListActionHandlerInterface {
 
     Context mContext;
     IdeaShareHandlerInterface mShareHandler;
     IdeaInteractorInterface mIdeaInteractor;
 
-    public IdeaListFragmentActionHandler(Context context, IdeaInteractorInterface ideaInteractor) {
+    public IdeaListActionHandler(Context context, IdeaInteractorInterface ideaInteractor) {
         mContext = context;
         if (context instanceof IdeaShareHandlerInterface) {
             mShareHandler = (IdeaShareHandlerInterface) context;
@@ -59,6 +59,16 @@ public class IdeaListFragmentActionHandler implements IdeaListFragmentActionHand
     @Override
     public void onEmptyButtonClick() {
         mIdeaInteractor.removeAllIdeas();
+    }
+
+    @Override
+    public void onIncreaseQuantity(int pos) {
+        mIdeaInteractor.increaseQuantityAtPos(pos);
+    }
+
+    @Override
+    public void onDecreaseQuantity(int pos) {
+        mIdeaInteractor.decreaseQuantityAtPos(pos);
     }
 
     public interface IdeaShareHandlerInterface {

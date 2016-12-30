@@ -70,8 +70,6 @@ public class GoalSearchFragment extends Fragment {
         binding = DataBindingUtil.inflate(inflater,
                 R.layout.fragment_goal_search, container, false);
         didGainFocus();
-        ToolbarUtils.configureTitle(binding.activityMainToolbarContainer,
-                getString(R.string.app_name), getResources().getInteger(R.integer.app_title_size));
         binding.rvIdeaSearchResults.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.rvIdeaSearchResults.setAdapter(mAdapter);
         binding.rvIdeaSearchResults.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -208,5 +206,7 @@ public class GoalSearchFragment extends Fragment {
         }
         ToolbarUtils.bind((AppCompatActivity)getActivity(),
                 binding.activityMainToolbarContainer.toolbar);
+        ToolbarUtils.configureTitle(binding.activityMainToolbarContainer,
+                getString(R.string.app_name), getResources().getInteger(R.integer.app_title_size));
     }
 }

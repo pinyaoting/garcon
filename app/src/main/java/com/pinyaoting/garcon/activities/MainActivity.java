@@ -21,7 +21,7 @@ import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.pinyaoting.garcon.R;
-import com.pinyaoting.garcon.actions.IdeaListFragmentActionHandler;
+import com.pinyaoting.garcon.actions.IdeaListActionHandler;
 import com.pinyaoting.garcon.adapters.HomeFragmentPagerAdapter;
 import com.pinyaoting.garcon.application.GarconApplication;
 import com.pinyaoting.garcon.databinding.ActivityMainBinding;
@@ -51,7 +51,7 @@ import rx.Observer;
 public class MainActivity extends AppCompatActivity implements InjectorInterface,
         GoalActionHandlerInterface.PreviewHandlerInterface,
         GoalDetailActionHandlerInterface.IdeaListHandlerInterface,
-        IdeaListFragmentActionHandler.IdeaShareHandlerInterface {
+        IdeaListActionHandler.IdeaShareHandlerInterface {
 
     public static final int RC_SIGN_IN = 1;
     ActivityMainBinding binding;

@@ -5,7 +5,7 @@
 
         <variable
             name="handler"
-            type="com.pinyaoting.garcon.interfaces.presentation.IdeaListFragmentActionHandlerInterface"/>
+            type="com.pinyaoting.garcon.interfaces.presentation.IdeaListActionHandlerInterface"/>
     </data>
 
     <FrameLayout xmlns:app="http://schemas.android.com/apk/res-auto"

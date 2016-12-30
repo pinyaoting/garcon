@@ -62,7 +62,9 @@ public class IngredientInteractor implements IdeaInteractorInterface {
                             R.id.idea_category_recipe_v2,
                             ingredient.getName(),
                             ingredient.getOriginalString(),
-                            false, R.id.idea_type_suggestion,
+                            false,
+                            1,
+                            R.id.idea_type_suggestion,
                             new IdeaMeta(
                                     ConstantsAndUtils.getSpoonacularImageUrl(ingredient.getImage()),
                                     ingredient.getName(),
@@ -121,32 +123,22 @@ public class IngredientInteractor implements IdeaInteractorInterface {
 
     @Override
     public void crossoutIdea(int pos) {
-        mDataStore.setIdeaState(new ViewState(
-                R.id.state_refreshing, ViewState.OPERATION.REMOVE));
         Idea idea = mDataStore.getIdeaAtPos(pos);
         IdeaReducer reducer = mDataStore.getIdeaReducer(idea.getId());
         if (reducer != null) {
             reducer.setCrossedOut(true);
         }
-        mDataStore.moveIdeaToBottom(pos);
         mCloudRepository.savePlan(getPlan());
-        mDataStore.setIdeaState(new ViewState(
-                R.id.state_loaded, ViewState.OPERATION.REMOVE));
     }
 
     @Override
     public void uncrossoutIdea(int pos) {
-        mDataStore.setIdeaState(new ViewState(
-                R.id.state_refreshing, ViewState.OPERATION.REMOVE));
         Idea idea = mDataStore.getIdeaAtPos(pos);
         IdeaReducer reducer = mDataStore.getIdeaReducer(idea.getId());
         if (reducer != null) {
             reducer.setCrossedOut(false);
         }
-        mDataStore.moveIdeaToTop(pos);
         mCloudRepository.savePlan(getPlan());
-        mDataStore.setIdeaState(new ViewState(
-                R.id.state_loaded, ViewState.OPERATION.REMOVE));
     }
 
     @Override
@@ -368,4 +360,30 @@ public class IngredientInteractor implements IdeaInteractorInterface {
         mCloudRepository.onSignedOutCleanup();
     }
 
+    @Override
+    public void increaseQuantityAtPos(int pos) {
+        Idea idea = mDataStore.getIdeaAtPos(pos);
+        mDataStore.setIdeaState(new ViewState(
+                R.id.state_refreshing, ViewState.OPERATION.RELOAD));
+        IdeaReducer reducer = mDataStore.getIdeaReducer(idea.getId());
+        if (reducer != null) {
+            reducer.setQuantity(idea.getQuantity() + 1);
+        }
+        mCloudRepository.savePlan(getPlan());
+    }
+
+    @Override
+    public void decreaseQuantityAtPos(int pos) {
+        Idea idea = mDataStore.getIdeaAtPos(pos);
+        if (idea.getQuantity() < 1) {
+            return;
+        }
+        mDataStore.setIdeaState(new ViewState(
+                R.id.state_refreshing, ViewState.OPERATION.RELOAD));
+        IdeaReducer reducer = mDataStore.getIdeaReducer(idea.getId());
+        if (reducer != null) {
+            reducer.setQuantity(idea.getQuantity() - 1);
+        }
+        mCloudRepository.savePlan(getPlan());
+    }
 }

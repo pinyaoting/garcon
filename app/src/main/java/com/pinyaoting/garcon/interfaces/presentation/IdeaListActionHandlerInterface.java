@@ -1,6 +1,6 @@
 package com.pinyaoting.garcon.interfaces.presentation;
 
-public interface IdeaListFragmentActionHandlerInterface {
+public interface IdeaListActionHandlerInterface {
 
     void onShareButtonClick();
 
@@ -9,5 +9,9 @@ public interface IdeaListFragmentActionHandlerInterface {
     void onNearbyStoreButtonClick();
 
     void onEmptyButtonClick();
+
+    void onIncreaseQuantity(int pos);
+
+    void onDecreaseQuantity(int pos);
 
 }

@@ -84,4 +84,5 @@ public interface DataStoreInterface {
     int getPendingIdeasCount(String id);
 
     Idea getPendingIdea(String id, int pos);
+
 }
