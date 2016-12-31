@@ -3,7 +3,9 @@ package com.pinyaoting.garcon.fragments;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,8 +57,31 @@ public class GoalDetailViewPagerFragment extends Fragment {
         mPagerAdapter = new GoalPreviewFragmentPagerAdapter(
                 getChildFragmentManager(), mGoalInteractor);
         binding.viewpager.setAdapter(mPagerAdapter);
-        binding.viewpager.setCurrentItem(startIndex, true);
+        binding.viewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset,
+                    int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                notifyGainFocus(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
         return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        binding.viewpager.setCurrentItem(startIndex, true);
+        mGoalInteractor.bookmarkGoalAtPos(startIndex);
     }
 
     @Override
@@ -73,4 +98,12 @@ public class GoalDetailViewPagerFragment extends Fragment {
         super.onDetach();
     }
 
+
+    private void notifyGainFocus(int pos) {
+        Fragment fragment = mPagerAdapter.getItem(pos);
+        if (fragment instanceof GoalPreviewFragment) {
+            GoalPreviewFragment goalPreviewFragment = (GoalPreviewFragment) fragment;
+            goalPreviewFragment.didGainFocus();
+        }
+    }
 }

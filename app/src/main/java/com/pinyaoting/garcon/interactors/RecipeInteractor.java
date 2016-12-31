@@ -16,6 +16,7 @@ import com.pinyaoting.garcon.viewstates.Idea;
 import com.pinyaoting.garcon.viewstates.IdeaMeta;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -29,7 +30,7 @@ public class RecipeInteractor implements GoalInteractorInterface {
 
     public static final int RECIPEV2_INTERACTOR_BATCH_SIZE = 10;
     public static final long RECIPEV2_INTERACTOR_DEBOUNCE_TIME_IN_MILLIES = 500;
-    public static final long RECIPEV2_BOOKMARK_INTERACTOR_DEBOUNCE_TIME_IN_MILLIES = 100;
+    public static final long RECIPEV2_BOOKMARK_INTERACTOR_DEBOUNCE_TIME_IN_MILLIES = 2000;
     public static final int RECIPEV2_INTERACTOR_SEARCH_BY_INGREDIENT_RANKING_MORE_HITS = 1;
     public static final int RECIPEV2_INTERACTOR_SEARCH_BY_INGREDIENT_RANKING_FEWER_MISSES = 2;
     public static final boolean RECIPEV2_INTERACTOR_SEARCH_BY_INGREDIENT_SHOW_INGREDIENTS = true;
@@ -225,26 +226,25 @@ public class RecipeInteractor implements GoalInteractorInterface {
                         public void call(Integer pos) {
                             Goal goal = mDataStore.getGoalAtPos(pos);
                             SavedRecipe savedRecipe;
+                            Long timestamp = Calendar.getInstance().getTimeInMillis();
                             if (!goal.isBookmarked()) {
                                 savedRecipe = new SavedRecipe();
                                 savedRecipe.setId(goal.getId());
+                                savedRecipe.setTimestamp(timestamp);
                                 savedRecipe.save();
                             } else {
                                 savedRecipe = SavedRecipe.byId(goal.getId());
-                                if (savedRecipe != null) {
-                                    savedRecipe.delete();
-                                }
+                                savedRecipe.setTimestamp(timestamp);
                             }
-                            boolean isBookmarked = !goal.isBookmarked();
                             GoalReducer exploreGoalReducer = mDataStore.getExploreGoalReducer(
                                     goal.getId());
                             if (exploreGoalReducer != null) {
-                                exploreGoalReducer.setBookmarked(isBookmarked);
+                                exploreGoalReducer.setBookmarked(true);
                             }
                             GoalReducer savedGoalReducer = mDataStore.getSavedGoalReducer(
                                     goal.getId());
                             if (savedGoalReducer != null) {
-                                savedGoalReducer.setBookmarked(isBookmarked);
+                                savedGoalReducer.setBookmarked(true);
                             }
                             mDataStore.setGoalState(new ViewState(
                                     R.id.state_loaded, ViewState.OPERATION.UPDATE, pos, 1));

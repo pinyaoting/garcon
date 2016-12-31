@@ -18,6 +18,9 @@ public class SavedRecipe extends BaseModel {
     @Column
     String id;
 
+    @Column
+    Long timestamp;
+
     public SavedRecipe() {
         super();
     }
@@ -32,7 +35,7 @@ public class SavedRecipe extends BaseModel {
                 .join(SavedRecipe.class, Join.JoinType.INNER).as("U")
                 .on(RecipeV2_Table.id.withTable(NameAlias.builder("T").build())
                         .eq(SavedRecipe_Table.id.withTable(NameAlias.builder("U").build())))
-                .orderBy(RecipeV2_Table.id, false).queryList();
+                .orderBy(SavedRecipe_Table.timestamp, false).queryList();
     }
 
     public String getId() {
@@ -41,5 +44,13 @@ public class SavedRecipe extends BaseModel {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public Long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Long timestamp) {
+        this.timestamp = timestamp;
     }
 }

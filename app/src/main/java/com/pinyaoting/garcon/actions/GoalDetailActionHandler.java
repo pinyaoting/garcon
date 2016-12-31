@@ -18,7 +18,6 @@ public class GoalDetailActionHandler implements GoalDetailActionHandlerInterface
 
     @Override
     public void onCreateIdeaListClick(int pos) {
-        mInteractor.bookmarkGoalAtPos(pos);
         Goal goal = mInteractor.getGoalAtPos(pos);
         mDialogHandler.compose(goal);
     }

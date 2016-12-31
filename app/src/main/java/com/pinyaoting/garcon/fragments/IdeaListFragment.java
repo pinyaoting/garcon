@@ -163,6 +163,7 @@ public class IdeaListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        binding.multipleActions.collapse();
     }
 
     @Override
@@ -237,5 +238,6 @@ public class IdeaListFragment extends Fragment {
         }
         ToolbarUtils.bind((AppCompatActivity)getActivity(),
                 binding.activityMainToolbarContainer.toolbar);
+        binding.multipleActions.collapse();
     }
 }

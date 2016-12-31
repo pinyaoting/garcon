@@ -31,7 +31,7 @@ public class ViewState {
         this.state = state;
         this.operation = operation;
         this.start = start;
-        this.count = -1;
+        this.count = 1;
     }
 
     public ViewState(int state, OPERATION operation, int start, int count) {
@@ -58,6 +58,6 @@ public class ViewState {
     }
 
     public enum OPERATION {
-        NOOP, RELOAD, ADD, INSERT, UPDATE, REMOVE, CLEAR
+        NOOP, RELOAD, ADD, UPDATE, REMOVE, CLEAR
     }
 }

@@ -13,6 +13,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.pinyaoting.garcon.interfaces.data.CloudRepositoryInterface;
+import com.pinyaoting.garcon.interfaces.presentation.ViewState;
 import com.pinyaoting.garcon.models.v2.User;
 import com.pinyaoting.garcon.models.v2.UserList;
 import com.pinyaoting.garcon.utils.ConstantsAndUtils;
@@ -27,7 +28,9 @@ import java.util.Map;
 
 import rx.Observable;
 import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.observables.ConnectableObservable;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by pinyaoting on 12/21/16.
@@ -42,6 +45,7 @@ public class FirebaseRepository implements CloudRepositoryInterface {
     private DatabaseReference mUsersListsDatabaseReference;
     private DatabaseReference mNotifySharedDatabaseReference;
     private List<Observer<DataSnapshot>> mPlanObservers;
+    private List<Observer<ViewState>> mViewStateObservers;
     private User mUser;
 
     final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(
@@ -57,11 +61,7 @@ public class FirebaseRepository implements CloudRepositoryInterface {
         mNotifySharedDatabaseReference = mFirebaseDatabase.getReference().child(
                 ConstantsAndUtils.NOTIFY);
         mPlanObservers = new ArrayList<>();
-    }
-
-    @Override
-    public void loadPlan(String planId) {
-        loadPlan(planId, null);
+        mViewStateObservers = new ArrayList<>();
     }
 
     @Override
@@ -70,16 +70,20 @@ public class FirebaseRepository implements CloudRepositoryInterface {
         DatabaseReference listsDatabaseReference = firebaseDatabase.getReference().child(
                 ConstantsAndUtils.SHOPPING_LISTS).child(planId);
         listsDatabaseReference.addValueEventListener(new ValueEventListener() {
+            Observer<DataSnapshot> mObserver = observer;
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 ConnectableObservable<DataSnapshot> connectableObservable =
                         Observable.just(dataSnapshot).publish();
                 for (Observer<DataSnapshot> planObserver : mPlanObservers) {
-                    connectableObservable.subscribe(planObserver);
+                    connectableObservable.subscribeOn(Schedulers.immediate()).observeOn(
+                            AndroidSchedulers.mainThread()).subscribe(planObserver);
                 }
-                if (observer != null) {
-                    connectableObservable.subscribe(observer);
+                if (mObserver != null) {
+                    connectableObservable.subscribeOn(Schedulers.immediate()).observeOn(
+                            AndroidSchedulers.mainThread()).subscribe(mObserver);
                 }
+                mObserver = null;
                 connectableObservable.connect();
             }
 
@@ -108,25 +112,19 @@ public class FirebaseRepository implements CloudRepositoryInterface {
     }
 
     @Override
-    public void updateItemInPlan(Plan plan, int start, int count) {
+    public void updateItemInPlan(Plan plan, int pos) {
         List<Idea> ideaList = plan.getIdeas();
-        for (int i = 0; i < count; i++) {
-            int pos = start + count - 1;
-            Idea updatedIdea = ideaList.get(pos);
-            mShoppingListDatabaseReference.child(plan.getId()).child(ConstantsAndUtils.IDEAS)
-                    .child(String.valueOf(pos)).setValue(updatedIdea);
-        }
+        Idea updatedIdea = ideaList.get(pos);
+        mShoppingListDatabaseReference.child(plan.getId()).child(ConstantsAndUtils.IDEAS)
+                .child(String.valueOf(pos)).setValue(updatedIdea);
     }
 
     @Override
-    public void addNewItemsToPlan(Plan plan, int start, int count) {
+    public void addNewItemToPlan(Plan plan, int pos) {
         List<Idea> ideaList = plan.getIdeas();
-        for (int i = 0; i < count; i++) {
-            int pos = start + count - 1;
-            Idea newIdea = ideaList.get(pos);
-            mShoppingListDatabaseReference.child(plan.getId()).child(
-                    ConstantsAndUtils.IDEAS).child(String.valueOf(pos)).setValue(newIdea);
-        }
+        Idea newIdea = ideaList.get(pos);
+        mShoppingListDatabaseReference.child(plan.getId()).child(ConstantsAndUtils.IDEAS)
+                .child(String.valueOf(pos)).setValue(newIdea);
     }
 
     @Override

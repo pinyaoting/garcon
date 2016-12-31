@@ -44,6 +44,15 @@ public class IdeaListArrayAdapter extends RecyclerView.Adapter {
                         break;
                     case R.id.state_loaded:
                         switch (state.getOperation()) {
+                            case ADD:
+                                notifyItemInserted(state.getStart());
+                                break;
+                            case UPDATE:
+                                notifyItemChanged(state.getStart());
+                                break;
+                            case REMOVE:
+                                notifyItemRemoved(state.getStart());
+                                break;
                             case RELOAD:
                                 notifyDataSetChanged();
                                 break;

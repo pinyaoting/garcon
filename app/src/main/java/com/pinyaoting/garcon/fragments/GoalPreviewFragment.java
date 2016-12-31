@@ -38,7 +38,7 @@ public class GoalPreviewFragment extends Fragment {
     static final String IDEA_PREVIEW_FRAGMENT_INDEX = "IDEA_PREVIEW_FRAGMENT_INDEX";
 
     FragmentGoalPreviewBinding binding;
-    int mPos;
+    Integer mPos;
     @Inject
     GoalDetailActionHandlerInterface mActionHandler;
     @Inject
@@ -190,6 +190,10 @@ public class GoalPreviewFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    public void didGainFocus() {
+        mGoalInteractor.bookmarkGoalAtPos(mPos);
     }
 
 }

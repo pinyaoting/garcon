@@ -12,13 +12,12 @@ import rx.Observer;
 
 public interface CloudRepositoryInterface {
 
-    void loadPlan(String planId);
     void loadPlan(String planId, Observer<DataSnapshot> observer);
     void subscribe(Observer<DataSnapshot> observer);
     void newPlan(Plan plan);
     void savePlan(Plan plan);
-    void updateItemInPlan(Plan plan, int start, int count);
-    void addNewItemsToPlan(Plan plan, int start, int count);
+    void updateItemInPlan(Plan plan, int pos);
+    void addNewItemToPlan(Plan plan, int pos);
     void removePlan(Plan plan);
 
     void share(Plan plan, final String userEmail);

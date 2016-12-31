@@ -13,7 +13,6 @@ import com.pinyaoting.garcon.interfaces.domain.DataStoreInterface;
 import com.pinyaoting.garcon.interfaces.domain.IdeaInteractorInterface;
 import com.pinyaoting.garcon.interfaces.presentation.ViewState;
 import com.pinyaoting.garcon.models.v2.IngredientV2;
-import com.pinyaoting.garcon.models.v2.User;
 import com.pinyaoting.garcon.utils.ConstantsAndUtils;
 import com.pinyaoting.garcon.viewstates.Goal;
 import com.pinyaoting.garcon.viewstates.Idea;
@@ -40,7 +39,6 @@ public class IngredientInteractor implements IdeaInteractorInterface {
     RecipeRepositoryInterface mRecipeRepository;
     CloudRepositoryInterface mCloudRepository;
     PublishSubject<String> mSearchDebouncer;
-    User mUser;
     Goal mPendingGoal;
 
     public IngredientInteractor(Context context,
@@ -103,62 +101,64 @@ public class IngredientInteractor implements IdeaInteractorInterface {
                 Plan plan = dataSnapshot.getValue(Plan.class);
                 mDataStore.setPlan(plan);
                 mDataStore.setIdeaState(new ViewState(
-                        R.id.state_loaded,
-                        ViewState.OPERATION.RELOAD));
+                        R.id.state_loaded, ViewState.OPERATION.RELOAD));
             }
         });
     }
 
     @Override
     public void acceptSuggestedIdeaAtPos(int pos) {
-        mDataStore.setIdeaState(new ViewState(
-                R.id.state_refreshing, ViewState.OPERATION.ADD, mDataStore.getIdeaCount() - 1));
+        ViewState viewState = new ViewState(
+                R.id.state_refreshing, ViewState.OPERATION.ADD, mDataStore.getIdeaCount() - 1);
+        mDataStore.setIdeaState(viewState);
         Idea idea = mDataStore.getSuggestionAtPos(pos);
         mDataStore.addIdea(idea);
-        mCloudRepository.addNewItemsToPlan(getPlan(),
-                mDataStore.getIdeaCount() - 1, 1);
-        mDataStore.setIdeaState(new ViewState(
-                R.id.state_loaded, ViewState.OPERATION.ADD, mDataStore.getIdeaCount() - 1));
+        mCloudRepository.addNewItemToPlan(
+                getPlan(), mDataStore.getIdeaCount() - 1);
     }
 
     @Override
-    public void crossoutIdea(int pos) {
+    public void crossoutIdea(final int pos) {
+        ViewState viewState = new ViewState(
+                R.id.state_refreshing, ViewState.OPERATION.UPDATE, pos);
+        mDataStore.setIdeaState(viewState);
         Idea idea = mDataStore.getIdeaAtPos(pos);
         IdeaReducer reducer = mDataStore.getIdeaReducer(idea.getId());
         if (reducer != null) {
             reducer.setCrossedOut(true);
         }
-        mCloudRepository.savePlan(getPlan());
+        mCloudRepository.updateItemInPlan(mDataStore.getPlan(), pos);
     }
 
     @Override
-    public void uncrossoutIdea(int pos) {
+    public void uncrossoutIdea(final int pos) {
+        ViewState viewState = new ViewState(
+                R.id.state_refreshing, ViewState.OPERATION.UPDATE, pos);
+        mDataStore.setIdeaState(viewState);
         Idea idea = mDataStore.getIdeaAtPos(pos);
         IdeaReducer reducer = mDataStore.getIdeaReducer(idea.getId());
         if (reducer != null) {
             reducer.setCrossedOut(false);
         }
-        mCloudRepository.savePlan(getPlan());
+        mCloudRepository.updateItemInPlan(mDataStore.getPlan(), pos);
     }
 
     @Override
-    public void removeIdea(int pos) {
-        mDataStore.setIdeaState(new ViewState(
-                R.id.state_refreshing, ViewState.OPERATION.REMOVE, pos, 1));
+    public void removeIdea(final int pos) {
+        ViewState viewState = new ViewState(
+                R.id.state_refreshing, ViewState.OPERATION.REMOVE, pos);
+        mDataStore.setIdeaState(viewState);
         mDataStore.removeIdea(pos);
         mCloudRepository.savePlan(getPlan());
-        mDataStore.setIdeaState(new ViewState(
-                R.id.state_loaded, ViewState.OPERATION.REMOVE, pos, 1));
     }
 
     @Override
     public void removeAllIdeas() {
-        mDataStore.setIdeaState(new ViewState(
-                R.id.state_refreshing, ViewState.OPERATION.RELOAD));
+        ViewState viewState = new ViewState(
+                R.id.state_refreshing, ViewState.OPERATION.RELOAD);
+        mDataStore.setIdeaState(viewState);
         mDataStore.clearIdeas();
         mCloudRepository.savePlan(getPlan());
-        mDataStore.setIdeaState(new ViewState(
-                R.id.state_loaded, ViewState.OPERATION.RELOAD));
     }
 
     @Override
@@ -235,12 +235,12 @@ public class IngredientInteractor implements IdeaInteractorInterface {
 
             @Override
             public void onNext(DataSnapshot dataSnapshot) {
-                Plan plan = dataSnapshot.getValue(Plan.class);
                 if (mPendingGoal != null) {
-                    loadPendingIdeas(mPendingGoal);
+                    mDataStore.mergePendingIdeas(mPendingGoal.getId());
+                    mCloudRepository.savePlan(getPlan());
                     mPendingGoal = null;
                 }
-                Observable.just(plan).subscribe(observer);
+                Observable.just(getPlan()).subscribe(observer);
             }
         });
     }
@@ -291,15 +291,6 @@ public class IngredientInteractor implements IdeaInteractorInterface {
     @Override
     public void setPendingIdeas(Goal goal) {
         mPendingGoal = goal;
-    }
-
-    private void loadPendingIdeas(Goal goal) {
-        mDataStore.setIdeaState(new ViewState(
-                R.id.state_refreshing, ViewState.OPERATION.RELOAD));
-        mDataStore.mergePendingIdeas(goal.getId());
-        mCloudRepository.savePlan(getPlan());
-        mDataStore.setIdeaState(new ViewState(
-                R.id.state_loaded, ViewState.OPERATION.RELOAD));
     }
 
     private PublishSubject getDebouncer() {
@@ -363,13 +354,15 @@ public class IngredientInteractor implements IdeaInteractorInterface {
     @Override
     public void increaseQuantityAtPos(int pos) {
         Idea idea = mDataStore.getIdeaAtPos(pos);
-        mDataStore.setIdeaState(new ViewState(
-                R.id.state_refreshing, ViewState.OPERATION.RELOAD));
         IdeaReducer reducer = mDataStore.getIdeaReducer(idea.getId());
-        if (reducer != null) {
-            reducer.setQuantity(idea.getQuantity() + 1);
+        if (reducer == null) {
+            return;
         }
-        mCloudRepository.savePlan(getPlan());
+        reducer.setQuantity(idea.getQuantity() + 1);
+        ViewState viewState = new ViewState(
+                R.id.state_refreshing, ViewState.OPERATION.UPDATE, pos);
+        mDataStore.setIdeaState(viewState);
+        mCloudRepository.updateItemInPlan(getPlan(), pos);
     }
 
     @Override
@@ -378,12 +371,14 @@ public class IngredientInteractor implements IdeaInteractorInterface {
         if (idea.getQuantity() < 1) {
             return;
         }
-        mDataStore.setIdeaState(new ViewState(
-                R.id.state_refreshing, ViewState.OPERATION.RELOAD));
         IdeaReducer reducer = mDataStore.getIdeaReducer(idea.getId());
-        if (reducer != null) {
-            reducer.setQuantity(idea.getQuantity() - 1);
+        if (reducer == null) {
+            return;
         }
-        mCloudRepository.savePlan(getPlan());
+        reducer.setQuantity(idea.getQuantity() - 1);
+        ViewState viewState = new ViewState(
+                R.id.state_refreshing, ViewState.OPERATION.UPDATE, pos);
+        mDataStore.setIdeaState(viewState);
+        mCloudRepository.updateItemInPlan(getPlan(), pos);
     }
 }

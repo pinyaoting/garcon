@@ -56,11 +56,6 @@ public class SavedGoalArrayAdapter extends RecyclerView.Adapter {
                                 start = state.getStart();
                                 notifyItemInserted(start);
                                 break;
-                            case INSERT:
-                                start = state.getStart();
-                                count = state.getCount();
-                                notifyItemRangeInserted(start, count);
-                                break;
                             case UPDATE:
                                 start = state.getStart();
                                 count = state.getCount();
