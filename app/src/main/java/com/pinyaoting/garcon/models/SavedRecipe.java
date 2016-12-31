@@ -1,6 +1,6 @@
-package com.pinyaoting.garcon.models.v2;
+package com.pinyaoting.garcon.models;
 
-import com.pinyaoting.garcon.database.RecipeV2Database;
+import com.pinyaoting.garcon.database.RecipeDatabase;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
@@ -11,7 +11,7 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
 
 import java.util.List;
 
-@Table(database = RecipeV2Database.class)
+@Table(database = RecipeDatabase.class)
 public class SavedRecipe extends BaseModel {
 
     @PrimaryKey
@@ -30,10 +30,10 @@ public class SavedRecipe extends BaseModel {
                 SavedRecipe_Table.id.eq(id)).querySingle();
     }
 
-    public static List<RecipeV2> savedRecipes() {
-        return new Select().from(RecipeV2.class).as("T")
+    public static List<Recipe> savedRecipes() {
+        return new Select().from(Recipe.class).as("T")
                 .join(SavedRecipe.class, Join.JoinType.INNER).as("U")
-                .on(RecipeV2_Table.id.withTable(NameAlias.builder("T").build())
+                .on(Recipe_Table.id.withTable(NameAlias.builder("T").build())
                         .eq(SavedRecipe_Table.id.withTable(NameAlias.builder("U").build())))
                 .orderBy(SavedRecipe_Table.timestamp, false).queryList();
     }

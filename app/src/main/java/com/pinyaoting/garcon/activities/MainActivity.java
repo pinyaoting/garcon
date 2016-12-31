@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
             mActivityComponent =
                     ((GarconApplication) getApplication()).getPresentationLayerComponent()
                             .newMainActivitySubComponent(
-                                    new MainActivityModule(this, R.id.idea_category_recipe_v2));
+                                    new MainActivityModule(this, R.id.idea_category_recipe));
         }
         return mActivityComponent;
     }

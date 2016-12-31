@@ -22,9 +22,9 @@ public class DataLayerModule {
 
     @Provides
     @DataLayerScope
-    public SpoonacularApiEndpointInterface providesRecipeV2ApiEndpointInterface(
+    public SpoonacularApiEndpointInterface providesRecipeApiEndpointInterface(
             Map<Integer, Retrofit> retrofitMap) {
-        Retrofit retrofit = retrofitMap.get(R.id.idea_category_recipe_v2);
+        Retrofit retrofit = retrofitMap.get(R.id.idea_category_recipe);
         return retrofit.create(SpoonacularApiEndpointInterface.class);
     }
 
@@ -37,7 +37,7 @@ public class DataLayerModule {
 
     @Provides
     @DataLayerScope
-    public RecipeRepositoryInterface providesRecipeV2Repository(Application application,
+    public RecipeRepositoryInterface providesRecipeRepository(Application application,
                                                                   SpoonacularClient client) {
         return new SpoonacularRepository(application, client);
     }

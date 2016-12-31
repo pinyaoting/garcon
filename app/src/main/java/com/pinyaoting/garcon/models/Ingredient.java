@@ -1,13 +1,13 @@
-package com.pinyaoting.garcon.models.v2;
+package com.pinyaoting.garcon.models;
 
-import com.pinyaoting.garcon.database.RecipeV2Database;
+import com.pinyaoting.garcon.database.RecipeDatabase;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
-@Table(database = RecipeV2Database.class)
-public class IngredientV2 extends BaseModel {
+@Table(database = RecipeDatabase.class)
+public class Ingredient extends BaseModel {
 
     @PrimaryKey
     @Column
@@ -37,7 +37,7 @@ public class IngredientV2 extends BaseModel {
     @Column
     String originalString;
 
-    public IngredientV2() {
+    public Ingredient() {
         super();
     }
 

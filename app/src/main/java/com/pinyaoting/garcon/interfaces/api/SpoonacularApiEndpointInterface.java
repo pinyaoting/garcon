@@ -1,9 +1,9 @@
 package com.pinyaoting.garcon.interfaces.api;
 
-import com.pinyaoting.garcon.models.v2.IngredientV2;
-import com.pinyaoting.garcon.models.v2.RandomRecipeResponseV2;
-import com.pinyaoting.garcon.models.v2.RecipeResponseV2;
-import com.pinyaoting.garcon.models.v2.RecipeV2;
+import com.pinyaoting.garcon.models.Ingredient;
+import com.pinyaoting.garcon.models.RandomRecipeResponse;
+import com.pinyaoting.garcon.models.RecipeResponse;
+import com.pinyaoting.garcon.models.Recipe;
 
 import java.util.List;
 
@@ -21,34 +21,34 @@ public interface SpoonacularApiEndpointInterface {
 
     @Headers({REQUEST_HEADER_WITH_CACHE, REQUEST_HEADER_API_KEY})
     @GET("recipes/search")
-    Observable<RecipeResponseV2> searchRecipe(@Query("query") String keyword,
+    Observable<RecipeResponse> searchRecipe(@Query("query") String keyword,
                                               @Query("number") int number,
                                               @Query("offset") int offset);
 
     @Headers({REQUEST_HEADER_WITH_CACHE, REQUEST_HEADER_API_KEY})
     @GET("recipes/{id}/information")
-    Observable<RecipeV2> searchRecipeDetail(@Path("id") String id);
+    Observable<Recipe> searchRecipeDetail(@Path("id") String id);
 
     @Headers({REQUEST_HEADER_WITH_CACHE, REQUEST_HEADER_API_KEY})
     @GET("recipes/random")
-    Observable<RandomRecipeResponseV2> randomRecipe(@Query("number") int number);
+    Observable<RandomRecipeResponse> randomRecipe(@Query("number") int number);
 
     @Headers({REQUEST_HEADER_WITH_CACHE, REQUEST_HEADER_API_KEY})
     @GET("food/ingredients/autocomplete")
-    Observable<List<IngredientV2>> autocompleteIngredient(
+    Observable<List<Ingredient>> autocompleteIngredient(
             @Query("query") String keyword,
             @Query("number") int number,
             @Query("metaInformation") boolean metaInformation);
 
     @Headers({REQUEST_HEADER_WITH_CACHE, REQUEST_HEADER_API_KEY})
     @GET("recipes/autocomplete")
-    Observable<List<RecipeV2>> autocompleteRecipe(
+    Observable<List<Recipe>> autocompleteRecipe(
             @Query("query") String keyword,
             @Query("number") int number);
 
     @Headers({REQUEST_HEADER_WITH_CACHE, REQUEST_HEADER_API_KEY})
     @GET("recipes/findByIngredients")
-    Observable<List<RecipeV2>> searchRecipeByIngredients(
+    Observable<List<Recipe>> searchRecipeByIngredients(
             @Query("ingredients") String ingredients,
             @Query("fillIngredients") boolean fillIngredients,
             @Query("number") int number,

@@ -1,6 +1,6 @@
-package com.pinyaoting.garcon.models.v2;
+package com.pinyaoting.garcon.models;
 
-import com.pinyaoting.garcon.database.RecipeV2Database;
+import com.pinyaoting.garcon.database.RecipeDatabase;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.OneToMany;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
@@ -10,10 +10,10 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
 
 import java.util.List;
 
-@Table(database = RecipeV2Database.class)
-public class RecipeV2 extends BaseModel {
+@Table(database = RecipeDatabase.class)
+public class Recipe extends BaseModel {
 
-    public List<IngredientV2> extendedIngredients;
+    public List<Ingredient> extendedIngredients;
     @PrimaryKey
     @Column
     String id;
@@ -26,16 +26,16 @@ public class RecipeV2 extends BaseModel {
     @Column
     String instructions;
 
-    public RecipeV2() {
+    public Recipe() {
         super();
     }
 
-    public static RecipeV2 byId(String id) {
-        return new Select().from(RecipeV2.class).where(RecipeV2_Table.id.eq(id)).querySingle();
+    public static Recipe byId(String id) {
+        return new Select().from(Recipe.class).where(Recipe_Table.id.eq(id)).querySingle();
     }
 
-    public static List<RecipeV2> recentItems() {
-        return new Select().from(RecipeV2.class).limit(50).queryList();
+    public static List<Recipe> recentItems() {
+        return new Select().from(Recipe.class).limit(50).queryList();
     }
 
     public String getId() {
@@ -79,7 +79,7 @@ public class RecipeV2 extends BaseModel {
     }
 
     @OneToMany(methods = {OneToMany.Method.ALL}, variableName = "extendedIngredients")
-    public List<IngredientV2> getExtendedIngredients() {
+    public List<Ingredient> getExtendedIngredients() {
 //        if (extendedIngredients == null || extendedIngredients.isEmpty()) {
 //            extendedIngredients = SQLite.select()
 //                    .from(Ingredient.class)
@@ -89,7 +89,7 @@ public class RecipeV2 extends BaseModel {
         return extendedIngredients;
     }
 
-    public void setExtendedIngredients(List<IngredientV2> extendedIngredients) {
+    public void setExtendedIngredients(List<Ingredient> extendedIngredients) {
         this.extendedIngredients = extendedIngredients;
     }
 }

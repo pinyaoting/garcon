@@ -7,9 +7,9 @@ import com.pinyaoting.garcon.interfaces.data.RecipeRepositoryInterface;
 import com.pinyaoting.garcon.interfaces.domain.DataStoreInterface;
 import com.pinyaoting.garcon.interfaces.presentation.GoalInteractorInterface;
 import com.pinyaoting.garcon.interfaces.presentation.ViewState;
-import com.pinyaoting.garcon.models.v2.IngredientV2;
-import com.pinyaoting.garcon.models.v2.RecipeV2;
-import com.pinyaoting.garcon.models.v2.SavedRecipe;
+import com.pinyaoting.garcon.models.Ingredient;
+import com.pinyaoting.garcon.models.Recipe;
+import com.pinyaoting.garcon.models.SavedRecipe;
 import com.pinyaoting.garcon.viewstates.Goal;
 import com.pinyaoting.garcon.viewstates.GoalReducer;
 import com.pinyaoting.garcon.viewstates.Idea;
@@ -28,13 +28,13 @@ import rx.subjects.PublishSubject;
 
 public class RecipeInteractor implements GoalInteractorInterface {
 
-    public static final int RECIPEV2_INTERACTOR_BATCH_SIZE = 10;
-    public static final long RECIPEV2_INTERACTOR_DEBOUNCE_TIME_IN_MILLIES = 500;
-    public static final long RECIPEV2_BOOKMARK_INTERACTOR_DEBOUNCE_TIME_IN_MILLIES = 2000;
-    public static final int RECIPEV2_INTERACTOR_SEARCH_BY_INGREDIENT_RANKING_MORE_HITS = 1;
-    public static final int RECIPEV2_INTERACTOR_SEARCH_BY_INGREDIENT_RANKING_FEWER_MISSES = 2;
-    public static final boolean RECIPEV2_INTERACTOR_SEARCH_BY_INGREDIENT_SHOW_INGREDIENTS = true;
-    public static final boolean RECIPEV2_INTERACTOR_SEARCH_BY_INGREDIENT_HIDE_INGREDIENTS = false;
+    public static final int RECIPE_INTERACTOR_BATCH_SIZE = 10;
+    public static final long RECIPE_INTERACTOR_DEBOUNCE_TIME_IN_MILLIES = 500;
+    public static final long RECIPE_BOOKMARK_INTERACTOR_DEBOUNCE_TIME_IN_MILLIES = 2000;
+    public static final int RECIPE_INTERACTOR_SEARCH_BY_INGREDIENT_RANKING_MORE_HITS = 1;
+    public static final int RECIPE_INTERACTOR_SEARCH_BY_INGREDIENT_RANKING_FEWER_MISSES = 2;
+    public static final boolean RECIPE_INTERACTOR_SEARCH_BY_INGREDIENT_SHOW_INGREDIENTS = true;
+    public static final boolean RECIPE_INTERACTOR_SEARCH_BY_INGREDIENT_HIDE_INGREDIENTS = false;
     static final int count = 10;
     static final int offset = 0;
 
@@ -49,13 +49,13 @@ public class RecipeInteractor implements GoalInteractorInterface {
         mContext = context;
         mDataStore = dataStore;
         mRecipeRepository = recipeRepository;
-        mRecipeRepository.subscribe(new Observer<List<RecipeV2>>() {
-            List<RecipeV2> mRecipes = new ArrayList<>();
+        mRecipeRepository.subscribe(new Observer<List<Recipe>>() {
+            List<Recipe> mRecipes = new ArrayList<>();
 
             @Override
             public void onCompleted() {
                 List<Goal> goals = new ArrayList<>();
-                for (RecipeV2 recipe : mRecipes) {
+                for (Recipe recipe : mRecipes) {
                     boolean isBookmarked = (SavedRecipe.byId(recipe.getId()) != null);
                     String subTitle = null;
                     if (recipe.getReadyInMinutes() != null) {
@@ -82,13 +82,13 @@ public class RecipeInteractor implements GoalInteractorInterface {
             }
 
             @Override
-            public void onNext(List<RecipeV2> recipes) {
+            public void onNext(List<Recipe> recipes) {
                 mRecipes.clear();
                 mRecipes.addAll(recipes);
             }
         });
-        mRecipeRepository.subscribeDetail(new Observer<RecipeV2>() {
-            RecipeV2 mRecipe;
+        mRecipeRepository.subscribeDetail(new Observer<Recipe>() {
+            Recipe mRecipe;
 
             @Override
             public void onCompleted() {
@@ -104,13 +104,13 @@ public class RecipeInteractor implements GoalInteractorInterface {
                 }
                 List<Idea> ideas = new ArrayList<>();
                 Set<String> dedupSet = new HashSet<>();
-                for (IngredientV2 ingredient : mRecipe.getExtendedIngredients()) {
+                for (Ingredient ingredient : mRecipe.getExtendedIngredients()) {
                     if (dedupSet.contains(ingredient.getName())) {
                         continue;
                     }
                     Idea idea = new Idea(
                             ingredient.getId(),
-                            R.id.idea_category_recipe_v2,
+                            R.id.idea_category_recipe,
                             ingredient.getName(),
                             ingredient.getOriginalString(),
                             false,
@@ -134,7 +134,7 @@ public class RecipeInteractor implements GoalInteractorInterface {
             }
 
             @Override
-            public void onNext(RecipeV2 recipe) {
+            public void onNext(Recipe recipe) {
                 mRecipe = recipe;
             }
         });
@@ -167,7 +167,7 @@ public class RecipeInteractor implements GoalInteractorInterface {
         mDataStore.setGoalState(new ViewState(
                 R.id.state_refreshing, ViewState.OPERATION.RELOAD));
         if (keyword == null) {
-            mRecipeRepository.randomRecipe(RECIPEV2_INTERACTOR_BATCH_SIZE);
+            mRecipeRepository.randomRecipe(RECIPE_INTERACTOR_BATCH_SIZE);
             return;
         }
         searchRecipeWithDebounce(keyword);
@@ -183,9 +183,9 @@ public class RecipeInteractor implements GoalInteractorInterface {
         ingredientsBuilder.deleteCharAt(ingredientsBuilder.lastIndexOf(","));
         mRecipeRepository.searchRecipeByIngredients(
                 ingredientsBuilder.toString(),
-                RECIPEV2_INTERACTOR_SEARCH_BY_INGREDIENT_HIDE_INGREDIENTS,
-                RECIPEV2_INTERACTOR_BATCH_SIZE,
-                RECIPEV2_INTERACTOR_SEARCH_BY_INGREDIENT_RANKING_FEWER_MISSES);
+                RECIPE_INTERACTOR_SEARCH_BY_INGREDIENT_HIDE_INGREDIENTS,
+                RECIPE_INTERACTOR_BATCH_SIZE,
+                RECIPE_INTERACTOR_SEARCH_BY_INGREDIENT_RANKING_FEWER_MISSES);
     }
 
     @Override
@@ -204,7 +204,7 @@ public class RecipeInteractor implements GoalInteractorInterface {
     private PublishSubject getDebouncer() {
         if (mSearchDebouncer == null) {
             mSearchDebouncer = PublishSubject.create();
-            mSearchDebouncer.debounce(RECIPEV2_INTERACTOR_DEBOUNCE_TIME_IN_MILLIES,
+            mSearchDebouncer.debounce(RECIPE_INTERACTOR_DEBOUNCE_TIME_IN_MILLIES,
                     TimeUnit.MILLISECONDS)
                     .subscribe(new Action1<String>() {
                         @Override
@@ -219,7 +219,7 @@ public class RecipeInteractor implements GoalInteractorInterface {
     private PublishSubject getBookmarkDebouncer() {
         if (mBookmarkDebouncer == null) {
             mBookmarkDebouncer = PublishSubject.create();
-            mBookmarkDebouncer.debounce(RECIPEV2_BOOKMARK_INTERACTOR_DEBOUNCE_TIME_IN_MILLIES,
+            mBookmarkDebouncer.debounce(RECIPE_BOOKMARK_INTERACTOR_DEBOUNCE_TIME_IN_MILLIES,
                     TimeUnit.MILLISECONDS)
                     .subscribe(new Action1<Integer>() {
                         @Override
@@ -280,8 +280,8 @@ public class RecipeInteractor implements GoalInteractorInterface {
 
     private void loadBookmarkedGoals() {
         List<Goal> bookmarkedGoals = new ArrayList<>();
-        List<RecipeV2> bookmarkedRecipes = SavedRecipe.savedRecipes();
-        for (RecipeV2 recipe : bookmarkedRecipes) {
+        List<Recipe> bookmarkedRecipes = SavedRecipe.savedRecipes();
+        for (Recipe recipe : bookmarkedRecipes) {
             String subTitle = null;
             if (recipe.getReadyInMinutes() != null) {
                 subTitle = String.format(mContext.getString(R.string.subtitle_text),

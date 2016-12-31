@@ -5,10 +5,10 @@ import android.app.Application;
 import com.pinyaoting.garcon.api.SpoonacularClient;
 import com.pinyaoting.garcon.database.RecipeDatabase;
 import com.pinyaoting.garcon.interfaces.data.RecipeRepositoryInterface;
-import com.pinyaoting.garcon.models.v2.IngredientV2;
-import com.pinyaoting.garcon.models.v2.RandomRecipeResponseV2;
-import com.pinyaoting.garcon.models.v2.RecipeResponseV2;
-import com.pinyaoting.garcon.models.v2.RecipeV2;
+import com.pinyaoting.garcon.models.Ingredient;
+import com.pinyaoting.garcon.models.RandomRecipeResponse;
+import com.pinyaoting.garcon.models.RecipeResponse;
+import com.pinyaoting.garcon.models.Recipe;
 import com.pinyaoting.garcon.utils.ImageUtils;
 import com.pinyaoting.garcon.utils.NetworkUtils;
 import com.raizlabs.android.dbflow.config.FlowManager;
@@ -26,10 +26,10 @@ import rx.schedulers.Schedulers;
 
 public class SpoonacularRepository implements RecipeRepositoryInterface {
 
-    List<Observer<List<RecipeV2>>> mSubscribers;
-    List<Observer<RecipeV2>> mDetailSubscribers;
-    List<Observer<List<RecipeV2>>> mAutoCompleteRecipeSubscribers;
-    List<Observer<List<IngredientV2>>> mAutoCompleteIngredientSubscribers;
+    List<Observer<List<Recipe>>> mSubscribers;
+    List<Observer<Recipe>> mDetailSubscribers;
+    List<Observer<List<Recipe>>> mAutoCompleteRecipeSubscribers;
+    List<Observer<List<Ingredient>>> mAutoCompleteIngredientSubscribers;
     private Application mApplication;
     private SpoonacularClient mClient;
 
@@ -40,8 +40,8 @@ public class SpoonacularRepository implements RecipeRepositoryInterface {
         mDetailSubscribers = new ArrayList<>();
         mAutoCompleteRecipeSubscribers = new ArrayList<>();
         mAutoCompleteIngredientSubscribers = new ArrayList<>();
-        getClient().subscribeRecipe(new Observer<RecipeResponseV2>() {
-            List<RecipeV2> mRecipes = new ArrayList<>();
+        getClient().subscribeRecipe(new Observer<RecipeResponse>() {
+            List<Recipe> mRecipes = new ArrayList<>();
 
             @Override
             public void onCompleted() {
@@ -54,19 +54,19 @@ public class SpoonacularRepository implements RecipeRepositoryInterface {
             }
 
             @Override
-            public void onNext(RecipeResponseV2 recipeResponse) {
+            public void onNext(RecipeResponse recipeResponse) {
                 mRecipes.clear();
                 String baseUri = recipeResponse.getBaseUri();
-                List<RecipeV2> recipes = recipeResponse.getResults();
-                for (RecipeV2 recipe : recipes) {
+                List<Recipe> recipes = recipeResponse.getResults();
+                for (Recipe recipe : recipes) {
                     recipe.setImage(ImageUtils.composeImageUri(baseUri, recipe.getImage()));
                 }
                 mRecipes.addAll(recipes);
                 asyncPersistRecipes(mRecipes);
             }
         });
-        getClient().subscribeRecipeByIngredients(new Observer<List<RecipeV2>>() {
-            List<RecipeV2> mRecipes = new ArrayList<>();
+        getClient().subscribeRecipeByIngredients(new Observer<List<Recipe>>() {
+            List<Recipe> mRecipes = new ArrayList<>();
 
             @Override
             public void onCompleted() {
@@ -79,14 +79,14 @@ public class SpoonacularRepository implements RecipeRepositoryInterface {
             }
 
             @Override
-            public void onNext(List<RecipeV2> recipes) {
+            public void onNext(List<Recipe> recipes) {
                 mRecipes.clear();
                 mRecipes.addAll(recipes);
                 asyncPersistRecipes(mRecipes);
             }
         });
-        getClient().subscribeRandomRecipe(new Observer<RandomRecipeResponseV2>() {
-            List<RecipeV2> mRecipes = new ArrayList<>();
+        getClient().subscribeRandomRecipe(new Observer<RandomRecipeResponse>() {
+            List<Recipe> mRecipes = new ArrayList<>();
 
             @Override
             public void onCompleted() {
@@ -99,19 +99,19 @@ public class SpoonacularRepository implements RecipeRepositoryInterface {
             }
 
             @Override
-            public void onNext(RandomRecipeResponseV2 randomRecipeResponseV2) {
+            public void onNext(RandomRecipeResponse randomRecipeResponse) {
                 mRecipes.clear();
-                mRecipes.addAll(randomRecipeResponseV2.getRecipes());
+                mRecipes.addAll(randomRecipeResponse.getRecipes());
                 asyncPersistRecipes(mRecipes);
             }
         });
-        getClient().subscribeRecipeDetail(new Observer<RecipeV2>() {
-            RecipeV2 mRecipe = null;
+        getClient().subscribeRecipeDetail(new Observer<Recipe>() {
+            Recipe mRecipe = null;
 
             @Override
             public void onCompleted() {
                 notifyAllDetailObservers(mRecipe);
-                List<RecipeV2> recipes = new ArrayList<>();
+                List<Recipe> recipes = new ArrayList<>();
                 recipes.add(mRecipe);
                 asyncPersistRecipes(recipes);
             }
@@ -122,12 +122,12 @@ public class SpoonacularRepository implements RecipeRepositoryInterface {
             }
 
             @Override
-            public void onNext(RecipeV2 recipeV2) {
-                mRecipe = recipeV2;
+            public void onNext(Recipe recipe) {
+                mRecipe = recipe;
             }
         });
-        getClient().subscribeAutoCompleteIngredient(new Observer<List<IngredientV2>>() {
-            List<IngredientV2> mIngredients = new ArrayList<>();
+        getClient().subscribeAutoCompleteIngredient(new Observer<List<Ingredient>>() {
+            List<Ingredient> mIngredients = new ArrayList<>();
 
             @Override
             public void onCompleted() {
@@ -140,13 +140,13 @@ public class SpoonacularRepository implements RecipeRepositoryInterface {
             }
 
             @Override
-            public void onNext(List<IngredientV2> ingredients) {
+            public void onNext(List<Ingredient> ingredients) {
                 mIngredients.clear();
                 mIngredients.addAll(ingredients);
             }
         });
-        getClient().subscribeAutoCompleteRecipe(new Observer<List<RecipeV2>>() {
-            List<RecipeV2> mRecipes = new ArrayList<>();
+        getClient().subscribeAutoCompleteRecipe(new Observer<List<Recipe>>() {
+            List<Recipe> mRecipes = new ArrayList<>();
 
             @Override
             public void onCompleted() {
@@ -159,7 +159,7 @@ public class SpoonacularRepository implements RecipeRepositoryInterface {
             }
 
             @Override
-            public void onNext(List<RecipeV2> recipes) {
+            public void onNext(List<Recipe> recipes) {
                 mRecipes.clear();
                 mRecipes.addAll(recipes);
             }
@@ -175,22 +175,22 @@ public class SpoonacularRepository implements RecipeRepositoryInterface {
     }
 
     @Override
-    public void subscribe(Observer<List<RecipeV2>> observer) {
+    public void subscribe(Observer<List<Recipe>> observer) {
         mSubscribers.add(observer);
     }
 
     @Override
-    public void subscribeDetail(Observer<RecipeV2> observer) {
+    public void subscribeDetail(Observer<Recipe> observer) {
         mDetailSubscribers.add(observer);
     }
 
     @Override
-    public void subscribeAutoCompleteIngredient(Observer<List<IngredientV2>> observer) {
+    public void subscribeAutoCompleteIngredient(Observer<List<Ingredient>> observer) {
         mAutoCompleteIngredientSubscribers.add(observer);
     }
 
     @Override
-    public void subscribeAutoCompleteRecipe(Observer<List<RecipeV2>> observer) {
+    public void subscribeAutoCompleteRecipe(Observer<List<Recipe>> observer) {
         mAutoCompleteRecipeSubscribers.add(observer);
     }
 
@@ -245,59 +245,59 @@ public class SpoonacularRepository implements RecipeRepositoryInterface {
     }
 
     void fallback() {
-        notifyAllObservers(RecipeV2.recentItems());
+        notifyAllObservers(Recipe.recentItems());
     }
 
-    void notifyAllObservers(List<RecipeV2> recipes) {
-        ConnectableObservable<List<RecipeV2>> connectableObservable = Observable.just(
+    void notifyAllObservers(List<Recipe> recipes) {
+        ConnectableObservable<List<Recipe>> connectableObservable = Observable.just(
                 recipes).publish();
-        for (Observer<List<RecipeV2>> subscriber : mSubscribers) {
+        for (Observer<List<Recipe>> subscriber : mSubscribers) {
             connectableObservable.subscribeOn(Schedulers.immediate()).observeOn(
                     AndroidSchedulers.mainThread()).subscribe(subscriber);
         }
         connectableObservable.connect();
     }
 
-    void notifyAllDetailObservers(RecipeV2 recipe) {
-        ConnectableObservable<RecipeV2> connectableObservable = Observable.just(
+    void notifyAllDetailObservers(Recipe recipe) {
+        ConnectableObservable<Recipe> connectableObservable = Observable.just(
                 recipe).publish();
-        for (Observer<RecipeV2> subscriber : mDetailSubscribers) {
+        for (Observer<Recipe> subscriber : mDetailSubscribers) {
             connectableObservable.subscribeOn(Schedulers.immediate()).observeOn(
                     AndroidSchedulers.mainThread()).subscribe(subscriber);
         }
         connectableObservable.connect();
     }
 
-    void notifyAllAutoCompleteIngredientObservers(List<IngredientV2> ingredients) {
-        ConnectableObservable<List<IngredientV2>> connectableObservable = Observable.just(
+    void notifyAllAutoCompleteIngredientObservers(List<Ingredient> ingredients) {
+        ConnectableObservable<List<Ingredient>> connectableObservable = Observable.just(
                 ingredients).publish();
-        for (Observer<List<IngredientV2>> subscriber : mAutoCompleteIngredientSubscribers) {
+        for (Observer<List<Ingredient>> subscriber : mAutoCompleteIngredientSubscribers) {
             connectableObservable.subscribeOn(Schedulers.immediate()).observeOn(
                     AndroidSchedulers.mainThread()).subscribe(subscriber);
         }
         connectableObservable.connect();
     }
 
-    void notifyAllAutoCompleteRecipeObservers(List<RecipeV2> recipes) {
-        ConnectableObservable<List<RecipeV2>> connectableObservable = Observable.just(
+    void notifyAllAutoCompleteRecipeObservers(List<Recipe> recipes) {
+        ConnectableObservable<List<Recipe>> connectableObservable = Observable.just(
                 recipes).publish();
-        for (Observer<List<RecipeV2>> subscriber : mAutoCompleteRecipeSubscribers) {
+        for (Observer<List<Recipe>> subscriber : mAutoCompleteRecipeSubscribers) {
             connectableObservable.subscribeOn(Schedulers.immediate()).observeOn(
                     AndroidSchedulers.mainThread()).subscribe(subscriber);
         }
         connectableObservable.connect();
     }
 
-    void asyncPersistRecipes(List<RecipeV2> recipes) {
+    void asyncPersistRecipes(List<Recipe> recipes) {
         // persists into database in background thread
         FlowManager.getDatabase(RecipeDatabase.class)
                 .beginTransactionAsync(new ProcessModelTransaction.Builder<>(
-                        new ProcessModelTransaction.ProcessModel<RecipeV2>() {
+                        new ProcessModelTransaction.ProcessModel<Recipe>() {
                             @Override
-                            public void processModel(RecipeV2 recipe) {
+                            public void processModel(Recipe recipe) {
                                 recipe.save();
                                 if (recipe.getExtendedIngredients() != null) {
-                                    for (IngredientV2 ingredient : recipe.getExtendedIngredients
+                                    for (Ingredient ingredient : recipe.getExtendedIngredients
                                             ()) {
                                         // TODO: save object relation
                                         ingredient.save();

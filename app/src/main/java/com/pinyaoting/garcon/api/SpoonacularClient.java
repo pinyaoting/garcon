@@ -1,10 +1,10 @@
 package com.pinyaoting.garcon.api;
 
 import com.pinyaoting.garcon.interfaces.api.SpoonacularApiEndpointInterface;
-import com.pinyaoting.garcon.models.v2.IngredientV2;
-import com.pinyaoting.garcon.models.v2.RandomRecipeResponseV2;
-import com.pinyaoting.garcon.models.v2.RecipeResponseV2;
-import com.pinyaoting.garcon.models.v2.RecipeV2;
+import com.pinyaoting.garcon.models.Ingredient;
+import com.pinyaoting.garcon.models.RandomRecipeResponse;
+import com.pinyaoting.garcon.models.RecipeResponse;
+import com.pinyaoting.garcon.models.Recipe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,12 +20,12 @@ public class SpoonacularClient {
 
     static final int DELAY_BETWEEN_API_CALLS = 1000;
     SpoonacularApiEndpointInterface apiService;
-    List<Observer<RecipeResponseV2>> mSubscribers;
-    List<Observer<RecipeV2>> mDetailSubscribers;
-    List<Observer<List<RecipeV2>>> mRecipeSubscribers;
-    List<Observer<RandomRecipeResponseV2>> mRandomRecipeSubscribers;
-    List<Observer<List<RecipeV2>>> mAutoCompleteRecipeSubscribers;
-    List<Observer<List<IngredientV2>>> mAutoCompleteIngredientSubscribers;
+    List<Observer<RecipeResponse>> mSubscribers;
+    List<Observer<Recipe>> mDetailSubscribers;
+    List<Observer<List<Recipe>>> mRecipeSubscribers;
+    List<Observer<RandomRecipeResponse>> mRandomRecipeSubscribers;
+    List<Observer<List<Recipe>>> mAutoCompleteRecipeSubscribers;
+    List<Observer<List<Ingredient>>> mAutoCompleteIngredientSubscribers;
 
     public SpoonacularClient(SpoonacularApiEndpointInterface apiService) {
         this.apiService = apiService;
@@ -38,10 +38,10 @@ public class SpoonacularClient {
     }
 
     public void searchRecipe(String keyword, int count, int offset) {
-        Observable<RecipeResponseV2> call = apiService.searchRecipe(keyword, count, offset);
+        Observable<RecipeResponse> call = apiService.searchRecipe(keyword, count, offset);
         ConnectableObservable connectableObservable = call.publish();
         connectableObservable.delay(DELAY_BETWEEN_API_CALLS, TimeUnit.MILLISECONDS);
-        for (Observer<RecipeResponseV2> subscriber : mSubscribers) {
+        for (Observer<RecipeResponse> subscriber : mSubscribers) {
             connectableObservable.subscribeOn(Schedulers.io()).observeOn(
                     AndroidSchedulers.mainThread()).subscribe(subscriber);
         }
@@ -49,10 +49,10 @@ public class SpoonacularClient {
     }
 
     public void searchRecipeDetail(String id) {
-        Observable<RecipeV2> call = apiService.searchRecipeDetail(id);
+        Observable<Recipe> call = apiService.searchRecipeDetail(id);
         ConnectableObservable connectableObservable = call.publish();
         connectableObservable.delay(DELAY_BETWEEN_API_CALLS, TimeUnit.MILLISECONDS);
-        for (Observer<RecipeV2> subscriber : mDetailSubscribers) {
+        for (Observer<Recipe> subscriber : mDetailSubscribers) {
             connectableObservable.subscribeOn(Schedulers.io()).observeOn(
                     AndroidSchedulers.mainThread()).subscribe(subscriber);
         }
@@ -64,14 +64,14 @@ public class SpoonacularClient {
             boolean fillIngredients,
             int number,
             int ranking) {
-        Observable<List<RecipeV2>> call = apiService.searchRecipeByIngredients(
+        Observable<List<Recipe>> call = apiService.searchRecipeByIngredients(
                 ingredients,
                 fillIngredients,
                 number,
                 ranking);
         ConnectableObservable connectableObservable = call.publish();
         connectableObservable.delay(DELAY_BETWEEN_API_CALLS, TimeUnit.MILLISECONDS);
-        for (Observer<List<RecipeV2>> subscriber : mRecipeSubscribers) {
+        for (Observer<List<Recipe>> subscriber : mRecipeSubscribers) {
             connectableObservable.subscribeOn(Schedulers.io()).observeOn(
                     AndroidSchedulers.mainThread()).subscribe(subscriber);
         }
@@ -79,10 +79,10 @@ public class SpoonacularClient {
     }
 
     public void randomRecipe(int count) {
-        Observable<RandomRecipeResponseV2> call = apiService.randomRecipe(count);
+        Observable<RandomRecipeResponse> call = apiService.randomRecipe(count);
         ConnectableObservable connectableObservable = call.publish();
         connectableObservable.delay(DELAY_BETWEEN_API_CALLS, TimeUnit.MILLISECONDS);
-        for (Observer<RandomRecipeResponseV2> subscriber : mRandomRecipeSubscribers) {
+        for (Observer<RandomRecipeResponse> subscriber : mRandomRecipeSubscribers) {
             connectableObservable.subscribeOn(Schedulers.io()).observeOn(
                     AndroidSchedulers.mainThread()).subscribe(subscriber);
         }
@@ -90,11 +90,11 @@ public class SpoonacularClient {
     }
 
     public void autoCompleteIngredient(String keyword, int number, boolean metaInformation) {
-        Observable<List<IngredientV2>> call = apiService.autocompleteIngredient(
+        Observable<List<Ingredient>> call = apiService.autocompleteIngredient(
                 keyword, number, metaInformation);
         ConnectableObservable connectableObservable = call.publish();
         connectableObservable.delay(DELAY_BETWEEN_API_CALLS, TimeUnit.MILLISECONDS);
-        for (Observer<List<IngredientV2>> subscriber : mAutoCompleteIngredientSubscribers) {
+        for (Observer<List<Ingredient>> subscriber : mAutoCompleteIngredientSubscribers) {
             connectableObservable.subscribeOn(Schedulers.io()).observeOn(
                     AndroidSchedulers.mainThread()).subscribe(subscriber);
         }
@@ -102,37 +102,37 @@ public class SpoonacularClient {
     }
 
     public void autoCompleteRecipe(String keyword, int number) {
-        Observable<List<RecipeV2>> call = apiService.autocompleteRecipe(keyword, number);
+        Observable<List<Recipe>> call = apiService.autocompleteRecipe(keyword, number);
         ConnectableObservable connectableObservable = call.publish();
         connectableObservable.delay(DELAY_BETWEEN_API_CALLS, TimeUnit.MILLISECONDS);
-        for (Observer<List<RecipeV2>> subscriber : mAutoCompleteRecipeSubscribers) {
+        for (Observer<List<Recipe>> subscriber : mAutoCompleteRecipeSubscribers) {
             connectableObservable.subscribeOn(Schedulers.io()).observeOn(
                     AndroidSchedulers.mainThread()).subscribe(subscriber);
         }
         connectableObservable.connect();
     }
 
-    public void subscribeRecipe(Observer<RecipeResponseV2> observer) {
+    public void subscribeRecipe(Observer<RecipeResponse> observer) {
         mSubscribers.add(observer);
     }
 
-    public void subscribeRecipeDetail(Observer<RecipeV2> observer) {
+    public void subscribeRecipeDetail(Observer<Recipe> observer) {
         mDetailSubscribers.add(observer);
     }
 
-    public void subscribeRecipeByIngredients(Observer<List<RecipeV2>> observer) {
+    public void subscribeRecipeByIngredients(Observer<List<Recipe>> observer) {
         mRecipeSubscribers.add(observer);
     }
 
-    public void subscribeRandomRecipe(Observer<RandomRecipeResponseV2> observer) {
+    public void subscribeRandomRecipe(Observer<RandomRecipeResponse> observer) {
         mRandomRecipeSubscribers.add(observer);
     }
 
-    public void subscribeAutoCompleteIngredient(Observer<List<IngredientV2>> observer) {
+    public void subscribeAutoCompleteIngredient(Observer<List<Ingredient>> observer) {
         mAutoCompleteIngredientSubscribers.add(observer);
     }
 
-    public void subscribeAutoCompleteRecipe(Observer<List<RecipeV2>> observer) {
+    public void subscribeAutoCompleteRecipe(Observer<List<Recipe>> observer) {
         mAutoCompleteRecipeSubscribers.add(observer);
     }
 }

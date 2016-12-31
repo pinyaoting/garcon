@@ -35,9 +35,9 @@ public class DomainLayerModule {
     @Provides
     @DomainLayerScope
     @IntoMap
-    @IntKey(R.id.idea_category_recipe_v2)
+    @IntKey(R.id.idea_category_recipe)
     public com.pinyaoting.garcon.interfaces.domain.IdeaInteractorInterface
-    providesRecipeV2IdeaInteractor(
+    providesRecipeIdeaInteractor(
             DataStoreInterface ideaDataStore,
             RecipeRepositoryInterface recipeRepository,
             CloudRepositoryInterface cloudRepository) {

@@ -1,7 +1,7 @@
 package com.pinyaoting.garcon.interfaces.data;
 
-import com.pinyaoting.garcon.models.v2.IngredientV2;
-import com.pinyaoting.garcon.models.v2.RecipeV2;
+import com.pinyaoting.garcon.models.Ingredient;
+import com.pinyaoting.garcon.models.Recipe;
 
 import java.util.List;
 
@@ -9,13 +9,13 @@ import rx.Observer;
 
 public interface RecipeRepositoryInterface {
 
-    void subscribe(Observer<List<RecipeV2>> observer);
+    void subscribe(Observer<List<Recipe>> observer);
 
-    void subscribeDetail(Observer<RecipeV2> observer);
+    void subscribeDetail(Observer<Recipe> observer);
 
-    void subscribeAutoCompleteIngredient(Observer<List<IngredientV2>> observer);
+    void subscribeAutoCompleteIngredient(Observer<List<Ingredient>> observer);
 
-    void subscribeAutoCompleteRecipe(Observer<List<RecipeV2>> observer);
+    void subscribeAutoCompleteRecipe(Observer<List<Recipe>> observer);
 
     void searchRecipe(String keyword, int count, int offset);
 

@@ -1,16 +1,16 @@
-package com.pinyaoting.garcon.models.v2;
+package com.pinyaoting.garcon.models;
 
 import java.util.List;
 
-public class RecipeResponseV2 {
+public class RecipeResponse {
 
-    List<RecipeV2> results;
+    List<Recipe> results;
     int number;
     int offset;
     int totalProducts;
     String baseUri;
 
-    public List<RecipeV2> getResults() {
+    public List<Recipe> getResults() {
         return results;
     }
 

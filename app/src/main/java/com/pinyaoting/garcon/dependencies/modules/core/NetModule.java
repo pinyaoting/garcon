@@ -67,10 +67,10 @@ public class NetModule {
     @Provides
     @Singleton
     @IntoMap
-    @IntKey(R.id.idea_category_recipe_v2)
+    @IntKey(R.id.idea_category_recipe)
     Retrofit provideSpoonacularRetrofit(Gson gson, OkHttpClient okHttpClient,
                                         Application application) {
-        String endpoint = application.getString(R.string.api_endpoint_recipe_v2);
+        String endpoint = application.getString(R.string.api_endpoint_recipe);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(endpoint)
                 .addConverterFactory(GsonConverterFactory.create(gson))

@@ -12,7 +12,7 @@ import com.pinyaoting.garcon.interfaces.data.RecipeRepositoryInterface;
 import com.pinyaoting.garcon.interfaces.domain.DataStoreInterface;
 import com.pinyaoting.garcon.interfaces.domain.IdeaInteractorInterface;
 import com.pinyaoting.garcon.interfaces.presentation.ViewState;
-import com.pinyaoting.garcon.models.v2.IngredientV2;
+import com.pinyaoting.garcon.models.Ingredient;
 import com.pinyaoting.garcon.utils.ConstantsAndUtils;
 import com.pinyaoting.garcon.viewstates.Goal;
 import com.pinyaoting.garcon.viewstates.Idea;
@@ -49,15 +49,15 @@ public class IngredientInteractor implements IdeaInteractorInterface {
         mDataStore = ideaDataStore;
         mRecipeRepository = recipeRepository;
         mCloudRepository = cloudRepository;
-        mRecipeRepository.subscribeAutoCompleteIngredient(new Observer<List<IngredientV2>>() {
-            List<IngredientV2> mIngredients = new ArrayList<>();
+        mRecipeRepository.subscribeAutoCompleteIngredient(new Observer<List<Ingredient>>() {
+            List<Ingredient> mIngredients = new ArrayList<>();
 
             @Override
             public void onCompleted() {
                 List<Idea> suggestions = new ArrayList<>();
-                for (IngredientV2 ingredient : mIngredients) {
+                for (Ingredient ingredient : mIngredients) {
                     Idea idea = new Idea(ingredient.getId(),
-                            R.id.idea_category_recipe_v2,
+                            R.id.idea_category_recipe,
                             ingredient.getName(),
                             ingredient.getOriginalString(),
                             false,
@@ -80,9 +80,9 @@ public class IngredientInteractor implements IdeaInteractorInterface {
             }
 
             @Override
-            public void onNext(List<IngredientV2> ingredientV2s) {
+            public void onNext(List<Ingredient> ingredients) {
                 mIngredients.clear();
-                mIngredients.addAll(ingredientV2s);
+                mIngredients.addAll(ingredients);
             }
         });
         mCloudRepository.subscribe(new Observer<DataSnapshot>() {
