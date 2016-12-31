@@ -41,9 +41,11 @@ dependencies {
     compile "com.github.Raizlabs.DBFlow:dbflow:${dbflow_version}"
     // for logging API calls to LogCat
     compile 'com.android.support:multidex:1.0.1'
-    compile 'com.google.android.gms:play-services-maps:10.0.0'
+    compile 'com.google.android.gms:play-services:10.0.1'
+    compile 'com.google.android.gms:play-services-maps:10.0.1'
+    compile 'com.google.android.gms:play-services-auth:10.0.1'
+    compile 'com.google.android.gms:play-services-location:10.0.1'
     compile 'com.google.maps.android:android-maps-utils:0.4.2'
-    compile 'com.google.android.gms:play-services-location:10.0.0'
     compile 'com.android.support:appcompat-v7:25.0.1'
     compile 'com.android.support:support-v4:25.0.1'
     compile 'com.android.support:design:25.0.1'
@@ -76,7 +78,6 @@ dependencies {
     provided 'javax.annotation:jsr250-api:1.0'
     compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
     compile 'com.batch.android:batch-sdk:1.7+'
-    compile 'com.google.android.gms:play-services:10.0.0'
     compile 'jp.wasabeef:blurry:2.0.3'
     compile 'com.github.AndroidDeveloperLB:AutoFitTextView:4'
 }
