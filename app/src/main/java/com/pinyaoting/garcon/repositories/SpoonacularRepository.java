@@ -3,12 +3,12 @@ package com.pinyaoting.garcon.repositories;
 import android.app.Application;
 
 import com.pinyaoting.garcon.api.SpoonacularClient;
-import com.pinyaoting.garcon.database.RecipeDatabase;
+import com.pinyaoting.garcon.database.GarconDatabase;
 import com.pinyaoting.garcon.interfaces.data.RecipeRepositoryInterface;
 import com.pinyaoting.garcon.models.Ingredient;
 import com.pinyaoting.garcon.models.RandomRecipeResponse;
-import com.pinyaoting.garcon.models.RecipeResponse;
 import com.pinyaoting.garcon.models.Recipe;
+import com.pinyaoting.garcon.models.RecipeResponse;
 import com.pinyaoting.garcon.utils.ImageUtils;
 import com.pinyaoting.garcon.utils.NetworkUtils;
 import com.raizlabs.android.dbflow.config.FlowManager;
@@ -290,7 +290,7 @@ public class SpoonacularRepository implements RecipeRepositoryInterface {
 
     void asyncPersistRecipes(List<Recipe> recipes) {
         // persists into database in background thread
-        FlowManager.getDatabase(RecipeDatabase.class)
+        FlowManager.getDatabase(GarconDatabase.class)
                 .beginTransactionAsync(new ProcessModelTransaction.Builder<>(
                         new ProcessModelTransaction.ProcessModel<Recipe>() {
                             @Override

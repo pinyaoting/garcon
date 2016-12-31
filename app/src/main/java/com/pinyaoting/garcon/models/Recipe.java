@@ -1,6 +1,6 @@
 package com.pinyaoting.garcon.models;
 
-import com.pinyaoting.garcon.database.RecipeDatabase;
+import com.pinyaoting.garcon.database.GarconDatabase;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.OneToMany;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
@@ -10,7 +10,7 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
 
 import java.util.List;
 
-@Table(database = RecipeDatabase.class)
+@Table(database = GarconDatabase.class)
 public class Recipe extends BaseModel {
 
     public List<Ingredient> extendedIngredients;
