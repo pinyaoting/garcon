@@ -2,7 +2,7 @@ package com.pinyaoting.garcon.interfaces.data;
 
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
-import com.pinyaoting.garcon.viewstates.Plan;
+import com.pinyaoting.garcon.models.Plan;
 
 import rx.Observer;
 

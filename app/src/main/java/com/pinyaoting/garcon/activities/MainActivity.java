@@ -40,7 +40,7 @@ import com.pinyaoting.garcon.interfaces.presentation.InjectorInterface;
 import com.pinyaoting.garcon.utils.TabUtils;
 import com.pinyaoting.garcon.viewholders.GoalViewHolder;
 import com.pinyaoting.garcon.viewstates.Goal;
-import com.pinyaoting.garcon.viewstates.Plan;
+import com.pinyaoting.garcon.models.Plan;
 
 import java.util.Arrays;
 

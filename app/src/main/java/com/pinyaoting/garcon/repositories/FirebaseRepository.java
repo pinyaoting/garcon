@@ -18,7 +18,7 @@ import com.pinyaoting.garcon.models.User;
 import com.pinyaoting.garcon.models.UserList;
 import com.pinyaoting.garcon.utils.ConstantsAndUtils;
 import com.pinyaoting.garcon.viewstates.Idea;
-import com.pinyaoting.garcon.viewstates.Plan;
+import com.pinyaoting.garcon.models.Plan;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -168,39 +168,25 @@ public class FirebaseRepository implements CloudRepositoryInterface {
     }
 
     @Override
-    public void onSignedInInitialize(final FirebaseUser user) {
+    public void onSignedInInitialize(FirebaseUser user) {
+        String userName = user.getDisplayName();
         String userEmail = user.getEmail().replace(".", ",");
+        HashMap<String, Object> timestampJoined = new HashMap<>();
+        timestampJoined.put(ConstantsAndUtils.TIMESTAMP, ServerValue.TIMESTAMP);
+        mUser = new User(
+                userName,
+                userEmail,
+                timestampJoined);
+        // Add user to db
+        mUsersDatabaseReference.child(userEmail).setValue(mUser);
         persistsUserEmail(userEmail);
-        mUsersDatabaseReference.child(userEmail)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot != null) {
-                    mUser = dataSnapshot.getValue(User.class);
-                    return;
-                }
-
-                HashMap<String, Object> timestampJoined = new HashMap<>();
-                timestampJoined.put(ConstantsAndUtils.TIMESTAMP, ServerValue.TIMESTAMP);
-                mUser = new User(
-                        user.getDisplayName(),
-                        user.getEmail().replace(".", ","),
-                        timestampJoined);
-                // Add user to db
-                mUsersDatabaseReference.child(mUser.getEmail()).setValue(mUser);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
-
     }
 
     @Override
     public void onSignedOutCleanup() {
         mUser = null;
         SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove(ConstantsAndUtils.EMAIL);
         editor.remove(ConstantsAndUtils.PLAN_ID);
         editor.apply();
         editor.commit();

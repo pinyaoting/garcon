@@ -1,4 +1,6 @@
-package com.pinyaoting.garcon.viewstates;
+package com.pinyaoting.garcon.models;
+
+import com.pinyaoting.garcon.viewstates.Idea;
 
 import org.parceler.Parcel;
 

@@ -32,13 +32,11 @@ repositories {
 apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'me.tatarka.retrolambda'
 
-def dbflow_version = "3.1.1"
-
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    apt "com.github.Raizlabs.DBFlow:dbflow-processor:${dbflow_version}"
-    compile "com.github.Raizlabs.DBFlow:dbflow-core:${dbflow_version}"
-    compile "com.github.Raizlabs.DBFlow:dbflow:${dbflow_version}"
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    apt "com.github.Raizlabs.DBFlow:dbflow-processor:3.1.1"
+    compile "com.github.Raizlabs.DBFlow:dbflow-core:3.1.1"
+    compile "com.github.Raizlabs.DBFlow:dbflow:3.1.1"
     // for logging API calls to LogCat
     compile 'com.android.support:multidex:1.0.1'
     compile 'com.google.android.gms:play-services:10.0.1'

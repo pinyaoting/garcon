@@ -4,7 +4,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.pinyaoting.garcon.interfaces.presentation.ViewState;
 import com.pinyaoting.garcon.viewstates.Goal;
 import com.pinyaoting.garcon.viewstates.Idea;
-import com.pinyaoting.garcon.viewstates.Plan;
+import com.pinyaoting.garcon.models.Plan;
 
 import rx.Observer;
 

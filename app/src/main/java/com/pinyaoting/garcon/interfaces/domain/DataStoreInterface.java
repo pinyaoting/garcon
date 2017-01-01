@@ -5,7 +5,7 @@ import com.pinyaoting.garcon.viewstates.Goal;
 import com.pinyaoting.garcon.viewstates.GoalReducer;
 import com.pinyaoting.garcon.viewstates.Idea;
 import com.pinyaoting.garcon.viewstates.IdeaReducer;
-import com.pinyaoting.garcon.viewstates.Plan;
+import com.pinyaoting.garcon.models.Plan;
 
 import java.util.List;
 

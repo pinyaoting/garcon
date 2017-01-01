@@ -10,7 +10,7 @@ import com.pinyaoting.garcon.activities.MainActivity;
 import com.pinyaoting.garcon.fragments.MapFragment;
 import com.pinyaoting.garcon.interfaces.domain.IdeaInteractorInterface;
 import com.pinyaoting.garcon.interfaces.presentation.IdeaListActionHandlerInterface;
-import com.pinyaoting.garcon.viewstates.Plan;
+import com.pinyaoting.garcon.models.Plan;
 
 public class IdeaListActionHandler implements IdeaListActionHandlerInterface {
 
