@@ -5,14 +5,14 @@
     <data>
         <variable
             name="viewState"
-            type="com.pinyaoting.garcon.viewstates.Goal"/>
+            type="com.pinyaoting.garcondecuisine.viewstates.Goal"/>
         <variable
             name="pos"
             type="int"/>
 
         <variable
             name="handler"
-            type="com.pinyaoting.garcon.interfaces.presentation.GoalActionHandlerInterface"/>
+            type="com.pinyaoting.garcondecuisine.interfaces.presentation.GoalActionHandlerInterface"/>
     </data>
 
     <FrameLayout

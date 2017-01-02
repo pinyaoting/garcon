@@ -8,7 +8,7 @@
     </string>
     <string name="my_ideas_hint">My Shopping Cart</string>
 
-    <string name="google_maps_api_key">AIzaSyByLoX6pDKUo9oeDkfbny5F894queLjaBw</string>
+    <string name="google_maps_api_key">AIzaSyDwoiscaWKrSbPgIM_cUlL0CJNFFY_IKOg</string>
 
     <string name="api_endpoint_recipe" translatable="false">
         https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/

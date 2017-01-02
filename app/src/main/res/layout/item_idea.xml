@@ -10,11 +10,11 @@
 
         <variable
             name="viewState"
-            type="com.pinyaoting.garcon.viewstates.Idea"/>
+            type="com.pinyaoting.garcondecuisine.viewstates.Idea"/>
 
         <variable
             name="handler"
-            type="com.pinyaoting.garcon.interfaces.presentation.IdeaListActionHandlerInterface"/>
+            type="com.pinyaoting.garcondecuisine.interfaces.presentation.IdeaListActionHandlerInterface"/>
 
     </data>
 

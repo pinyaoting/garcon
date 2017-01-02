@@ -10,7 +10,7 @@
 
         <variable
             name="viewState"
-            type="com.pinyaoting.garcon.viewstates.Idea"/>
+            type="com.pinyaoting.garcondecuisine.viewstates.Idea"/>
 
     </data>
 

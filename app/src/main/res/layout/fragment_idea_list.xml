@@ -5,13 +5,13 @@
 
         <variable
             name="handler"
-            type="com.pinyaoting.garcon.interfaces.presentation.IdeaListActionHandlerInterface"/>
+            type="com.pinyaoting.garcondecuisine.interfaces.presentation.IdeaListActionHandlerInterface"/>
     </data>
 
     <FrameLayout xmlns:app="http://schemas.android.com/apk/res-auto"
                  android:layout_width="match_parent"
                  android:layout_height="match_parent"
-                 tools:context="com.pinyaoting.garcon.fragments.IdeaListFragment">
+                 tools:context="com.pinyaoting.garcondecuisine.fragments.IdeaListFragment">
 
         <ImageView
             android:id="@+id/ivIdeaCompositionBackground"

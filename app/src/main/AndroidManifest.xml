@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
-          package="com.pinyaoting.garcon">
+          package="com.pinyaoting.garcondecuisine">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
@@ -20,7 +20,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" tools:node="remove" />
 
     <application
-        android:name="com.pinyaoting.garcon.application.GarconApplication"
+        android:name="com.pinyaoting.garcondecuisine.application.GarconApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -31,7 +31,7 @@
             android:value="@string/google_maps_api_key"/>
 
         <activity
-            android:name="com.pinyaoting.garcon.activities.MainActivity"
+            android:name="com.pinyaoting.garcondecuisine.activities.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter android:label="@string/app_name">
                 <action android:name="android.intent.action.MAIN"/>
@@ -45,7 +45,7 @@
                 <category android:name="android.intent.category.BROWSABLE"/>
 
                 <data
-                    android:host="garcon-efffe.firebaseapp.com"
+                    android:host="garcon-de-cuisine.firebaseapp.com"
                     android:scheme="https"/>
             </intent-filter>
         </activity>
@@ -70,7 +70,7 @@
             </intent-filter>
         </service>
         <service
-            android:name="com.pinyaoting.garcon.service.NotificationService"
+            android:name="com.pinyaoting.garcondecuisine.service.NotificationService"
             android:enabled="true"
             android:exported="true"/>
     </application>
