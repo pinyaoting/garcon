@@ -1,10 +1,13 @@
 package com.pinyaoting.garcon.fragments;
 
+import static com.pinyaoting.garcon.utils.ConstantsAndUtils.POSITION;
+
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.graphics.Palette;
@@ -46,6 +49,7 @@ public class GoalPreviewFragment extends Fragment {
     @Inject
     IdeaInteractorInterface mIdeaInteractor;
     IdeasArrayAdapter mIdeasArrayAdapter;
+    boolean mDidGainFocus;
 
     public GoalPreviewFragment() {
         // Required empty public constructor
@@ -62,40 +66,41 @@ public class GoalPreviewFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mPos = getArguments().getInt(IDEA_PREVIEW_FRAGMENT_INDEX);
-            Goal goal = mGoalInteractor.getGoalAtPos(mPos);
-            mIdeasArrayAdapter = new IdeasArrayAdapter(mIdeaInteractor, goal.getId());
-            mGoalInteractor.loadDetailsForGoalAtPos(mPos);
-            mGoalInteractor.subscribeToGoalStateChange(new Observer<ViewState>() {
-                @Override
-                public void onCompleted() {
-                }
-
-                @Override
-                public void onError(Throwable e) {
-
-                }
-
-                @Override
-                public void onNext(ViewState viewState) {
-                    switch (viewState.getState()) {
-                        case R.id.state_loaded:
-                            switch (viewState.getOperation()) {
-                                case UPDATE:
-                                    if (viewState.getStart() != -1) {
-                                        return;
-                                    }
-                                    Goal updatedGoal = mGoalInteractor.getGoalAtPos(mPos);
-                                    mIdeasArrayAdapter.setGoalId(updatedGoal.getId());
-                                    mIdeasArrayAdapter.notifyDataSetChanged();
-                                    binding.setViewState(updatedGoal);
-                                    binding.executePendingBindings();
-                            }
-                    }
-                }
-            });
+        if (getArguments() == null) {
+            return;
         }
+        mPos = getArguments().getInt(IDEA_PREVIEW_FRAGMENT_INDEX);
+        Goal goal = mGoalInteractor.getGoalAtPos(mPos);
+        mIdeasArrayAdapter = new IdeasArrayAdapter(mIdeaInteractor, goal.getId());
+        mGoalInteractor.loadDetailsForGoalAtPos(mPos);
+        mGoalInteractor.subscribeToGoalStateChange(new Observer<ViewState>() {
+            @Override
+            public void onCompleted() {
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(ViewState viewState) {
+                switch (viewState.getState()) {
+                    case R.id.state_loaded:
+                        switch (viewState.getOperation()) {
+                            case UPDATE:
+                                if (viewState.getStart() != -1) {
+                                    return;
+                                }
+                                Goal updatedGoal = mGoalInteractor.getGoalAtPos(mPos);
+                                mIdeasArrayAdapter.setGoalId(updatedGoal.getId());
+                                mIdeasArrayAdapter.notifyDataSetChanged();
+                                binding.setViewState(updatedGoal);
+                                binding.executePendingBindings();
+                        }
+                }
+            }
+        });
     }
 
     @Override
@@ -114,6 +119,14 @@ public class GoalPreviewFragment extends Fragment {
         binding.rvGoalPreviewIdeas.addItemDecoration(dividerItemDecoration);
         binding.nsvGoalPreviewIdeasContainer.setNestedScrollingEnabled(false);
         return binding.getRoot();
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            mPos = savedInstanceState.getInt(POSITION);
+        }
     }
 
     @Override
@@ -192,8 +205,18 @@ public class GoalPreviewFragment extends Fragment {
         super.onDetach();
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(POSITION, mPos);
+    }
+
     public void didGainFocus() {
-        mGoalInteractor.bookmarkGoalAtPos(mPos);
+        if (mPos != null) {
+            mGoalInteractor.bookmarkGoalAtPos(mPos);
+        } else {
+            mDidGainFocus = true;
+        }
     }
 
 }

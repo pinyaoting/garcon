@@ -9,8 +9,8 @@ android {
         applicationId "com.pinyaoting.garcon"
         minSdkVersion 21
         targetSdkVersion 25
-        versionCode 5
-        versionName "1.4"
+        versionCode 1
+        versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -35,8 +35,8 @@ apply plugin: 'me.tatarka.retrolambda'
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     apt "com.github.Raizlabs.DBFlow:dbflow-processor:3.1.1"
-    compile "com.github.Raizlabs.DBFlow:dbflow-core:3.1.1"
-    compile "com.github.Raizlabs.DBFlow:dbflow:3.1.1"
+    compile 'com.github.Raizlabs.DBFlow:dbflow-core:3.1.1'
+    compile 'com.github.Raizlabs.DBFlow:dbflow:3.1.1'
     // for logging API calls to LogCat
     compile 'com.android.support:multidex:1.0.1'
     compile 'com.google.android.gms:play-services:10.0.1'
