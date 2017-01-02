@@ -49,7 +49,6 @@ public class GoalPreviewFragment extends Fragment {
     @Inject
     IdeaInteractorInterface mIdeaInteractor;
     IdeasArrayAdapter mIdeasArrayAdapter;
-    boolean mDidGainFocus;
 
     public GoalPreviewFragment() {
         // Required empty public constructor
@@ -214,9 +213,6 @@ public class GoalPreviewFragment extends Fragment {
     public void didGainFocus() {
         if (mPos != null) {
             mGoalInteractor.bookmarkGoalAtPos(mPos);
-        } else {
-            mDidGainFocus = true;
         }
     }
-
 }
