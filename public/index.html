@@ -45,7 +45,7 @@
       authDomain: "garcon-de-cuisine.firebaseapp.com",
       databaseURL: "https://garcon-de-cuisine.firebaseio.com",
       storageBucket: "garcon-de-cuisine.appspot.com",
-      messagingSenderId: "781856762807",
+      messagingSenderId: "781856762807"
     };
     var app = firebase.initializeApp(config);
     var items;
@@ -57,6 +57,9 @@
       var ref = firebase.database().ref().child('shoppingLists').child(listId);
       ref.once("value").then(function(snapshot) {
         var data = snapshot.val();
+	if (!data) {
+	  return;
+	}
         items = data.ideas;
         document.title = data.title;
         ReactDOM.render(
