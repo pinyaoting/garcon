@@ -47,16 +47,24 @@ public class SavedGoalsFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+    }
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_saved_goals, container,
                 false);
+        if (getActivity() instanceof InjectorInterface) {
+            InjectorInterface injector = (InjectorInterface) getActivity();
+            injector.inject(this);
+        }
         ToolbarUtils.configureTitle(
                 binding.activityMainToolbarContainer,
                 getString(R.string.saved_goals_hint),
@@ -92,15 +100,6 @@ public class SavedGoalsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof InjectorInterface) {
-            InjectorInterface injector = (InjectorInterface) context;
-            injector.inject(this);
-        }
     }
 
     @Override

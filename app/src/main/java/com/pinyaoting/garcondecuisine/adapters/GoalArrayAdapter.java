@@ -21,12 +21,13 @@ public class GoalArrayAdapter
 
     GoalInteractorInterface mInteractor;
     GoalActionHandlerInterface mActionHandler;
+    Observer<ViewState> mViewStateObserver;
 
     public GoalArrayAdapter(GoalInteractorInterface interactor,
                             GoalActionHandlerInterface actionHandler) {
         mInteractor = interactor;
         mActionHandler = actionHandler;
-        mInteractor.subscribeToGoalStateChange(new Observer<ViewState>() {
+        mViewStateObserver = new Observer<ViewState>() {
             @Override
             public void onCompleted() {
             }
@@ -73,7 +74,8 @@ public class GoalArrayAdapter
                         break;
                 }
             }
-        });
+        };
+        mInteractor.subscribeToGoalStateChange(mViewStateObserver);
     }
 
     @Override
@@ -108,5 +110,13 @@ public class GoalArrayAdapter
     @Override
     public int getItemCount() {
         return mInteractor.getGoalCount();
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        if (mInteractor != null && mViewStateObserver != null) {
+            mInteractor.unsubscribeFromGoalStateChange(mViewStateObserver);
+        }
+        super.finalize();
     }
 }

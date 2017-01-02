@@ -20,13 +20,14 @@ public class IdeaListArrayAdapter extends RecyclerView.Adapter {
 
     IdeaInteractorInterface mIdeaInteractor;
     IdeaListActionHandlerInterface mIdeaActionHandler;
+    Observer<ViewState> mViewStateObserver;
 
     public IdeaListArrayAdapter(IdeaInteractorInterface ideaInteractor,
                                        IdeaListActionHandlerInterface ideaActionHandler) {
         mIdeaInteractor = ideaInteractor;
         mIdeaActionHandler = ideaActionHandler;
 
-        mIdeaInteractor.subscribeIdeaStateChange(new Observer<ViewState>() {
+        mViewStateObserver = new Observer<ViewState>() {
             @Override
             public void onCompleted() {
             }
@@ -61,7 +62,8 @@ public class IdeaListArrayAdapter extends RecyclerView.Adapter {
                 }
 
             }
-        });
+        };
+        mIdeaInteractor.subscribeIdeaStateChange(mViewStateObserver);
     }
 
     @Override
@@ -95,4 +97,11 @@ public class IdeaListArrayAdapter extends RecyclerView.Adapter {
         return mIdeaInteractor.getIdeaCount();
     }
 
+    @Override
+    protected void finalize() throws Throwable {
+        if (mIdeaInteractor != null && mViewStateObserver != null) {
+            mIdeaInteractor.unsubscribeSuggestionStateChange(mViewStateObserver);
+        }
+        super.finalize();
+    }
 }

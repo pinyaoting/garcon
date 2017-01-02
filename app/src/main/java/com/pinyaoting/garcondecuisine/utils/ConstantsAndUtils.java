@@ -19,7 +19,6 @@ public class ConstantsAndUtils {
     public static final String PLAN_ID = "planId";
     public static final String SHARED_WITH = "sharedWith";
     public static final String NOTIFY = "notify";
-    public static final String POSITION = "position";
     public static final int LATEST = 25;
     static final String SPOONACULAR_IMAGE_CDN_BASE_URL =
             "https://spoonacular.com/cdn/ingredients_100x100/";

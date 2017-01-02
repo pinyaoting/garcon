@@ -46,6 +46,7 @@ public class GoalSearchFragment extends Fragment {
     RecyclerView.Adapter<RecyclerView.ViewHolder> mAdapter;
     @Inject
     GoalInteractorInterface mGoalInteractor;
+    Observer<ViewState> mViewStateObserver;
 
     public GoalSearchFragment() {
         // Required empty public constructor
@@ -59,16 +60,25 @@ public class GoalSearchFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         binding = DataBindingUtil.inflate(inflater,
                 R.layout.fragment_goal_search, container, false);
+        if (getActivity() instanceof InjectorInterface) {
+            InjectorInterface injector = (InjectorInterface) getActivity();
+            injector.inject(this);
+        }
         didGainFocus();
         binding.rvIdeaSearchResults.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.rvIdeaSearchResults.setAdapter(mAdapter);
@@ -113,7 +123,7 @@ public class GoalSearchFragment extends Fragment {
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
-        mGoalInteractor.subscribeToGoalStateChange(new Observer<ViewState>() {
+        mViewStateObserver = new Observer<ViewState>() {
             @Override
             public void onCompleted() {
 
@@ -130,7 +140,8 @@ public class GoalSearchFragment extends Fragment {
                     binding.swipeRefreshLayout.setRefreshing(false);
                 }
             }
-        });
+        };
+        mGoalInteractor.subscribeToGoalStateChange(mViewStateObserver);
         return binding.getRoot();
     }
 
@@ -142,17 +153,14 @@ public class GoalSearchFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof InjectorInterface) {
-            InjectorInterface injector = (InjectorInterface) context;
-            injector.inject(this);
-        }
+    public void onResume() {
+        super.onResume();
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onDestroyView() {
+        mGoalInteractor.unsubscribeFromGoalStateChange(mViewStateObserver);
+        super.onDestroyView();
     }
 
     @Override

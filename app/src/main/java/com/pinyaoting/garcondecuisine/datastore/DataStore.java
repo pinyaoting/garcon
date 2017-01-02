@@ -373,4 +373,18 @@ public class DataStore implements DataStoreInterface {
         return null;
     }
 
+    @Override
+    public void unsubscribeFromIdeaStateChanges(Observer<ViewState> observer) {
+        mIdeaStateObservers.remove(observer);
+    }
+
+    @Override
+    public void unsubscribeFromSuggestionStateChanges(Observer<ViewState> observer) {
+        mSuggestionStateObservers.remove(observer);
+    }
+
+    @Override
+    public void unsubscribeFromGoalStateChanges(Observer<ViewState> observer) {
+        mGoalStateObservers.remove(observer);
+    }
 }

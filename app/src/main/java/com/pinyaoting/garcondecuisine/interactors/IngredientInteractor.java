@@ -381,4 +381,14 @@ public class IngredientInteractor implements IdeaInteractorInterface {
         mDataStore.setIdeaState(viewState);
         mCloudRepository.updateItemInPlan(getPlan(), pos);
     }
+
+    @Override
+    public void unsubscribeIdeaStateChange(Observer<ViewState> observer) {
+        mDataStore.unsubscribeFromIdeaStateChanges(observer);
+    }
+
+    @Override
+    public void unsubscribeSuggestionStateChange(Observer<ViewState> observer) {
+        mDataStore.unsubscribeFromSuggestionStateChanges(observer);
+    }
 }

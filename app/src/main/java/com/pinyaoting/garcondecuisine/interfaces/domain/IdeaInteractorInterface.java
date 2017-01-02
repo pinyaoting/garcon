@@ -62,4 +62,7 @@ public interface IdeaInteractorInterface {
 
     void decreaseQuantityAtPos(int pos);
 
+    void unsubscribeIdeaStateChange(Observer<ViewState> observer);
+
+    void unsubscribeSuggestionStateChange(Observer<ViewState> observer);
 }

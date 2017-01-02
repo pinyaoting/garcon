@@ -24,12 +24,13 @@ public class SavedGoalArrayAdapter extends RecyclerView.Adapter {
 
     GoalInteractorInterface mInteractor;
     GoalActionHandlerInterface mActionHandler;
+    Observer<ViewState> mViewStateObserver;
 
     public SavedGoalArrayAdapter(GoalInteractorInterface interactor,
             GoalActionHandlerInterface actionHandler) {
         mInteractor = interactor;
         mActionHandler = actionHandler;
-        mInteractor.subscribeToGoalStateChange(new Observer<ViewState>() {
+        mViewStateObserver = new Observer<ViewState>() {
             @Override
             public void onCompleted() {
             }
@@ -76,7 +77,8 @@ public class SavedGoalArrayAdapter extends RecyclerView.Adapter {
                         break;
                 }
             }
-        });
+        };
+        mInteractor.subscribeToGoalStateChange(mViewStateObserver);
     }
 
     @Override
@@ -113,4 +115,11 @@ public class SavedGoalArrayAdapter extends RecyclerView.Adapter {
         return mInteractor.getGoalCount();
     }
 
+    @Override
+    protected void finalize() throws Throwable {
+        if (mInteractor != null && mViewStateObserver != null) {
+            mInteractor.unsubscribeFromGoalStateChange(mViewStateObserver);
+        }
+        super.finalize();
+    }
 }

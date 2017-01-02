@@ -23,7 +23,7 @@ public class GoalDetailViewPagerFragment extends Fragment {
     static final String GOAL_DETAIL_VIEW_PAGER_INDEX = "GOAL_DETAIL_VIEW_PAGER_INDEX";
     FragmentGoalDetailViewPagerBinding binding;
     GoalPreviewFragmentPagerAdapter mPagerAdapter;
-    int startIndex;
+    int currentIndex;
 
     @Inject
     GoalInteractorInterface mGoalInteractor;
@@ -41,19 +41,30 @@ public class GoalDetailViewPagerFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            startIndex = getArguments().getInt(GOAL_DETAIL_VIEW_PAGER_INDEX);
+         if (getArguments() != null) {
+            currentIndex = getArguments().getInt(GOAL_DETAIL_VIEW_PAGER_INDEX);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        if (savedInstanceState != null) {
+            currentIndex = savedInstanceState.getInt(GOAL_DETAIL_VIEW_PAGER_INDEX, currentIndex);
+        }
         binding = DataBindingUtil.inflate(
                 inflater, R.layout.fragment_goal_detail_view_pager, container, false);
+        if (getActivity() instanceof InjectorInterface) {
+            InjectorInterface injector = (InjectorInterface) getActivity();
+            injector.inject(this);
+        }
         mPagerAdapter = new GoalPreviewFragmentPagerAdapter(
                 getChildFragmentManager(), mGoalInteractor);
         binding.viewpager.setAdapter(mPagerAdapter);
@@ -80,17 +91,8 @@ public class GoalDetailViewPagerFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        binding.viewpager.setCurrentItem(startIndex, true);
-        mGoalInteractor.bookmarkGoalAtPos(startIndex);
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof InjectorInterface) {
-            InjectorInterface injector = (InjectorInterface) context;
-            injector.inject(this);
-        }
+        binding.viewpager.setCurrentItem(currentIndex, true);
+        mGoalInteractor.bookmarkGoalAtPos(currentIndex);
     }
 
     @Override
@@ -105,5 +107,11 @@ public class GoalDetailViewPagerFragment extends Fragment {
             GoalPreviewFragment goalPreviewFragment = (GoalPreviewFragment) fragment;
             goalPreviewFragment.didGainFocus();
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(GOAL_DETAIL_VIEW_PAGER_INDEX, currentIndex);
     }
 }

@@ -47,6 +47,8 @@ public class IdeaListFragment extends Fragment {
     @Named("Composition")
     RecyclerView.Adapter<RecyclerView.ViewHolder> mAdapter;
     @Inject
+    IdeaSuggestionsAdapter mSuggestionsAdapter;
+    @Inject
     IdeaListActionHandlerInterface mActionHandler;
     @Inject
     IdeaInteractorInterface mIdeaInteractor;
@@ -63,17 +65,25 @@ public class IdeaListFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        setHasOptionsMenu(true);
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_idea_list, container,
                 false);
+        if (getActivity() instanceof InjectorInterface) {
+            InjectorInterface injector = (InjectorInterface) getActivity();
+            injector.inject(this);
+        }
         ToolbarUtils.configureTitle(
                 binding.activityMainToolbarContainer,
                 getString(R.string.my_ideas_hint),
@@ -152,15 +162,6 @@ public class IdeaListFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof InjectorInterface) {
-            InjectorInterface injector = (InjectorInterface) context;
-            injector.inject(this);
-        }
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         binding.multipleActions.collapse();
@@ -184,8 +185,7 @@ public class IdeaListFragment extends Fragment {
         }
         final AutoCompleteSearchView searchView =
                 (AutoCompleteSearchView) MenuItemCompat.getActionView(searchItem);
-        searchView.setAdapter(new IdeaSuggestionsAdapter(
-                getActivity(), mIdeaInteractor));
+        searchView.setAdapter(mSuggestionsAdapter);
         searchView.setQueryHint(getString(R.string.idea_search_hint));
         searchView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

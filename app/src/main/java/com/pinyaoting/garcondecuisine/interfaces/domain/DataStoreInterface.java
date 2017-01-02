@@ -61,6 +61,12 @@ public interface DataStoreInterface {
 
     void subscribeToGoalStateChanges(Observer<ViewState> observer);
 
+    void unsubscribeFromIdeaStateChanges(Observer<ViewState> observer);
+
+    void unsubscribeFromSuggestionStateChanges(Observer<ViewState> observer);
+
+    void unsubscribeFromGoalStateChanges(Observer<ViewState> observer);
+
     Plan getPlan();
 
     void setPlan(Plan plan);

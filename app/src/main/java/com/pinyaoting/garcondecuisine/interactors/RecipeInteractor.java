@@ -201,6 +201,11 @@ public class RecipeInteractor implements GoalInteractorInterface {
         mDataStore.subscribeToGoalStateChanges(observer);
     }
 
+    @Override
+    public void unsubscribeFromGoalStateChange(Observer<ViewState> observer) {
+        mDataStore.unsubscribeFromGoalStateChanges(observer);
+    }
+
     private PublishSubject getDebouncer() {
         if (mSearchDebouncer == null) {
             mSearchDebouncer = PublishSubject.create();

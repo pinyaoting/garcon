@@ -8,6 +8,7 @@ import com.pinyaoting.garcondecuisine.actions.IdeaListActionHandler;
 import com.pinyaoting.garcondecuisine.activities.MainActivity;
 import com.pinyaoting.garcondecuisine.adapters.GoalArrayAdapter;
 import com.pinyaoting.garcondecuisine.adapters.IdeaListArrayAdapter;
+import com.pinyaoting.garcondecuisine.adapters.IdeaSuggestionsAdapter;
 import com.pinyaoting.garcondecuisine.adapters.SavedGoalArrayAdapter;
 import com.pinyaoting.garcondecuisine.interfaces.domain.IdeaInteractorInterface;
 import com.pinyaoting.garcondecuisine.interfaces.presentation.GoalActionHandlerInterface;
@@ -88,4 +89,10 @@ public class MainActivityModule {
         return new GoalDetailActionHandler(mActivity, interactor);
     }
 
+    @Provides
+    @PresentationLayerScope
+    public IdeaSuggestionsAdapter providesIdeaSuggestionsAdapter(
+            IdeaInteractorInterface ideaInteractor) {
+        return new IdeaSuggestionsAdapter(mActivity, ideaInteractor);
+    }
 }

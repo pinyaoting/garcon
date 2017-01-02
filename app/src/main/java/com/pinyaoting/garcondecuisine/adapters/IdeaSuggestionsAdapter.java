@@ -20,11 +20,11 @@ public class IdeaSuggestionsAdapter extends ArrayAdapter<Idea> {
 
     static final int mResource = R.layout.item_idea_suggestions;
     IdeaInteractorInterface mIdeaInteractor;
+    Observer<ViewState> mViewStateObserver;
 
     public IdeaSuggestionsAdapter(Context context, IdeaInteractorInterface ideaInteractor) {
         super(context, mResource);
-        mIdeaInteractor = ideaInteractor;
-        mIdeaInteractor.subscribeSuggestionStateChange(new Observer<ViewState>() {
+        mViewStateObserver = new Observer<ViewState>() {
             ViewState mViewState;
 
             @Override
@@ -45,7 +45,9 @@ public class IdeaSuggestionsAdapter extends ArrayAdapter<Idea> {
             public void onNext(ViewState viewState) {
                 mViewState = viewState;
             }
-        });
+        };
+        mIdeaInteractor = ideaInteractor;
+        mIdeaInteractor.subscribeSuggestionStateChange(mViewStateObserver);
     }
 
     @NonNull
@@ -92,5 +94,13 @@ public class IdeaSuggestionsAdapter extends ArrayAdapter<Idea> {
         public ViewHolder(View view) {
             binding = ItemIdeaSuggestionsBinding.bind(view);
         }
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        if (mIdeaInteractor != null && mViewStateObserver != null) {
+            mIdeaInteractor.unsubscribeSuggestionStateChange(mViewStateObserver);
+        }
+        super.finalize();
     }
 }

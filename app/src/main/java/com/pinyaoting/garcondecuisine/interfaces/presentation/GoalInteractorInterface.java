@@ -25,6 +25,8 @@ public interface GoalInteractorInterface {
 
     void subscribeToGoalStateChange(Observer<ViewState> observer);
 
+    void unsubscribeFromGoalStateChange(Observer<ViewState> observer);
+
     int getDisplayGoalFlag();
 
     void setDisplayGoalFlag(int flag);
