@@ -6,7 +6,7 @@
         android:icon="@android:drawable/ic_menu_add"
         android:orderInCategory="5"
         android:title="@string/idea_search_hint"
-        app:actionViewClass="com.pinyaoting.androidgarcon.view.AutoCompleteSearchView"
+        app:actionViewClass="com.pinyaoting.garcondecuisine.view.AutoCompleteSearchView"
         app:showAsAction="ifRoom|collapseActionView"/>
     <item
         android:id="@+id/action_remove"
