@@ -7,6 +7,9 @@ public class IdeaReducer {
 
     Idea mIdea;
 
+    public IdeaReducer() {
+    }
+
     public IdeaReducer(Idea idea) {
         mIdea = idea;
     }

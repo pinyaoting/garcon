@@ -19,9 +19,6 @@ public class HomeFragmentPagerAdapter extends FragmentPagerAdapter {
     private String tabTitles[] =
             new String[]{"Explore Goals", "My Ideas", "Saved Goals"};
     private Context mContext;
-    private GoalSearchFragment mGoalSearchFragment;
-    private SavedGoalsFragment mSavedGoalFragment;
-    private IdeaListFragment mMyIdeasFragment;
 
     public HomeFragmentPagerAdapter(FragmentManager fm, Context context) {
         super(fm);
@@ -32,35 +29,14 @@ public class HomeFragmentPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case SEARCH_GOAL:
-                return getGoalSearchFragment();
+                return GoalSearchFragment.newInstance();
             case MY_IDEAS:
-                return getMyIdeasFragment();
+                return IdeaListFragment.newInstance();
             case SAVED_GOALS:
-                return getSavedGoalFragment();
+                return SavedGoalsFragment.newInstance();
             default:
                 return null;
         }
-    }
-
-    public GoalSearchFragment getGoalSearchFragment() {
-        if (mGoalSearchFragment == null) {
-            mGoalSearchFragment = GoalSearchFragment.newInstance();
-        }
-        return mGoalSearchFragment;
-    }
-
-    public SavedGoalsFragment getSavedGoalFragment() {
-        if (mSavedGoalFragment == null) {
-            mSavedGoalFragment = SavedGoalsFragment.newInstance();
-        }
-        return mSavedGoalFragment;
-    }
-
-    public IdeaListFragment getMyIdeasFragment() {
-        if (mMyIdeasFragment == null) {
-            mMyIdeasFragment = IdeaListFragment.newInstance();
-        }
-        return mMyIdeasFragment;
     }
 
     @Override

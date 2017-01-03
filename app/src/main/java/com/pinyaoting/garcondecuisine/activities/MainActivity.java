@@ -67,7 +67,8 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
     private HomeFragmentPagerAdapter mPagerAdapter;
     private Transition mChangeTransform;
     private Transition mFadeTransform;
-    Observer<Plan> mEmptyPlanObserver;
+    private Observer<Plan> mEmptyPlanObserver;
+    private ViewPager.OnPageChangeListener mOnPageChangeListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,8 +78,7 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         mPagerAdapter = new HomeFragmentPagerAdapter(
                 getSupportFragmentManager(), MainActivity.this);
-        binding.viewpager.setAdapter(mPagerAdapter);
-        binding.viewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(
                     int position, float positionOffset, int positionOffsetPixels) {
@@ -93,7 +93,8 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
             public void onPageScrollStateChanged(int state) {
 
             }
-        });
+        };
+        binding.viewpager.setAdapter(mPagerAdapter);
         binding.tabs.setupWithViewPager(binding.viewpager);
         TabUtils.bindIcons(MainActivity.this, binding.viewpager, binding.tabs);
 
@@ -170,6 +171,7 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
     protected void onResume() {
         super.onResume();
         mFirebaseAuth.addAuthStateListener(mAuthStateListener);
+        binding.viewpager.addOnPageChangeListener(mOnPageChangeListener);
     }
 
     @Override
@@ -189,6 +191,9 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
         super.onPause();
         if (mAuthStateListener != null) {
             mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
+        }
+        if (binding != null && binding.viewpager != null && mOnPageChangeListener != null) {
+            binding.viewpager.removeOnPageChangeListener(mOnPageChangeListener);
         }
     }
 
@@ -357,15 +362,18 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
         switch (position) {
             case SEARCH_GOAL:
                 mGoalInteractor.setDisplayGoalFlag(R.id.flag_explore_recipes);
-                mPagerAdapter.getGoalSearchFragment().didGainFocus();
+                ((GoalSearchFragment)mPagerAdapter.getItem(SEARCH_GOAL))
+                        .didGainFocus(MainActivity.this);
                 break;
             case SAVED_GOALS:
                 mGoalInteractor.setDisplayGoalFlag(R.id.flag_saved_recipes);
-                mPagerAdapter.getSavedGoalFragment().didGainFocus();
+                ((SavedGoalsFragment)mPagerAdapter.getItem(SAVED_GOALS))
+                        .didGainFocus(MainActivity.this);
                 break;
             case MY_IDEAS:
                 mIdeaInteractor.loadPlan(mIdeaInteractor.myPlanId(), mEmptyPlanObserver);
-                mPagerAdapter.getMyIdeasFragment().didGainFocus();
+                ((IdeaListFragment)mPagerAdapter.getItem(MY_IDEAS))
+                        .didGainFocus(MainActivity.this);
                 break;
         }
         invalidateOptionsMenu();

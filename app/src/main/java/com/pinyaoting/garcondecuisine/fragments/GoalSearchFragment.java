@@ -79,7 +79,7 @@ public class GoalSearchFragment extends Fragment {
             InjectorInterface injector = (InjectorInterface) getActivity();
             injector.inject(this);
         }
-        didGainFocus();
+        didGainFocus((AppCompatActivity) getActivity());
         binding.rvIdeaSearchResults.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.rvIdeaSearchResults.setAdapter(mAdapter);
         binding.rvIdeaSearchResults.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -166,7 +166,6 @@ public class GoalSearchFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mGoalInteractor.clearGoal();
     }
 
     @Override
@@ -207,13 +206,12 @@ public class GoalSearchFragment extends Fragment {
                 super.onOptionsItemSelected(item);
     }
 
-    public void didGainFocus() {
+    public void didGainFocus(AppCompatActivity activity) {
         if (binding == null || binding.activityMainToolbarContainer == null ||
                 binding.activityMainToolbarContainer.toolbar == null) {
             return;
         }
-        ToolbarUtils.bind((AppCompatActivity)getActivity(),
-                binding.activityMainToolbarContainer.toolbar);
+        ToolbarUtils.bind(activity, binding.activityMainToolbarContainer.toolbar);
         ToolbarUtils.configureTitle(binding.activityMainToolbarContainer,
                 getString(R.string.app_name), getResources().getInteger(R.integer.app_title_size));
     }

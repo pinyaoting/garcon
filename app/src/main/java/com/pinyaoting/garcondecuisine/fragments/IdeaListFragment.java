@@ -230,13 +230,12 @@ public class IdeaListFragment extends Fragment {
                 super.onOptionsItemSelected(item);
     }
 
-    public void didGainFocus() {
+    public void didGainFocus(AppCompatActivity activity) {
         if (binding == null || binding.activityMainToolbarContainer == null ||
                 binding.activityMainToolbarContainer.toolbar == null) {
             return;
         }
-        ToolbarUtils.bind((AppCompatActivity)getActivity(),
-                binding.activityMainToolbarContainer.toolbar);
+        ToolbarUtils.bind(activity, binding.activityMainToolbarContainer.toolbar);
         binding.multipleActions.collapse();
     }
 }

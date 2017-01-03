@@ -43,10 +43,6 @@ public interface DataStoreInterface {
 
     GoalReducer getSavedGoalReducer(String id);
 
-    void clearSuggestions();
-
-    void clearGoals();
-
     Idea getIdeaAtPos(int pos);
 
     Idea getSuggestionAtPos(int pos);

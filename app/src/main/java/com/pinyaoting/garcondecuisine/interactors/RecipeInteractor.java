@@ -151,11 +151,6 @@ public class RecipeInteractor implements GoalInteractorInterface {
     }
 
     @Override
-    public void clearGoal() {
-        mDataStore.clearGoals();
-    }
-
-    @Override
     public void bookmarkGoalAtPos(int pos) {
         mDataStore.setGoalState(new ViewState(
                 R.id.state_refreshing, ViewState.OPERATION.UPDATE, pos, 1));

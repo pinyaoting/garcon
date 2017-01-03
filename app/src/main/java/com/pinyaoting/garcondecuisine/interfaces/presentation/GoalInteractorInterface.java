@@ -13,8 +13,6 @@ public interface GoalInteractorInterface {
 
     Goal getGoalAtPos(int pos);
 
-    void clearGoal();
-
     void bookmarkGoalAtPos(int pos);
 
     void search(String keyword);

@@ -62,6 +62,13 @@ public class DataSnapshotStore {
         return mPlan.getIdeas();
     }
 
+    public int getIdeaCount() {
+        if (mPlan == null) {
+            return 0;
+        }
+        return getIdeas().size();
+    }
+
     public void addIdea(Idea idea) {
         if (mPlan == null) {
             return;
@@ -112,10 +119,6 @@ public class DataSnapshotStore {
         mSuggestions.addAll(suggestions);
     }
 
-    public void clearSuggestions() {
-        mSuggestions.clear();
-    }
-
     public List<Goal> getSavedGoals() {
         return mSavedGoals;
     }
@@ -134,16 +137,12 @@ public class DataSnapshotStore {
     }
 
     public void setExploreGoals(List<Goal> goals) {
-        clearExploreGoals();
+        mExploreGoals.clear();
+        mExploreGoalReducers.clear();
         for (Goal goal : goals) {
             mExploreGoalReducers.put(goal.getId(), new GoalReducer(goal));
         }
         mExploreGoals.addAll(goals);
-    }
-
-    public void clearExploreGoals() {
-        mExploreGoals.clear();
-        mExploreGoalReducers.clear();
     }
 
     public IdeaReducer getIdeaReducer(String id) {

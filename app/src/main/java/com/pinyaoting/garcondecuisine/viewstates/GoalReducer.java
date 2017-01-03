@@ -7,6 +7,9 @@ public class GoalReducer {
 
     Goal mGoal;
 
+    public GoalReducer() {
+    }
+
     public GoalReducer(Goal goal) {
         mGoal = goal;
     }

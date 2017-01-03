@@ -91,22 +91,12 @@ public class DataStore implements DataStoreInterface {
 
     @Override
     public int getIdeaCount() {
-        return mSnapshotStore.getIdeas().size();
+        return mSnapshotStore.getIdeaCount();
     }
 
     @Override
     public int getSuggestionCount() {
         return mSnapshotStore.getSuggestions().size();
-    }
-
-    @Override
-    public void clearSuggestions() {
-        mSnapshotStore.clearSuggestions();
-    }
-
-    @Override
-    public void clearGoals() {
-        mSnapshotStore.clearExploreGoals();
     }
 
     @Override
