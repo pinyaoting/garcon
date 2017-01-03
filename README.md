@@ -1,6 +1,6 @@
 # Garçon de cuisine
 
-An app for dinner makers to search for recipe, create a shopping list, and send it to their significant others to have them buy the ingredients back.  [Now Available for Alpha Testing in Google Play](https://play.google.com/store/apps/details?id=com.pinyaoting.garcon)
+An app for dinner makers to search for recipe, create a shopping list, and send it to their significant others to have them buy the ingredients back.  [Google Play Store](https://play.google.com/store/apps/details?id=com.pinyaoting.garcondecuisine)
 
 ![Video Walkthrough](garcon.gif)
 
