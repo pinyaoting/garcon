@@ -1,5 +1,8 @@
 package com.pinyaoting.garcondecuisine.viewstates;
 
+import org.parceler.Parcel;
+
+@Parcel
 public class GoalReducer {
 
     Goal mGoal;

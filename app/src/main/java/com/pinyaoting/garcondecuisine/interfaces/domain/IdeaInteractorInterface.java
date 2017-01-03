@@ -1,5 +1,7 @@
 package com.pinyaoting.garcondecuisine.interfaces.domain;
 
+import android.os.Parcelable;
+
 import com.google.firebase.auth.FirebaseUser;
 import com.pinyaoting.garcondecuisine.interfaces.presentation.ViewState;
 import com.pinyaoting.garcondecuisine.viewstates.Goal;
@@ -44,8 +46,6 @@ public interface IdeaInteractorInterface {
 
     void setPendingIdeas(Goal goal);
 
-    void discardPlanIfEmpty();
-
     void clearPlan();
 
     int getPendingIdeasCount(String id);
@@ -65,4 +65,8 @@ public interface IdeaInteractorInterface {
     void unsubscribeIdeaStateChange(Observer<ViewState> observer);
 
     void unsubscribeSuggestionStateChange(Observer<ViewState> observer);
+
+    Parcelable getDataSnapshot();
+
+    void restoreDataSnapshot(Parcelable dataSnapshot);
 }

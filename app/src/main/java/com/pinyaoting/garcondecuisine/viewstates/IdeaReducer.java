@@ -1,5 +1,8 @@
 package com.pinyaoting.garcondecuisine.viewstates;
 
+import org.parceler.Parcel;
+
+@Parcel
 public class IdeaReducer {
 
     Idea mIdea;
@@ -34,6 +37,14 @@ public class IdeaReducer {
 
     public void setQuantity(int quantity) {
         mIdea.quantity = quantity;
+    }
+
+    public void increaseQuantity() {
+        mIdea.quantity++;
+    }
+
+    public void decreaseQuantity() {
+        mIdea.quantity--;
     }
 
     public void setType(int type) {

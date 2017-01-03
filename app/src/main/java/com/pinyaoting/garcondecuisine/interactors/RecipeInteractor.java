@@ -123,7 +123,7 @@ public class RecipeInteractor implements GoalInteractorInterface {
                     ideas.add(idea);
                     dedupSet.add(ingredient.getName());
                 }
-                mDataStore.setPendingIdeas(mRecipe.getId(), ideas);
+                mDataStore.addPendingIdeas(mRecipe.getId(), ideas);
                 mDataStore.setGoalState(new ViewState(
                         R.id.state_loaded, ViewState.OPERATION.UPDATE));
             }

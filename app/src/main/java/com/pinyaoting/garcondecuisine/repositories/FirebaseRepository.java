@@ -13,12 +13,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.pinyaoting.garcondecuisine.interfaces.data.CloudRepositoryInterface;
-import com.pinyaoting.garcondecuisine.interfaces.presentation.ViewState;
+import com.pinyaoting.garcondecuisine.models.Plan;
 import com.pinyaoting.garcondecuisine.models.User;
 import com.pinyaoting.garcondecuisine.models.UserList;
 import com.pinyaoting.garcondecuisine.utils.ConstantsAndUtils;
 import com.pinyaoting.garcondecuisine.viewstates.Idea;
-import com.pinyaoting.garcondecuisine.models.Plan;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,7 +44,6 @@ public class FirebaseRepository implements CloudRepositoryInterface {
     private DatabaseReference mUsersListsDatabaseReference;
     private DatabaseReference mNotifySharedDatabaseReference;
     private List<Observer<DataSnapshot>> mPlanObservers;
-    private List<Observer<ViewState>> mViewStateObservers;
     private User mUser;
 
     final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(
@@ -61,7 +59,6 @@ public class FirebaseRepository implements CloudRepositoryInterface {
         mNotifySharedDatabaseReference = mFirebaseDatabase.getReference().child(
                 ConstantsAndUtils.NOTIFY);
         mPlanObservers = new ArrayList<>();
-        mViewStateObservers = new ArrayList<>();
     }
 
     @Override
@@ -125,23 +122,6 @@ public class FirebaseRepository implements CloudRepositoryInterface {
         Idea newIdea = ideaList.get(pos);
         mShoppingListDatabaseReference.child(plan.getId()).child(ConstantsAndUtils.IDEAS)
                 .child(String.valueOf(pos)).setValue(newIdea);
-    }
-
-    @Override
-    public void removePlan(Plan plan) {
-        if (plan == null || plan.getId() == null) {
-            return;
-        }
-        String listId = plan.getId();
-        List<Idea> ideas = plan.getIdeas();
-        if (ideas == null || ideas.isEmpty() || ideas.size() == 0) {
-            mFirebaseDatabase
-                    .getReference()
-                    .child(ConstantsAndUtils.USER_LISTS)
-                    .child(ConstantsAndUtils.getOwner(getContext()))
-                    .child(listId)
-                    .removeValue();
-        }
     }
 
     @Override

@@ -100,7 +100,7 @@ public class IdeaListArrayAdapter extends RecyclerView.Adapter {
     @Override
     protected void finalize() throws Throwable {
         if (mIdeaInteractor != null && mViewStateObserver != null) {
-            mIdeaInteractor.unsubscribeSuggestionStateChange(mViewStateObserver);
+            mIdeaInteractor.unsubscribeIdeaStateChange(mViewStateObserver);
         }
         super.finalize();
     }

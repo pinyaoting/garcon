@@ -18,7 +18,6 @@ public interface CloudRepositoryInterface {
     void savePlan(Plan plan);
     void updateItemInPlan(Plan plan, int pos);
     void addNewItemToPlan(Plan plan, int pos);
-    void removePlan(Plan plan);
 
     void share(Plan plan, final String userEmail);
 

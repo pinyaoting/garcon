@@ -156,7 +156,6 @@ public class IdeaListFragment extends Fragment {
     @Override
     public void onDestroyView() {
         ItemClickSupport.removeFrom(binding.rvIdeas);
-        mIdeaInteractor.discardPlanIfEmpty();
         mIdeaInteractor.clearPlan();
         super.onDestroyView();
     }

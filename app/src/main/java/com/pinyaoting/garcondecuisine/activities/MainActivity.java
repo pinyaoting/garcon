@@ -37,10 +37,10 @@ import com.pinyaoting.garcondecuisine.interfaces.presentation.GoalActionHandlerI
 import com.pinyaoting.garcondecuisine.interfaces.presentation.GoalDetailActionHandlerInterface;
 import com.pinyaoting.garcondecuisine.interfaces.presentation.GoalInteractorInterface;
 import com.pinyaoting.garcondecuisine.interfaces.presentation.InjectorInterface;
+import com.pinyaoting.garcondecuisine.models.Plan;
 import com.pinyaoting.garcondecuisine.utils.TabUtils;
 import com.pinyaoting.garcondecuisine.viewholders.GoalViewHolder;
 import com.pinyaoting.garcondecuisine.viewstates.Goal;
-import com.pinyaoting.garcondecuisine.models.Plan;
 
 import java.util.Arrays;
 
@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
         IdeaListActionHandler.IdeaShareHandlerInterface {
 
     public static final int RC_SIGN_IN = 1;
+    public static final String MAIN_ACTIVITY_SNAPSHOT = "MAIN_ACTIVITY_SNAPSHOT";
     ActivityMainBinding binding;
     MainActivitySubComponent mActivityComponent;
     @Inject
@@ -125,7 +126,6 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
                 }
             }
         };
-        mGoalInteractor.search(null);
 
         mChangeTransform = TransitionInflater.from(this).
                 inflateTransition(R.transition.transition_to_detail);
@@ -152,16 +152,111 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
                 }
             }
         };
+        if (savedInstanceState != null && savedInstanceState.containsKey(MAIN_ACTIVITY_SNAPSHOT)) {
+            mIdeaInteractor.restoreDataSnapshot(
+                    savedInstanceState.getParcelable(MAIN_ACTIVITY_SNAPSHOT));
+        } else {
+            mGoalInteractor.search(null);
+        }
     }
 
-    public MainActivitySubComponent getActivityComponent() {
-        if (mActivityComponent == null) {
-            mActivityComponent =
-                    ((GarconApplication) getApplication()).getPresentationLayerComponent()
-                            .newMainActivitySubComponent(
-                                    new MainActivityModule(this, R.id.idea_category_recipe));
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Batch.onStart(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        handleDeeplink();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        Batch.onNewIntent(this, intent);
+        super.onNewIntent(intent);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mAuthStateListener != null) {
+            mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
         }
-        return mActivityComponent;
+    }
+
+    @Override
+    protected void onStop() {
+        Batch.onStop(this);
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        Batch.onDestroy(this);
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(MAIN_ACTIVITY_SNAPSHOT, mIdeaInteractor.getDataSnapshot());
+    }
+
+    @Override
+    public void share(Intent i) {
+        startActivity(i);
+    }
+
+    @Override
+    public void inject(IdeaListFragment fragment) {
+        getActivityComponent().inject(fragment);
+    }
+
+    @Override
+    public void inject(GoalSearchFragment fragment) {
+        getActivityComponent().inject(fragment);
+    }
+
+    @Override
+    public void inject(GoalPreviewFragment fragment) {
+        getActivityComponent().inject(fragment);
+    }
+
+    @Override
+    public void inject(SavedGoalsFragment fragment) {
+        getActivityComponent().inject(fragment);
+    }
+
+    @Override
+    public void inject(GoalDetailViewPagerFragment fragment) {
+        getActivityComponent().inject(fragment);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_SIGN_IN) {
+            if (resultCode == RESULT_CANCELED) {
+                finish();
+            }
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (mDialogFragment != null) {
+            didGainFocus(binding.viewpager.getCurrentItem());
+        }
+        mDialogFragment = null;
     }
 
     @Override
@@ -239,100 +334,6 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
                 .commit();
     }
 
-    @Override
-    protected void onNewIntent(Intent intent) {
-        Batch.onNewIntent(this, intent);
-        super.onNewIntent(intent);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Batch.onStart(this);
-    }
-
-    @Override
-    protected void onStop() {
-        Batch.onStop(this);
-        super.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-        Batch.onDestroy(this);
-        super.onDestroy();
-    }
-
-    @Override
-    public void share(Intent i) {
-        startActivity(i);
-    }
-
-    @Override
-    public void inject(IdeaListFragment fragment) {
-        getActivityComponent().inject(fragment);
-    }
-
-    @Override
-    public void inject(GoalSearchFragment fragment) {
-        getActivityComponent().inject(fragment);
-    }
-
-    @Override
-    public void inject(GoalPreviewFragment fragment) {
-        getActivityComponent().inject(fragment);
-    }
-
-    @Override
-    public void inject(SavedGoalsFragment fragment) {
-        getActivityComponent().inject(fragment);
-    }
-
-    @Override
-    public void inject(GoalDetailViewPagerFragment fragment) {
-        getActivityComponent().inject(fragment);
-    }
-
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RC_SIGN_IN) {
-            if (resultCode == RESULT_CANCELED) {
-                finish();
-            }
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
-    }
-
-    @Override
-    protected void onPostResume() {
-        super.onPostResume();
-        handleDeeplink();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (mAuthStateListener != null) {
-            mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        if (mDialogFragment != null) {
-            didGainFocus(binding.viewpager.getCurrentItem());
-        }
-        mDialogFragment = null;
-    }
-
     private void handleDeeplink() {
         Intent intent = getIntent();
         final Uri url = intent.getData();
@@ -368,5 +369,15 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
                 break;
         }
         invalidateOptionsMenu();
+    }
+
+    private MainActivitySubComponent getActivityComponent() {
+        if (mActivityComponent == null) {
+            mActivityComponent =
+                    ((GarconApplication) getApplication()).getPresentationLayerComponent()
+                            .newMainActivitySubComponent(
+                                    new MainActivityModule(this, R.id.idea_category_recipe));
+        }
+        return mActivityComponent;
     }
 }

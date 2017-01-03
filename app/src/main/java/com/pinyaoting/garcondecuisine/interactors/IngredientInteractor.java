@@ -3,6 +3,7 @@ package com.pinyaoting.garcondecuisine.interactors;
 import static com.raizlabs.android.dbflow.config.FlowManager.getContext;
 
 import android.content.Context;
+import android.os.Parcelable;
 
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -204,15 +205,6 @@ public class IngredientInteractor implements IdeaInteractorInterface {
     }
 
     @Override
-    public void discardPlanIfEmpty() {
-        Plan plan = getPlan();
-        if (plan == null || plan.getId() == null) {
-            return;
-        }
-        mCloudRepository.removePlan(plan);
-    }
-
-    @Override
     public void clearPlan() {
         mDataStore.clearPlan();
     }
@@ -390,5 +382,15 @@ public class IngredientInteractor implements IdeaInteractorInterface {
     @Override
     public void unsubscribeSuggestionStateChange(Observer<ViewState> observer) {
         mDataStore.unsubscribeFromSuggestionStateChanges(observer);
+    }
+
+    @Override
+    public Parcelable getDataSnapshot() {
+        return mDataStore.getDataSnapshot();
+    }
+
+    @Override
+    public void restoreDataSnapshot(Parcelable dataSnapshot) {
+        mDataStore.restoreDataSnapshot(dataSnapshot);
     }
 }

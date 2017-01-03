@@ -1,6 +1,7 @@
 package com.pinyaoting.garcondecuisine.datastore;
 
 import android.content.Context;
+import android.os.Parcelable;
 
 import com.pinyaoting.garcondecuisine.R;
 import com.pinyaoting.garcondecuisine.interfaces.domain.DataStoreInterface;
@@ -11,6 +12,8 @@ import com.pinyaoting.garcondecuisine.viewstates.GoalReducer;
 import com.pinyaoting.garcondecuisine.viewstates.Idea;
 import com.pinyaoting.garcondecuisine.viewstates.IdeaReducer;
 import com.pinyaoting.garcondecuisine.models.Plan;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,14 +35,10 @@ public class DataStore implements DataStoreInterface {
     List<Observer<ViewState>> mSuggestionStateObservers;
     List<Observer<ViewState>> mSavedGoalStateObservers;
     List<Observer<ViewState>> mGoalStateObservers;
-    Plan mPlan;
     ViewState mIdeaState;
     ViewState mSuggestionState;
     ViewState mSavedGoalState;
     ViewState mGoalState;
-    private Map<String, IdeaReducer> mIdeaReducers;
-    private Map<String, GoalReducer> mExploreGoalReducers;
-    private Map<String, GoalReducer> mSavedGoalReducers;
     private Context mContext;
     private int mDisplayGoalFlag;
 
@@ -54,9 +53,6 @@ public class DataStore implements DataStoreInterface {
         mSavedGoalState = new ViewState(R.id.state_idle);
         mGoalState = new ViewState(R.id.state_idle);
         mDisplayGoalFlag = R.id.flag_explore_recipes;
-        mIdeaReducers = new HashMap<>();
-        mExploreGoalReducers = new HashMap<>();
-        mSavedGoalReducers = new HashMap<>();
         mContext = context;
     }
 
@@ -80,38 +76,37 @@ public class DataStore implements DataStoreInterface {
 
     @Override
     public void addIdea(Idea idea) {
-        mIdeaReducers.put(idea.getId(), new IdeaReducer(idea));
-        getIdeas().add(idea);
+        mSnapshotStore.addIdea(idea);
     }
 
     @Override
     public void removeIdea(int pos) {
-        getIdeas().remove(pos);
+        mSnapshotStore.removeIdea(pos);
     }
 
     @Override
     public void clearIdeas() {
-        getIdeas().clear();
+        mSnapshotStore.clearIdeas();
     }
 
     @Override
     public int getIdeaCount() {
-        return getIdeas().size();
+        return mSnapshotStore.getIdeas().size();
     }
 
     @Override
     public int getSuggestionCount() {
-        return getSuggestions().size();
+        return mSnapshotStore.getSuggestions().size();
     }
 
     @Override
     public void clearSuggestions() {
-        getSuggestions().clear();
+        mSnapshotStore.clearSuggestions();
     }
 
     @Override
     public void clearGoals() {
-        getExploreGoals().clear();
+        mSnapshotStore.clearExploreGoals();
     }
 
     @Override
@@ -131,37 +126,29 @@ public class DataStore implements DataStoreInterface {
 
     @Override
     public Idea getIdeaAtPos(int pos) {
-        return getIdeas().get(pos);
+        return mSnapshotStore.getIdeas().get(pos);
     }
 
     @Override
     public Idea getSuggestionAtPos(int pos) {
-        return getSuggestions().get(pos);
+        return mSnapshotStore.getSuggestions().get(pos);
     }
 
     @Override
     public Plan getPlan() {
-        return mPlan;
+        return mSnapshotStore.getPlan();
     }
 
     @Override
     public void setPlan(Plan plan) {
-        mPlan = plan;
-        mIdeaReducers.clear();
-        List<Idea> ideas = plan.getIdeas();
-        if (ideas != null) {
-            for (Idea idea : ideas) {
-                mIdeaReducers.put(idea.getId(), new IdeaReducer(idea));
-            }
-        }
-        mSnapshotStore.setIdeas(mPlan.getIdeas());
+        mSnapshotStore.setPlan(plan);
     }
 
     @Override
     public Plan createPlan(String id, String name) {
-        mPlan = new Plan(id, getIdeas(), name,
-                ConstantsAndUtils.getOwner(mContext));
-        return mPlan;
+        Plan plan = new Plan(id, null, name, ConstantsAndUtils.getOwner(mContext));
+        setPlan(plan);
+        return plan;
     }
 
     private void notifyIdeaStateChange() {
@@ -197,98 +184,53 @@ public class DataStore implements DataStoreInterface {
         connectedObservable.connect();
     }
 
-    private List<Idea> getIdeas() {
-        return mSnapshotStore.getIdeas();
-    }
-
-    @Override
-    public void setIdeas(List<Idea> ideas) {
-        getIdeas().clear();
-        mIdeaReducers.clear();
-        for (Idea idea : ideas) {
-            mIdeaReducers.put(idea.getId(), new IdeaReducer(idea));
-        }
-        getIdeas().addAll(ideas);
-    }
-
     @Override
     public void moveIdeaToBottom(int pos) {
-        if (getIdeas().size() <= pos) {
-            // out of bound
-            return;
-        }
-        getIdeas().add(getIdeas().remove(pos));
+        mSnapshotStore.moveIdeaToBottom(pos);
     }
 
     @Override
     public void moveIdeaToTop(int pos) {
-        if (getIdeas().size() <= pos) {
-            // out of bound
-            return;
-        }
-        getIdeas().add(0, getIdeas().remove(pos));
-    }
-
-    private List<Idea> getSuggestions() {
-        return mSnapshotStore.getSuggestions();
+        mSnapshotStore.moveIdeaToTop(pos);
     }
 
     @Override
     public void setSuggestions(List<Idea> ideas) {
-        getSuggestions().clear();
-        getSuggestions().addAll(ideas);
-    }
-
-    private List<Goal> getExploreGoals() {
-        return mSnapshotStore.getExploreGoals();
+        mSnapshotStore.setSuggestions(ideas);
     }
 
     @Override
     public void setExploreGoals(List<Goal> goals) {
-        getExploreGoals().clear();
-        mExploreGoalReducers.clear();
-        for (Goal goal : goals) {
-            mExploreGoalReducers.put(goal.getId(), new GoalReducer(goal));
-        }
-        getExploreGoals().addAll(goals);
-    }
-
-    private List<Goal> getSavedGoals() {
-        return mSnapshotStore.getSavedGoals();
+        mSnapshotStore.setExploreGoals(goals);
     }
 
     @Override
     public void setSavedGoals(List<Goal> goals) {
-        getSavedGoals().clear();
-        mSavedGoalReducers.clear();
-        for (Goal goal : goals) {
-            mSavedGoalReducers.put(goal.getId(), new GoalReducer(goal));
-        }
-        getSavedGoals().addAll(goals);
+        mSnapshotStore.setSavedGoals(goals);
     }
 
     @Override
     public IdeaReducer getIdeaReducer(String id) {
-        return mIdeaReducers.get(id);
+        return mSnapshotStore.getIdeaReducer(id);
     }
 
     @Override
     public GoalReducer getExploreGoalReducer(String id) {
-        return mExploreGoalReducers.get(id);
+        return mSnapshotStore.getExploreGoalReducer(id);
     }
 
     @Override
     public GoalReducer getSavedGoalReducer(String id) {
-        return mSavedGoalReducers.get(id);
+        return mSnapshotStore.getSavedGoalReducer(id);
     }
 
     @Override
     public Goal getGoalAtPos(int pos) {
         switch (mDisplayGoalFlag) {
             case R.id.flag_explore_recipes:
-                return getExploreGoals().get(pos);
+                return mSnapshotStore.getExploreGoals().get(pos);
             case R.id.flag_saved_recipes:
-                return getSavedGoals().get(pos);
+                return mSnapshotStore.getSavedGoals().get(pos);
         }
         return null;
     }
@@ -307,54 +249,50 @@ public class DataStore implements DataStoreInterface {
     public int getGoalCount() {
         switch (mDisplayGoalFlag) {
             case R.id.flag_explore_recipes:
-                return getExploreGoals().size();
+                return mSnapshotStore.getExploreGoals().size();
             case R.id.flag_saved_recipes:
-                return getSavedGoals().size();
+                return mSnapshotStore.getSavedGoals().size();
         }
         return 0;
     }
 
     @Override
     public void clearPlan() {
-        mPlan = null;
-        mIdeaReducers.clear();
-        mSnapshotStore.getIdeas().clear();
-    }
-
-    private Map<String, List<Idea>> getPendingIdeas() {
-        return mSnapshotStore.getPendingIdeas();
+        mSnapshotStore.clearPlan();
     }
 
     @Override
-    public void setPendingIdeas(String id, List<Idea> pendingIdeas) {
-        getPendingIdeas().put(id, pendingIdeas);
+    public void addPendingIdeas(String id, List<Idea> pendingIdeas) {
+        mSnapshotStore.addPendingIdeas(id, pendingIdeas);
     }
 
     @Override
     public void mergePendingIdeas(String id) {
-        if (!getPendingIdeas().containsKey(id)) {
+        if (!mSnapshotStore.getPendingIdeas().containsKey(id)) {
             return;
         }
-        List<Idea> current = getIdeas();
         Set<String> dup = new HashSet<>();
-        for (Idea idea : current) {
+        Map<String, String> map = new HashMap<>();
+        for (Idea idea : mSnapshotStore.getIdeas()) {
             dup.add(idea.getContent());
         }
-        for (Idea idea : getPendingIdeas().get(id)) {
-            if (dup.contains(idea.getContent())) {
-                // TODO: increase quantity instead
+        for (Idea idea : mSnapshotStore.getPendingIdeas().get(id)) {
+            String content = idea.getContent();
+            if (dup.contains(content)) {
+                String ideaId = map.get(content);
+                mSnapshotStore.getIdeaReducer(ideaId).increaseQuantity();
                 continue;
             }
-            current.add(idea);
-            mIdeaReducers.put(idea.getId(), new IdeaReducer(idea));
+            mSnapshotStore.addIdea(idea);
             dup.add(idea.getContent());
+            map.put(idea.getContent(), idea.getId());
         }
     }
 
     @Override
     public int getPendingIdeasCount(String id) {
-        if (getPendingIdeas().containsKey(id)) {
-            List<Idea> ideas = getPendingIdeas().get(id);
+        if (mSnapshotStore.getPendingIdeas().containsKey(id)) {
+            List<Idea> ideas = mSnapshotStore.getPendingIdeas().get(id);
             if (ideas != null) {
                 return ideas.size();
             }
@@ -364,8 +302,8 @@ public class DataStore implements DataStoreInterface {
 
     @Override
     public Idea getPendingIdea(String id, int pos) {
-        if (getPendingIdeas().containsKey(id)) {
-            List<Idea> ideas = getPendingIdeas().get(id);
+        if (mSnapshotStore.getPendingIdeas().containsKey(id)) {
+            List<Idea> ideas = mSnapshotStore.getPendingIdeas().get(id);
             if (ideas.size() > pos) {
                 return ideas.get(pos);
             }
@@ -386,5 +324,15 @@ public class DataStore implements DataStoreInterface {
     @Override
     public void unsubscribeFromGoalStateChanges(Observer<ViewState> observer) {
         mGoalStateObservers.remove(observer);
+    }
+
+    @Override
+    public Parcelable getDataSnapshot() {
+        return Parcels.wrap(mSnapshotStore);
+    }
+
+    @Override
+    public void restoreDataSnapshot(Parcelable snapshot) {
+        mSnapshotStore = Parcels.unwrap(snapshot);
     }
 }
