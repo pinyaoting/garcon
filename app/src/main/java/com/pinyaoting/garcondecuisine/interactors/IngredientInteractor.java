@@ -99,6 +99,9 @@ public class IngredientInteractor implements IdeaInteractorInterface {
 
             @Override
             public void onNext(DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.exists()) {
+                    return;
+                }
                 Plan plan = dataSnapshot.getValue(Plan.class);
                 mDataStore.setPlan(plan);
                 mDataStore.setIdeaState(new ViewState(
@@ -227,6 +230,9 @@ public class IngredientInteractor implements IdeaInteractorInterface {
 
             @Override
             public void onNext(DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.exists()) {
+                    return;
+                }
                 if (mPendingGoal != null) {
                     mDataStore.mergePendingIdeas(mPendingGoal.getId());
                     mCloudRepository.savePlan(getPlan());
@@ -255,6 +261,9 @@ public class IngredientInteractor implements IdeaInteractorInterface {
 
             @Override
             public void onNext(DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.exists()) {
+                    return;
+                }
                 subscribePlan();
             }
         });

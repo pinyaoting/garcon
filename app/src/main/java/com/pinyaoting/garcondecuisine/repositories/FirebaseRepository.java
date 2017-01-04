@@ -184,7 +184,7 @@ public class FirebaseRepository implements CloudRepositoryInterface {
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (dataSnapshot == null) {
+                        if (dataSnapshot == null || !dataSnapshot.exists()) {
                             createPlanId(observer);
                             return;
                         }
