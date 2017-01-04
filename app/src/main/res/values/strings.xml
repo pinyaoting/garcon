@@ -6,6 +6,7 @@
     <string name="create_grocery_snackbar_hint">Looks like your grocery list is empty, start adding groceries to the list by tapping on the
         search icon above.
     </string>
+    <string name="search_with_empty_cart_hint">Your shopping cart is empty. You may perform a recipe search using the ingredients in the list.</string>
     <string name="my_ideas_hint">My Shopping Cart</string>
 
     <string name="google_maps_api_key">AIzaSyDwoiscaWKrSbPgIM_cUlL0CJNFFY_IKOg</string>

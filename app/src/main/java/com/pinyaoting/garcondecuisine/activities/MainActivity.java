@@ -301,6 +301,11 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
         dismissDialogIfNotNull();
     }
 
+    @Override
+    public void prompt(String hint) {
+        Snackbar.make(binding.clContent, hint, Snackbar.LENGTH_SHORT).show();
+    }
+
     private void showDetailFragment() {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.rlHome, mDialogFragment)

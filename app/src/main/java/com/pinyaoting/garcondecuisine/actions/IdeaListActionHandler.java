@@ -45,6 +45,10 @@ public class IdeaListActionHandler implements IdeaListActionHandlerInterface {
     @Override
     public void onSearchButtonClick() {
         Plan plan = mIdeaInteractor.getPlan();
+        if (plan == null || plan.getIdeas().isEmpty()) {
+            mShareHandler.prompt(mContext.getString(R.string.search_with_empty_cart_hint));
+            return;
+        }
         mShareHandler.search(plan);
     }
 
@@ -73,7 +77,7 @@ public class IdeaListActionHandler implements IdeaListActionHandlerInterface {
 
     public interface IdeaShareHandlerInterface {
         void share(Intent intent);
-
         void search(Plan plan);
+        void prompt(String hint);
     }
 }
