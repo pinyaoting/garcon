@@ -2,6 +2,7 @@ package com.pinyaoting.garcondecuisine.interactors;
 
 import android.content.Context;
 
+import com.google.firebase.crash.FirebaseCrash;
 import com.pinyaoting.garcondecuisine.R;
 import com.pinyaoting.garcondecuisine.interfaces.data.RecipeRepositoryInterface;
 import com.pinyaoting.garcondecuisine.interfaces.domain.DataStoreInterface;
@@ -45,7 +46,7 @@ public class RecipeInteractor implements GoalInteractorInterface {
     PublishSubject<Integer> mBookmarkDebouncer;
 
     public RecipeInteractor(Context context, DataStoreInterface dataStore,
-                              RecipeRepositoryInterface recipeRepository) {
+                              final RecipeRepositoryInterface recipeRepository) {
         mContext = context;
         mDataStore = dataStore;
         mRecipeRepository = recipeRepository;
@@ -105,6 +106,16 @@ public class RecipeInteractor implements GoalInteractorInterface {
                 List<Idea> ideas = new ArrayList<>();
                 Set<String> dedupSet = new HashSet<>();
                 for (Ingredient ingredient : mRecipe.getExtendedIngredients()) {
+                    if (ingredient == null) {
+                        FirebaseCrash.log(String.format(
+                                "Ingredient is null for recipe %s", mRecipe.getId()));
+                        continue;
+                    }
+                    if (ingredient.getName() == null) {
+                        FirebaseCrash.log(String.format(
+                                "Misformed ingredient for recipe %s", mRecipe.getId()));
+                        continue;
+                    }
                     if (dedupSet.contains(ingredient.getName())) {
                         continue;
                     }
