@@ -80,6 +80,7 @@ public class IdeaListFragment extends Fragment {
         setHasOptionsMenu(true);
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_idea_list, container,
                 false);
+        binding.setFabContainer(binding.multipleActions);
         if (getActivity() instanceof InjectorInterface) {
             InjectorInterface injector = (InjectorInterface) getActivity();
             injector.inject(this);

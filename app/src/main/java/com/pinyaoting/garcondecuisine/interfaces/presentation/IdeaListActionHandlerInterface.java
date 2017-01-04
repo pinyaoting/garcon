@@ -1,12 +1,16 @@
 package com.pinyaoting.garcondecuisine.interfaces.presentation;
 
+import android.view.View;
+
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
+
 public interface IdeaListActionHandlerInterface {
 
-    void onShareButtonClick();
+    void onShareButtonClick(View v, FloatingActionsMenu floatingActionsMenu);
 
-    void onSearchButtonClick();
+    void onSearchButtonClick(View v, FloatingActionsMenu floatingActionsMenu);
 
-    void onNearbyStoreButtonClick();
+    void onNearbyStoreButtonClick(View v, FloatingActionsMenu floatingActionsMenu);
 
     void onEmptyButtonClick();
 

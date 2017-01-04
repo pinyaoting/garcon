@@ -4,7 +4,9 @@ import static com.pinyaoting.garcondecuisine.utils.ConstantsAndUtils.SHARED_LIST
 
 import android.content.Context;
 import android.content.Intent;
+import android.view.View;
 
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.pinyaoting.garcondecuisine.R;
 import com.pinyaoting.garcondecuisine.activities.MainActivity;
 import com.pinyaoting.garcondecuisine.fragments.MapFragment;
@@ -27,7 +29,8 @@ public class IdeaListActionHandler implements IdeaListActionHandlerInterface {
     }
 
     @Override
-    public void onShareButtonClick() {
+    public void onShareButtonClick(View v, FloatingActionsMenu floatingActionsMenu) {
+        floatingActionsMenu.collapse();
         Plan plan = mIdeaInteractor.getPlan();
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
@@ -43,7 +46,8 @@ public class IdeaListActionHandler implements IdeaListActionHandlerInterface {
     }
 
     @Override
-    public void onSearchButtonClick() {
+    public void onSearchButtonClick(View v, FloatingActionsMenu floatingActionsMenu) {
+        floatingActionsMenu.collapse();
         Plan plan = mIdeaInteractor.getPlan();
         if (plan == null || plan.getIdeas().isEmpty()) {
             mShareHandler.prompt(mContext.getString(R.string.search_with_empty_cart_hint));
@@ -53,7 +57,8 @@ public class IdeaListActionHandler implements IdeaListActionHandlerInterface {
     }
 
     @Override
-    public void onNearbyStoreButtonClick() {
+    public void onNearbyStoreButtonClick(View v, FloatingActionsMenu floatingActionsMenu) {
+        floatingActionsMenu.collapse();
         ((MainActivity) mContext).getSupportFragmentManager().beginTransaction()
                 .replace(R.id.rlHome, MapFragment.newInstance(), "MapFragment")
                 .addToBackStack(null)
