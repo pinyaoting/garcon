@@ -5,7 +5,6 @@ import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.OneToMany;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
-import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.sql.language.Select;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
@@ -86,8 +85,10 @@ public class Recipe extends BaseModel {
     @OneToMany(methods = {OneToMany.Method.ALL}, variableName = "extendedIngredients")
     public List<Ingredient> getExtendedIngredients() {
         if (extendedIngredients == null || extendedIngredients.isEmpty()) {
-            List<Recipe_Ingredient> list = SQLite.select().from(Recipe_Ingredient.class)
-                    .where(Recipe_Ingredient_Table.recipeId.eq(id)).queryList();
+            List<Recipe_Ingredient> list = new Select()
+                    .from(Recipe_Ingredient.class)
+                    .where(Recipe_Ingredient_Table.recipeId.eq(id))
+                    .queryList();
             extendedIngredients = new ArrayList<>();
             for (Recipe_Ingredient item: list) {
                 extendedIngredients.add(item.getIngredient());

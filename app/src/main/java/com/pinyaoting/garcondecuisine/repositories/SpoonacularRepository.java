@@ -311,18 +311,25 @@ public class SpoonacularRepository implements RecipeRepositoryInterface {
                         new ProcessModelTransaction.ProcessModel<Recipe>() {
                             @Override
                             public void processModel(Recipe recipe) {
+                                recipe.setTimestamp(Calendar.getInstance().getTimeInMillis());
                                 recipe.save();
-                                if (recipe.getExtendedIngredients() != null) {
-                                    for (Ingredient ingredient : recipe.getExtendedIngredients
-                                            ()) {
-                                        ingredient.save();
+                                List<Ingredient> ingredients = recipe.getExtendedIngredients();
+                                if (ingredients == null || ingredients.isEmpty()) {
+                                    return;
+                                }
+                                List<Recipe_Ingredient> obsoleteRelations =
+                                        Recipe_Ingredient.byRecipeId(recipe.getId());
+                                for (Recipe_Ingredient obsoleteRelation : obsoleteRelations) {
+                                    obsoleteRelation.delete();
+                                }
+                                for (Ingredient ingredient : ingredients) {
+                                    ingredient.save();
 
-                                        // save recipe-ingredients relation
-                                        Recipe_Ingredient relation = new Recipe_Ingredient();
-                                        relation.setRecipeId(recipe.getId());
-                                        relation.setIngredientId(ingredient.getId());
-                                        relation.save();
-                                    }
+                                    // save recipe-ingredients relation
+                                    Recipe_Ingredient relation = new Recipe_Ingredient();
+                                    relation.setRecipeId(recipe.getId());
+                                    relation.setIngredient(ingredient);
+                                    relation.save();
                                 }
                             }
                         }).addAll(recipes).build())
