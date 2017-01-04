@@ -5,15 +5,16 @@ import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.OneToMany;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.sql.language.Select;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Table(database = GarconDatabase.class)
 public class Recipe extends BaseModel {
 
-    public List<Ingredient> extendedIngredients;
     @PrimaryKey
     @Column
     String id;
@@ -25,6 +26,10 @@ public class Recipe extends BaseModel {
     String image;
     @Column
     String instructions;
+    @Column
+    Long timestamp;
+
+    public List<Ingredient> extendedIngredients;
 
     public Recipe() {
         super();
@@ -80,16 +85,26 @@ public class Recipe extends BaseModel {
 
     @OneToMany(methods = {OneToMany.Method.ALL}, variableName = "extendedIngredients")
     public List<Ingredient> getExtendedIngredients() {
-//        if (extendedIngredients == null || extendedIngredients.isEmpty()) {
-//            extendedIngredients = SQLite.select()
-//                    .from(Ingredient.class)
-//                    .where(IngredientV2_Table.id.eq(id))
-//                    .queryList();
-//        }
+        if (extendedIngredients == null || extendedIngredients.isEmpty()) {
+            List<Recipe_Ingredient> list = SQLite.select().from(Recipe_Ingredient.class)
+                    .where(Recipe_Ingredient_Table.recipeId.eq(id)).queryList();
+            extendedIngredients = new ArrayList<>();
+            for (Recipe_Ingredient item: list) {
+                extendedIngredients.add(item.getIngredient());
+            }
+        }
         return extendedIngredients;
     }
 
     public void setExtendedIngredients(List<Ingredient> extendedIngredients) {
         this.extendedIngredients = extendedIngredients;
+    }
+
+    public Long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Long timestamp) {
+        this.timestamp = timestamp;
     }
 }

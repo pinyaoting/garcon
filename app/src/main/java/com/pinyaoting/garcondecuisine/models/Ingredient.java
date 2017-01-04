@@ -4,6 +4,7 @@ import com.pinyaoting.garcondecuisine.database.GarconDatabase;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.sql.language.Select;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
 @Table(database = GarconDatabase.class)
@@ -111,5 +112,9 @@ public class Ingredient extends BaseModel {
 
     public void setOriginalString(String originalString) {
         this.originalString = originalString;
+    }
+
+    public static Ingredient byId(String id) {
+        return new Select().from(Ingredient.class).where(Ingredient_Table.id.eq(id)).querySingle();
     }
 }

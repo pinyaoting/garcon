@@ -4,4 +4,5 @@
     <integer name="app_title_size">36</integer>
     <integer name="toolbar_title_size">16</integer>
     <integer name="bigtop_image_extra_padding">3</integer>
+    <integer name="client_cache_ttl">604800000</integer>
 </resources>

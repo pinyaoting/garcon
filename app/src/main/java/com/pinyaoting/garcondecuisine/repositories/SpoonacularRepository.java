@@ -2,6 +2,7 @@ package com.pinyaoting.garcondecuisine.repositories;
 
 import android.app.Application;
 
+import com.pinyaoting.garcondecuisine.R;
 import com.pinyaoting.garcondecuisine.api.SpoonacularClient;
 import com.pinyaoting.garcondecuisine.database.GarconDatabase;
 import com.pinyaoting.garcondecuisine.interfaces.data.RecipeRepositoryInterface;
@@ -9,6 +10,7 @@ import com.pinyaoting.garcondecuisine.models.Ingredient;
 import com.pinyaoting.garcondecuisine.models.RandomRecipeResponse;
 import com.pinyaoting.garcondecuisine.models.Recipe;
 import com.pinyaoting.garcondecuisine.models.RecipeResponse;
+import com.pinyaoting.garcondecuisine.models.Recipe_Ingredient;
 import com.pinyaoting.garcondecuisine.utils.ImageUtils;
 import com.pinyaoting.garcondecuisine.utils.NetworkUtils;
 import com.raizlabs.android.dbflow.config.FlowManager;
@@ -16,6 +18,7 @@ import com.raizlabs.android.dbflow.structure.database.transaction.ProcessModelTr
 import com.raizlabs.android.dbflow.structure.database.transaction.Transaction;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import rx.Observable;
@@ -32,6 +35,7 @@ public class SpoonacularRepository implements RecipeRepositoryInterface {
     List<Observer<List<Ingredient>>> mAutoCompleteIngredientSubscribers;
     private Application mApplication;
     private SpoonacularClient mClient;
+    private Long mCacheTTL;
 
     public SpoonacularRepository(Application application, SpoonacularClient client) {
         mApplication = application;
@@ -40,6 +44,7 @@ public class SpoonacularRepository implements RecipeRepositoryInterface {
         mDetailSubscribers = new ArrayList<>();
         mAutoCompleteRecipeSubscribers = new ArrayList<>();
         mAutoCompleteIngredientSubscribers = new ArrayList<>();
+        mCacheTTL = (long)application.getResources().getInteger(R.integer.client_cache_ttl);
         getClient().subscribeRecipe(new Observer<RecipeResponse>() {
             List<Recipe> mRecipes = new ArrayList<>();
 
@@ -216,6 +221,17 @@ public class SpoonacularRepository implements RecipeRepositoryInterface {
 
     @Override
     public void searchRecipeDetail(String id) {
+        Recipe recipe = Recipe.byId(id);
+        if (recipe != null && recipe.getExtendedIngredients() != null &&
+                !recipe.getExtendedIngredients().isEmpty()) {
+            Long lastAccessTime = recipe.getTimestamp();
+            Long currentTime = Calendar.getInstance().getTimeInMillis();
+            if (lastAccessTime != null && currentTime - lastAccessTime < mCacheTTL) {
+                // load recipe from DataBase to prevent excessive network requests
+                notifyAllDetailObservers(recipe);
+                return;
+            }
+        }
         getClient().searchRecipeDetail(id);
     }
 
@@ -299,8 +315,13 @@ public class SpoonacularRepository implements RecipeRepositoryInterface {
                                 if (recipe.getExtendedIngredients() != null) {
                                     for (Ingredient ingredient : recipe.getExtendedIngredients
                                             ()) {
-                                        // TODO: save object relation
                                         ingredient.save();
+
+                                        // save recipe-ingredients relation
+                                        Recipe_Ingredient relation = new Recipe_Ingredient();
+                                        relation.setRecipeId(recipe.getId());
+                                        relation.setIngredientId(ingredient.getId());
+                                        relation.save();
                                     }
                                 }
                             }

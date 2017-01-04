@@ -9,5 +9,5 @@ import com.raizlabs.android.dbflow.annotation.Database;
 @Database(name = GarconDatabase.NAME, version = GarconDatabase.VERSION)
 public class GarconDatabase {
     public static final String NAME = "GarconDatabase";
-    public static final int VERSION = 1;
+    public static final int VERSION = 2;
 }
