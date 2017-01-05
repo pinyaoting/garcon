@@ -186,7 +186,10 @@ public class RecipeInteractor implements GoalInteractorInterface {
             ingredientsBuilder.append(idea.getContent());
             ingredientsBuilder.append(",");
         }
-        ingredientsBuilder.deleteCharAt(ingredientsBuilder.lastIndexOf(","));
+        int lastIndex = ingredientsBuilder.lastIndexOf(",");
+        if (lastIndex != -1) {
+            ingredientsBuilder.deleteCharAt(lastIndex);
+        }
         mRecipeRepository.searchRecipeByIngredients(
                 ingredientsBuilder.toString(),
                 RECIPE_INTERACTOR_SEARCH_BY_INGREDIENT_HIDE_INGREDIENTS,

@@ -217,7 +217,9 @@ public class MainActivity extends AppCompatActivity implements InjectorInterface
 
     @Override
     public void share(Intent i) {
-        startActivity(i);
+        if (i.resolveActivity(getPackageManager()) != null) {
+            startActivity(i);
+        }
     }
 
     @Override
