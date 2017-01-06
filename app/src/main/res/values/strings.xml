@@ -54,4 +54,5 @@
     <string name="transition_goal_title" translatable="false">goalTitle</string>
     <string name="transition_goal_index" translatable="false">goalIndex</string>
 
+    <string name="share_url_host" translatable="false">garçondecuisine.com</string>
 </resources>

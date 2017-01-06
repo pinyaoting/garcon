@@ -45,7 +45,7 @@
                 <category android:name="android.intent.category.BROWSABLE"/>
 
                 <data
-                    android:host="garcon-de-cuisine.firebaseapp.com"
+                    android:host="@string/share_url_host"
                     android:scheme="https"/>
             </intent-filter>
         </activity>

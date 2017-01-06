@@ -1,7 +1,5 @@
 package com.pinyaoting.garcondecuisine.actions;
 
-import static com.pinyaoting.garcondecuisine.utils.ConstantsAndUtils.SHARED_LIST_URL;
-
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
@@ -37,7 +35,7 @@ public class IdeaListActionHandler implements IdeaListActionHandlerInterface {
         shareIntent.setType("text/plain");
         StringBuilder sharableContentBuilder = new StringBuilder();
         sharableContentBuilder
-                .append(SHARED_LIST_URL)
+                .append(mContext.getString(R.string.share_url_host))
                 .append(plan.getId());
 
         // with app link

@@ -1,7 +1,5 @@
 package com.pinyaoting.garcondecuisine.service;
 
-import static com.pinyaoting.garcondecuisine.utils.ConstantsAndUtils.SHARED_LIST_URL;
-
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -65,7 +63,7 @@ public class NotificationService extends Service {
 
         StringBuilder sharableContentBuilder = new StringBuilder();
         sharableContentBuilder
-                .append(SHARED_LIST_URL)
+                .append(getString(R.string.share_url_host))
                 .append(val);
 
         Intent intent = new Intent(Intent.ACTION_VIEW,
