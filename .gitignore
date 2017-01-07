@@ -107,3 +107,4 @@ gradle.properties
 # *.ipr
 
 .firebaserc
+google-services.json
