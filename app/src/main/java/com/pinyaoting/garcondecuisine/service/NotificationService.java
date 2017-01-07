@@ -63,7 +63,9 @@ public class NotificationService extends Service {
 
         StringBuilder sharableContentBuilder = new StringBuilder();
         sharableContentBuilder
+                .append("https://")
                 .append(getString(R.string.share_url_host))
+                .append("/")
                 .append(val);
 
         Intent intent = new Intent(Intent.ACTION_VIEW,

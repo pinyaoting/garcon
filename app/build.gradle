@@ -21,12 +21,24 @@ android {
         versionName "1.6"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
+        resValue "string", "GOOGLE_SERVICE_API_KEY", GOOGLE_SERVICE_API_KEY
+        buildConfigField("String", "GCM_SENDER_ID", GCM_SENDER_ID)
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.production
+            buildConfigField("String", "SPOONACULAR_APIKEY", SPOONACULAR_APIKEY_PRODUCTION)
+            buildConfigField("String", "BATCH_APIKEY", BATCH_APIKEY_LIVE)
+        }
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.production
+            buildConfigField("String", "SPOONACULAR_APIKEY", SPOONACULAR_APIKEY_DEBUG)
+            buildConfigField("String", "BATCH_APIKEY", BATCH_APIKEY_DEBUG)
+            debuggable true
         }
     }
 }

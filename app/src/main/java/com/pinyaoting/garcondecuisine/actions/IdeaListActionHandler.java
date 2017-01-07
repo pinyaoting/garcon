@@ -35,7 +35,9 @@ public class IdeaListActionHandler implements IdeaListActionHandlerInterface {
         shareIntent.setType("text/plain");
         StringBuilder sharableContentBuilder = new StringBuilder();
         sharableContentBuilder
+                .append("https://")
                 .append(mContext.getString(R.string.share_url_host))
+                .append("/")
                 .append(plan.getId());
 
         // with app link

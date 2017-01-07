@@ -9,15 +9,19 @@ import com.batch.android.Batch;
 import com.batch.android.Config;
 import com.facebook.stetho.Stetho;
 import com.google.firebase.database.FirebaseDatabase;
+import com.pinyaoting.garcondecuisine.BuildConfig;
 import com.pinyaoting.garcondecuisine.R;
 import com.pinyaoting.garcondecuisine.dependencies.components.application.ApplicationComponent;
-import com.pinyaoting.garcondecuisine.dependencies.components.application.DaggerApplicationComponent;
+import com.pinyaoting.garcondecuisine.dependencies.components.application
+        .DaggerApplicationComponent;
 import com.pinyaoting.garcondecuisine.dependencies.components.data.DaggerDataLayerComponent;
 import com.pinyaoting.garcondecuisine.dependencies.components.data.DataLayerComponent;
 import com.pinyaoting.garcondecuisine.dependencies.components.domain.DaggerDomainLayerComponent;
 import com.pinyaoting.garcondecuisine.dependencies.components.domain.DomainLayerComponent;
-import com.pinyaoting.garcondecuisine.dependencies.components.presentation.DaggerPresentationLayerComponent;
-import com.pinyaoting.garcondecuisine.dependencies.components.presentation.PresentationLayerComponent;
+import com.pinyaoting.garcondecuisine.dependencies.components.presentation
+        .DaggerPresentationLayerComponent;
+import com.pinyaoting.garcondecuisine.dependencies.components.presentation
+        .PresentationLayerComponent;
 import com.pinyaoting.garcondecuisine.dependencies.modules.core.AppModule;
 import com.pinyaoting.garcondecuisine.dependencies.modules.core.NetModule;
 import com.pinyaoting.garcondecuisine.dependencies.modules.data.DataLayerModule;
@@ -67,10 +71,9 @@ public class GarconApplication extends MultiDexApplication {
 
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
 
-        Push.setGCMSenderId("797609406506");
+        Push.setGCMSenderId(BuildConfig.GCM_SENDER_ID);
 
-        // Batch.setConfig(new Config("DEV585AF9F92C546FDFC55E6CEA121")); // devlopement
-        Batch.setConfig(new Config("585AF9F92C1EB0B95B2171A0990A3F")); // live
+        Batch.setConfig(new Config(BuildConfig.BATCH_APIKEY)); // live
         Push.setNotificationsColor(ContextCompat.getColor(this, R.color.colorPrimary));
         //Batch.Push.setSmallIconResourceId(R.drawable.ic_notification);
     }
