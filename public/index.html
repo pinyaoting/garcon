@@ -7,8 +7,8 @@
   <meta property="fb:app_id" content="392989124371977" />
   <meta property="og:title" content="Garçon de Cuisine" />
   <meta property="og:type" content="website" />
-  <meta property="og:image" content="http://garcon-de-cuisine.firebaseapp.com/icon_large.png" />
-  <meta property="og:image:secure_url" content="https://garcon-de-cuisine.firebaseapp.com/icon_large.png" />
+  <meta property="og:image" content="http://garcon.pinyaoting.com/icon_large.png" />
+  <meta property="og:image:secure_url" content="https://garcon.pinyaoting.com/icon_large.png" />
   <meta property="og:image:type" content="image/png" />
   <meta property="og:image:width" content="512" />
   <meta property="og:image:height" content="512" />
@@ -114,6 +114,11 @@
 
     function ItemList(props) {
       const items = props.items;
+      if (!items) {
+	return (
+	  <ul className="list"></ul>
+	);
+      }
       const listItems = items.map((item) =>
         <li key={item.id} className="list-item">
 	  <div className="list-item-image-container">
