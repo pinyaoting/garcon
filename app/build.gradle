@@ -2,14 +2,6 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 
 android {
-    signingConfigs {
-        production {
-            keyAlias KEY_ALIAS
-            keyPassword KEY_PASSWORD
-            storeFile file(KEYSTORE_PATH)
-            storePassword KEYSTORE_PASSWORD
-        }
-    }
     compileSdkVersion 25
     buildToolsVersion "25.0.0"
     dataBinding.enabled = true
@@ -17,8 +9,8 @@ android {
         applicationId "com.pinyaoting.garcondecuisine"
         minSdkVersion 21
         targetSdkVersion 25
-        versionCode 7
-        versionName "1.6"
+        versionCode 8
+        versionName "1.7"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         resValue "string", "GOOGLE_SERVICE_API_KEY", GOOGLE_SERVICE_API_KEY
@@ -26,16 +18,13 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.production
             buildConfigField("String", "SPOONACULAR_APIKEY", SPOONACULAR_APIKEY_PRODUCTION)
             buildConfigField("String", "BATCH_APIKEY", BATCH_APIKEY_LIVE)
         }
         debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.production
             buildConfigField("String", "SPOONACULAR_APIKEY", SPOONACULAR_APIKEY_DEBUG)
             buildConfigField("String", "BATCH_APIKEY", BATCH_APIKEY_DEBUG)
             debuggable true

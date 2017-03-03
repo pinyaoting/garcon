@@ -1,18 +1,30 @@
 package com.pinyaoting.garcondecuisine.models;
 
+import android.net.Uri;
+
 import com.pinyaoting.garcondecuisine.database.GarconDatabase;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.OneToMany;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.annotation.provider.ContentUri;
+import com.raizlabs.android.dbflow.annotation.provider.TableEndpoint;
 import com.raizlabs.android.dbflow.sql.language.Select;
-import com.raizlabs.android.dbflow.structure.BaseModel;
+import com.raizlabs.android.dbflow.structure.provider.BaseProviderModel;
+import com.raizlabs.android.dbflow.structure.provider.ContentUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Table(database = GarconDatabase.class)
-public class Recipe extends BaseModel {
+@TableEndpoint(name = Recipe.NAME, contentProvider = GarconDatabase.class)
+@Table(database = GarconDatabase.class, name = Recipe.NAME)
+public class Recipe extends BaseProviderModel<Recipe> {
+
+    public static final String NAME = "Recipe";
+
+    @ContentUri(path = NAME, type = ContentUri.ContentType.VND_MULTIPLE + NAME)
+    public static final Uri CONTENT_URI = ContentUtils.buildUriWithAuthority(
+            GarconDatabase.AUTHORITY);
 
     @PrimaryKey
     @Column
@@ -107,5 +119,25 @@ public class Recipe extends BaseModel {
 
     public void setTimestamp(Long timestamp) {
         this.timestamp = timestamp;
+    }
+
+    @Override
+    public Uri getDeleteUri() {
+        return Recipe.CONTENT_URI;
+    }
+
+    @Override
+    public Uri getInsertUri() {
+        return Recipe.CONTENT_URI;
+    }
+
+    @Override
+    public Uri getUpdateUri() {
+        return Recipe.CONTENT_URI;
+    }
+
+    @Override
+    public Uri getQueryUri() {
+        return Recipe.CONTENT_URI;
     }
 }

@@ -30,6 +30,11 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="GOOGLE_SERVICE_API_KEY"/>
 
+        <provider
+            android:authorities="com.pinyaoting.garcondecuisine.provider"
+            android:exported="false"
+            android:name=".database.GarconDatabase_Provider"/>
+
         <activity
             android:name="com.pinyaoting.garcondecuisine.activities.MainActivity"
             android:screenOrientation="portrait">
